@@ -1,12 +1,16 @@
 record_type	key	value	verification_status	path	byte_size	sha256	cell_count	study	notes
 build_identity	authoritative_manifest	audit/phase3_preflight/final_release_manifest.tsv	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
-build_identity	release_branch	plavisca-dec01-dec02-final	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
+build_identity	release_branch	gametocyte-harmonized-stage	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
+build_identity	release_id	plavisca-v1-gametocytes-2026-10-08	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
+build_identity	previous_release	plavisca-v1-dec01-dec02-2026-09-21	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	Previous atlas sha256 32068878fc92952e9be539befcc8ff2f42a6818716a912a55f5c45930cc830b9; identical cell membership
+build_identity	previous_release_merge_commit	117d0b57dea267aaae11a8b148de858f56a6c7f8	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 build_identity	parent_release_closure_commit	dea656faa2b06381cc971b462de8f911df1028f7	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
-build_identity	final_preprocessing_code_commit	173431cfca8e19c716a96164ee2ea6053441855b	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	Committed scientific rebuild and validation snapshot; the final manifest/report commit is its descendant.
+build_identity	final_preprocessing_code_commit	559c6eba26dcb6647890925ff993831e02d2138c	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	Committed scientific rebuild and validation snapshot; the final manifest/report commit is its descendant.
 build_identity	phase2_scientific_build_commit	54c6b9581ff5268422ddffda42ce457bf09c5b55	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 build_identity	independent_QA_commit	a57be450a84d42e47a67d1120320e8a5536797dd	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
-build_identity	application_RC_commit_read_only	e80e7705d75f9eec85146a09ecafa26a3f201a02	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
-build_identity	release_date	2026-09-21	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
+build_identity	application_commit	cd82670afcc7d4690a0b5c06e4657461d87d3b8f	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	PlaViSca app commit validated against this release (branch gametocyte-harmonized-stage)
+build_identity	release_date	2026-10-08	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
+build_identity	annotation_precedence_change	harmonized_life_cycle_stage = source-defined label > cluster-level gametocyte call > IDC heuristic bin (DEC07 resolved)	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 environment	R	4.3.3	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 environment	Seurat	5.3.0	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 environment	SeuratObject	5.2.0	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
@@ -15,7 +19,9 @@ environment	SingleR	2.4.0	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 environment	pixi_manifest	.	AVAILABLE_AND_VERIFIED	scripts/pixi.toml	1096	d9f3b1ec79cc17d19fb78bef1de75b406052342ab186f6a2c3a1c120f57a895a	NA	.	Closure validation environment definition
 environment	pixi_lock	.	AVAILABLE_AND_VERIFIED	scripts/pixi.lock	213307	c4378b47a51419af2f38d329b739830348c0b69616467ce238999ecc0d4cc11c	NA	.	Resolved closure validation environment
 parameter	integration_seed	123	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	Recorded by Phase-2 integration manifest row
-parameter	integration_feature_count	5203	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
+parameter	integration_feature_count	4709	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	Intersection of measured panels: STARsolo panel, Mancio-Silva2022 genes, Ruberto2022_1 author_present; after rRNA removal
+parameter	atlas_feature_count	6811	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	After removal of 49 GFF rRNA genes (0 rRNA features)
+parameter	rrna_genes_removed	49	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	audit/phase2_rebuild/rrna_removal_by_study.tsv
 parameter	HVG_PCA_feature_count	2000	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 parameter	production_cluster_resolution	0.05	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 parameter	AT30_perturbed_resolution	0.08	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
@@ -29,22 +35,26 @@ study_count	Ruberto2022_2	9947	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 provenance	Ruberto2022_1_source_of_counts	author_processed_object_raw_umi	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 provenance	Ruberto2022_1_counting_pipeline	kallisto_bustools	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 provenance	Ruberto2022_1_reference	PlasmoDB-51_PvivaxP01_AnnotatedTranscripts	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
-scientific_input	Mancio-Silva2022_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/silva2022.rds	951972	b8d335ccba309b602c3c3462c3279cae6316acb3c93d006b6577a98344e203a7	1480	Mancio-Silva2022	.
-scientific_input	Sa2020_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/sa2020.rds	8807324	c31d16e8b0731d163633b0ca2942663fa816b1dd5fff902ea84fcb0490391a6e	9766	Sa2020	.
-scientific_input	Hazzard2022_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/hazzard2022.rds	1356700	9787f1a4af016a59cd67b322489af4308aa62a6e1a97d074aac0ffa05180fe78	3294	Hazzard2022	.
-scientific_input	Hazzard2024_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/hazzard2024.rds	102402015	febb1377254756441aabb4fa8505e8d74aee2fe6adbbe1dfc2eaab9d608a9e18	80024	Hazzard2024	.
-scientific_input	Ruberto2022_1_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/ruberto2022_1.rds	5553310	802641469151745c92073242d2eb98aaeb57cef07ba2064d52b365f41afeb173	1438	Ruberto2022_1	.
-scientific_input	Ruberto2022_2_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/ruberto2022_2.rds	2714179	b20c625d10ed3ad0fecef2e388672f8a29df5c90449c225f2a0f0737bf49a68a	9947	Ruberto2022_2	.
-scientific_input	Ruberto2022_1_author_source	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/data/Hep59.1.2.seu_20aug2025.rds	13771658	87a64c47530ff5b1b140cc064269fbd8bf1160903efe7fb0b14a1bed5a998bce	1438	Ruberto2022_1	.
+scientific_input	Mancio-Silva2022_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/silva2022.rds	951972	b8d335ccba309b602c3c3462c3279cae6316acb3c93d006b6577a98344e203a7	1480	Mancio-Silva2022	.
+scientific_input	Sa2020_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/sa2020.rds	8807324	c31d16e8b0731d163633b0ca2942663fa816b1dd5fff902ea84fcb0490391a6e	9766	Sa2020	.
+scientific_input	Hazzard2022_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/hazzard2022.rds	1356700	9787f1a4af016a59cd67b322489af4308aa62a6e1a97d074aac0ffa05180fe78	3294	Hazzard2022	.
+scientific_input	Hazzard2024_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/hazzard2024.rds	102402015	febb1377254756441aabb4fa8505e8d74aee2fe6adbbe1dfc2eaab9d608a9e18	80024	Hazzard2024	.
+scientific_input	Ruberto2022_1_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/ruberto2022_1.rds	5553310	802641469151745c92073242d2eb98aaeb57cef07ba2064d52b365f41afeb173	1438	Ruberto2022_1	.
+scientific_input	Ruberto2022_2_study_object	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/ruberto2022_2.rds	2714179	b20c625d10ed3ad0fecef2e388672f8a29df5c90449c225f2a0f0737bf49a68a	9947	Ruberto2022_2	.
+scientific_input	Ruberto2022_1_author_source	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/data/Hep59.1.2.seu_20aug2025.rds	13771658	87a64c47530ff5b1b140cc064269fbd8bf1160903efe7fb0b14a1bed5a998bce	1438	Ruberto2022_1	.
 reference_input	PlasmoDB68_GFF	.	AVAILABLE_AND_VERIFIED	scripts/ref/PlasmoDB-68_PvivaxP01.gff	8132311	51c505fea934d33fa32c1fcb9e7d1ff0e7ffd67f2f0ae6f7f3a1ea1c366861c2	NA	.	.
+reference_input	STARsolo_feature_panel	.	AVAILABLE_AND_VERIFIED	scripts/ref/starsolo_feature_panel.tsv	302101	3f72b2c2aa9411240d370a2ca4fcdeaa2c56cdc2587ebea805889cfbfb2f496a	NA	.	.
+reference_input	Ruberto2022_1_feature_coverage	.	AVAILABLE_AND_VERIFIED	audit/ruberto2022_1/phase2_feature_coverage.tsv	3442861	3396f1ca03eb70e117dd23b5e49ce8db0c58c81dd6777ffbc650f5a36b4ee734	NA	.	.
 reference_input	Hazzard2024_authoritative_run_table	.	AVAILABLE_AND_VERIFIED	audit/hazzard2024/authoritative_run_table.tsv	26154	9bc8fd9fd66561a556f089b93ff24b6b24230446fb45ca4ed82faf4e9d9dfaa3	NA	.	.
 reference_input	Sa2020_authoritative_sample_crosswalk	.	AVAILABLE_AND_VERIFIED	audit/mancio_silva2022/sa2020_authoritative_sample_crosswalk.tsv	1088	dc8511e37ed477e378f67a833085bb323876186f30c5df06f28ffb707132a886	NA	.	.
 reference_input	Sa2020_authoritative_cell_lineage	.	AVAILABLE_AND_VERIFIED	audit/mancio_silva2022/sa2020_authoritative_cell_lineage.tsv	3493326	1b050bb61ed5e3ca95f48d9d45dc511eb89757320af53fe469e200f55658d5f8	9766	Sa2020	.
+decision_evidence	annotation_precedence	.	AVAILABLE_AND_VERIFIED	audit/shared_pipeline/annotation_precedence.tsv	9683	63a181c8c8500ef09fb1a58def0246bf099f899bfa49af623a1ef67348090e1f	NA	.	.
+decision_evidence	AT31_stage_population_floors	.	AVAILABLE_AND_VERIFIED	audit/shared_pipeline/stage_population_floors.tsv	2530	03d665146f09916f16cfcc651817035c66816ba887d7dd0591e524acee7ac1c7	NA	.	.
 decision_evidence	DEC01_removal_manifest	.	AVAILABLE_AND_VERIFIED	audit/mancio_silva2022/dec01_removed_duplicate_cells.tsv	3619	a82a42dec1360708412242f92fd40c1848dedb64f9ea912318105f0684d4dfbf	14	Mancio-Silva2022	.
 reused_input_checksums	reused_validated_inputs	.	AVAILABLE_AND_VERIFIED	audit/phase3_preflight/dec01_dec02_reused_input_checksums.sha256	600	61d818de1d8272e607454616d2517bdaad0072344013150f8834ab856206ff93	NA	.	.
-scientific_output	pv_all_studies	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/pv_all_studies.rds	639288837	32068878fc92952e9be539befcc8ff2f42a6818716a912a55f5c45930cc830b9	105949	.	.
-application_output	normalize_df	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/data/candidate_export/normalize_df.rds	489236573	e3afc56e52dc8eab940ac26777c17a9b27d19f680f7503bdbc373e1543c978f1	105949	.	.
-application_output	raw_df	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/data/candidate_export/raw_df.rds	109376246	0c01491b0628abd651513eee265b9faae8b10da57ac838c292beffd6612170f1	105949	.	.
-application_output	scale_df	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/data/candidate_export/scale_df.rds	205597070	a00f5a758fc09ee24193b993e673042f9d673ba1475f9378585891a7382fb505	105949	.	.
-application_output	cleaned_dataset	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/data/candidate_export/cleaned_dataset.rds	19361429	c1a04525424b7bad5bc723b8b9862ff71bebd16016d860a8ce6e652ce5117fed	105949	.	AT17 canonical lexicographic cell order; non-cell tables unchanged
-application_output	data_source	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_dec01_dec02_final/data/data_source.csv	1957	e70f880575f84b070a97a53b6245afdedc7424e6ee7283efc146d11197492e09	6	.	Six bibliography rows with verified study_pmid
+scientific_output	pv_all_studies	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/pv_all_studies.rds	642218847	e1a4112635bf966b3641778659e4c24dd1dcd7c19ae8f139568a5a96b6fac9fb	105949	.	.
+application_output	normalize_df	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/data/candidate_export/normalize_df.rds	489192138	21e25778f58039e80efc5f9806d3480d698c76b68b01d692ae9aa6786fc74971	105949	.	.
+application_output	raw_df	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/data/candidate_export/raw_df.rds	109407878	ed705a23aeb61464f5c3db97c85d9fe8f5cf8bf9224ec2495c6fa6ed99a632b9	105949	.	.
+application_output	scale_df	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/data/candidate_export/scale_df.rds	208118242	29c5f70cf5f282902c7972ed93278407b2af4079bb49a62a2d015ea04ddafd47	105949	.	.
+application_output	cleaned_dataset	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/data/candidate_export/cleaned_dataset.rds	19434259	1dc043a58bb4f15e962ffb761e9c056ae3b120b86cbffd631e488e387ffcfdec	105949	.	AT17 canonical lexicographic cell order; non-cell tables unchanged
+application_output	data_source	.	AVAILABLE_AND_VERIFIED	/home/baia/prj/plavisca/pre_process_data_gametocytes/data/data_source.csv	1957	e70f880575f84b070a97a53b6245afdedc7424e6ee7283efc146d11197492e09	6	.	Six bibliography rows with verified study_pmid

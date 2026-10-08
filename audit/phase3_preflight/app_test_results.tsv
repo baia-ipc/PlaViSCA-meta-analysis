@@ -1,0 +1,76 @@
+file	test	status	detail
+test_data_contract.R	candidate data directory resolves from PLAVISCA_DATA_DIR	PASS	
+test_data_contract.R	all four app data files are present	PASS	
+test_data_contract.R	cleaned_dataset.rds loads and has the expected cell count	PASS	
+test_data_contract.R	the atlas contains exactly the six expected studies	PASS	
+test_data_contract.R	every required configured field exists in the candidate data	PASS	
+test_data_contract.R	no configured field maps to an obsolete pre-Phase-2 column	PASS	
+test_data_contract.R	cell identifiers are unique and match the metadata rownames	PASS	
+test_data_contract.R	no literal 'NA'/'None' strings in app-visible categorical fields	PASS	
+test_data_contract.R	raw, normalized and metadata tables describe the same cells	PASS	
+test_data_contract.R	no duplicate cell ids in the expression tables	PASS	
+test_data_contract.R	full startup contract validation passes with no FAILs	PASS	
+test_data_contract.R	required embedding/reduction columns exist	PASS	
+test_lifecycle.R	every observed detailed stage is in the configured vocabulary	PASS	
+test_lifecycle.R	every observed broad stage is in the configured vocabulary	PASS	
+test_lifecycle.R	every (detailed, broad) pair in the data matches the documented mapping	PASS	
+test_lifecycle.R	broad and detailed stage are missing together, never one alone	PASS	
+test_lifecycle.R	an impossible broad/detailed combination is reported, not silently empty	PASS	
+test_lifecycle.R	a possible broad/detailed combination is accepted	PASS	
+test_lifecycle.R	selecting a broad stage constrains the detailed choices correctly	PASS	
+test_lifecycle.R	selecting a detailed stage preserves only compatible broad choices	PASS	
+test_lifecycle.R	detailed stage ordering follows lifecycle progression, not the alphabet	PASS	
+test_lifecycle.R	the configured ordering never invents a stage that is absent from the data	PASS	
+test_lifecycle.R	source-defined sporozoites are classified as Sporozoite stage	PASS	
+test_lifecycle.R	liver-stage cells never expose an inferred gametocyte sex	PASS	
+test_lifecycle.R	non-blood cells have no IDC reference-time class	PASS	
+test_idc_and_gametocytes.R	the obsolete hour_post_invasion field is not required by the app	PASS	
+test_idc_and_gametocytes.R	the IDC reference-similarity field is configured and present	PASS	
+test_idc_and_gametocytes.R	the IDC field is not labelled as measured hour-post-invasion	PASS	
+test_idc_and_gametocytes.R	IDC uncertainty companion fields are retained and configured	PASS	
+test_idc_and_gametocytes.R	the heuristic IDC bin is labelled as a PlaViSca heuristic	PASS	
+test_idc_and_gametocytes.R	no NA IDC values were manufactured	PASS	
+test_idc_and_gametocytes.R	inferred and author-reported gametocyte sex are distinct fields	PASS	
+test_idc_and_gametocytes.R	the two gametocyte fields are labelled with their provenance	PASS	
+test_idc_and_gametocytes.R	both male and female inferred labels are supported symmetrically	PASS	
+test_idc_and_gametocytes.R	adjudicated stage is not a separate app field and mirrors the detailed stage	PASS	
+test_idc_and_gametocytes.R	both gametocyte labels reach the detailed stage with configured colours	PASS	
+test_idc_and_gametocytes.R	source and inferred sex genuinely disagree for some cells (not collapsed)	PASS	
+test_idc_and_gametocytes.R	study_control and No_Treatment remain distinct categories	PASS	
+test_idc_and_gametocytes.R	missing treatment is never turned into a treatment category	PASS	
+test_idc_and_gametocytes.R	parasite geography uses parasite_origin_location, not the conflated field	PASS	
+test_idc_and_gametocytes.R	the other provenance concepts stay separate fields	PASS	
+test_idc_and_gametocytes.R	biological replicate identity is visible in the app	PASS	
+test_bibliography_and_filters.R	the bibliography maps exactly onto the six atlas studies	PASS	
+test_bibliography_and_filters.R	the bibliography has exactly six records, one per study	PASS	
+test_bibliography_and_filters.R	bibliography per-study cell counts agree with the atlas	PASS	
+test_bibliography_and_filters.R	each study carries exactly one PMID in the atlas	PASS	
+test_bibliography_and_filters.R	a missing or extra bibliography study is detected, not ignored	PASS	
+test_bibliography_and_filters.R	every configured filter field can populate non-empty choices	PASS	
+test_bibliography_and_filters.R	a valid filter combination returns rows	PASS	
+test_bibliography_and_filters.R	an impossible filter combination is constrained rather than silently empty	PASS	
+test_bibliography_and_filters.R	true NA values are displayed as the configured missing label	PASS	
+test_bibliography_and_filters.R	missing-value relabelling does not mutate the underlying data	PASS	
+test_bibliography_and_filters.R	numeric-sorted fields sort numerically, not lexicographically	PASS	
+test_bibliography_and_filters.R	an unconfigured/renamed filter column is a loud failure, not silent	PASS	
+test_expression.R	gene columns are identified by identifier despite the expanded metadata	PASS	
+test_expression.R	no metadata column is mistaken for a gene after the schema expansion	PASS	
+test_expression.R	raw and normalized lookup works for a known gene	PASS	
+test_expression.R	row-index filtering preserves cell-key alignment	PASS	
+test_expression.R	top-gene / HVG tables cover all six studies	PASS	
+test_expression.R	the expression tables carry every required metadata column	PASS	
+test_at19_at20.R	AT19: every configured field resolves to a real current-schema column	PASS	
+test_at19_at20.R	AT19: every configured field also exists in the expression tables	PASS	
+test_at19_at20.R	AT19: every field referenced by the filter/category/detail lists is configured	PASS	
+test_at19_at20.R	AT20: no live app code references obsolete stage/HPI/geography columns	PASS	
+test_at19_at20.R	AT20: no stale preprocessing generator remains under functions/	PASS	
+test_at19_at20.R	AT20: legacy files are documented as historical and are not sourced	PASS	
+test_at19_at20.R	AT20: global.R sources only files that exist	PASS	
+test_at19_at20.R	AT20: no absolute machine-specific path is hardcoded in app code	PASS	
+test_at19_at20.R	AT20: no hardcoded 'data/...' literal remains outside the path helper	PASS	
+test_final_release_candidate.R	final release count and six study counts are exact	PASS	
+test_final_release_candidate.R	DEC01 removes exactly the 14 duplicate representations and retains counterparts	PASS	
+test_final_release_candidate.R	DEC02 retains both distinct-source D5 cells without a suspicion field	PASS	
+test_final_release_candidate.R	exactly seven low-UMI Hazzard2024 cells have paired missing stages	PASS	
+test_final_release_candidate.R	final IDC and gametocyte totals preserve biological invariants	PASS	
+test_final_release_candidate.R	raw normalized scaled and cleaned tables have canonical identical keys	PASS	

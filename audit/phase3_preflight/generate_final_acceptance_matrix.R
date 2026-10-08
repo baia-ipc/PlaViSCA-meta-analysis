@@ -41,7 +41,7 @@ checks <- list(
   AT03 = list(all_pass("final_study_cell_counts.tsv") && file.exists(ev("membership_vs_previous_release.tsv")) && all_pass("membership_vs_previous_release.tsv"), "final_study_cell_counts.tsv; membership_vs_previous_release.tsv", "Study counts exact and cell-ID set identical to the 2026-09-21 release."),
   AT04 = list(unit_pass("UNIT-01") && !any(grepl("^\\[[^]]+\\] FAIL", unit_log)), "unit_study_tests.log", "Cardinality assertions pass."),
   AT05 = list(unit_pass("UNIT-02"), "unit_study_tests.log", "Keyed metadata, no unsafe recycling."),
-  AT06 = list(all(schema$literal_NA_count == 0), "app_candidate_schema.tsv", "Zero literal NA strings in exported fields."),
+  AT06 = list(any(!is.na(schema$literal_NA_count)) && all(schema$literal_NA_count[!is.na(schema$literal_NA_count)] == 0), "app_candidate_schema.tsv", "Zero literal NA strings in exported fields (NA count = column absent, e.g. obsolete names)."),
   AT07 = list(unit_pass("AT07"), "unit_study_tests.log", "Source, inferred and harmonized annotations remain separate fields."),
   AT08 = list(annot_pass("AT08"), "annotation_validation.tsv", "No non-blood IDC label."),
   AT09 = list(annot_pass("AT09"), "annotation_validation.tsv", "Source-defined sporozoites broad-labeled Sporozoite stage."),

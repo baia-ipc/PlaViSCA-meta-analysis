@@ -439,7 +439,7 @@ panel_e <- ggplot(sharing_long, aes(x = ratio, y = stage)) +
   geom_segment(data = sharing_wide, aes(x = from, xend = to, y = stage, yend = stage), colour = "grey70", linewidth = 0.6) +
   geom_point(aes(colour = embedding), size = 2.2) +
   scale_colour_manual(name = "Embedding", values = EMBEDDING_COLOURS) +
-  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1, 0.25), expand = expansion(mult = c(0, 0.01))) +
+  scale_x_continuous(limits = c(0, max(1.05, ceiling(max(sharing_long$ratio) * 20) / 20)), breaks = seq(0, 1.5, 0.25), expand = expansion(mult = c(0, 0.01))) +
   labs(
     title = "Cross-study neighbour sharing within stage",
     x = "Observed / expected fraction of 30 nearest neighbours from another study\n(1 = complete mixing)",

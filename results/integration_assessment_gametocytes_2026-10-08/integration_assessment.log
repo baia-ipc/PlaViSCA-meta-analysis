@@ -1,0 +1,20 @@
+[integration_assessment.R] input: /home/baia/prj/plavisca/deployments/data/releases/plavisca-v1-gametocytes-2026-10-08/pv_all_studies.rds (sha256 e1a4112635bf966b3641778659e4c24dd1dcd7c19ae8f139568a5a96b6fac9fb, 105949 cells)
+[integration_assessment.R] global metrics (8000-cell subsample, PCs 1-30, k=30):
+           metric unintegrated integrated                   better_if
+  knn_other_study       0.0426     0.2204       higher (study mixing)
+  knn_other_stage       0.2438     0.2789  lower (stage preservation)
+ silhouette_study      -0.0672    -0.2252        lower (study mixing)
+ silhouette_stage      -0.0130    -0.0912 higher (stage preservation)
+[integration_assessment.R] per-stage cross-study sharing (observed / expected under complete mixing):
+                  stage n_cells_sampled observed_unintegrated observed_integrated expected_complete_mixing ratio_unintegrated ratio_integrated
+      Female gametocyte            3000               0.00917              0.0722                    0.135            0.06803            0.536
+             Hypnozoite            1419               0.03697              0.1718                    0.310            0.11932            0.554
+        Male gametocyte             978               0.01459              0.1420                    0.181            0.08072            0.786
+              Merozoite            2305               0.02375              0.1091                    0.175            0.13579            0.624
+                   Ring            3000               0.00641              0.0486                    0.127            0.05051            0.383
+ Schizont (Blood stage)            3000               0.02120              0.1750                    0.250            0.08479            0.700
+ Schizont (Liver stage)            1499               0.00222              0.0590                    0.313            0.00711            0.188
+             Sporozoite            3000               0.16087              0.3654                    0.347            0.46392            1.054
+            Trophozoite            3000               0.00547              0.1203                    0.199            0.02749            0.605
+[integration_assessment.R] non-published release: published values reported in comparison_to_published.tsv, not enforced
+[integration_assessment.R] wrote 10 files to results/integration_assessment_gametocytes_2026-10-08/ and recorded them in build_manifest.tsv

@@ -64,8 +64,16 @@ RELEASE_RDS <- Sys.getenv(
   "PLAVISCA_RELEASE_RDS",
   unset = "/home/baia/prj/plavisca/deployments/data/releases/plavisca-v1-dec01-dec02-2026-09-21/pv_all_studies.rds"
 )
-EXPECTED_INPUT_SHA256 <- "32068878fc92952e9be539befcc8ff2f42a6818716a912a55f5c45930cc830b9"
-OUT_DIR <- "results/integration_assessment"
+PUBLISHED_INPUT_SHA256 <- "32068878fc92952e9be539befcc8ff2f42a6818716a912a55f5c45930cc830b9"
+# Any release other than the published 2026-09-21 object must be named
+# explicitly by its SHA256 and written to its own output directory; the
+# published values below are then reported for comparison, not enforced.
+EXPECTED_INPUT_SHA256 <- Sys.getenv("PLAVISCA_RELEASE_SHA256", unset = PUBLISHED_INPUT_SHA256)
+IS_PUBLISHED_RELEASE <- identical(EXPECTED_INPUT_SHA256, PUBLISHED_INPUT_SHA256)
+OUT_DIR <- Sys.getenv("PLAVISCA_ASSESSMENT_OUT_DIR", unset = "results/integration_assessment")
+if (!IS_PUBLISHED_RELEASE && OUT_DIR == "results/integration_assessment") {
+  pipeline_fail("a non-published release needs its own PLAVISCA_ASSESSMENT_OUT_DIR so the published outputs are never overwritten")
+}
 
 SEED <- 1L
 N_SUBSAMPLE <- 8000L
@@ -107,7 +115,7 @@ if (!file.exists(RELEASE_RDS)) {
 input_sha256 <- paste(openssl::sha256(file(RELEASE_RDS, raw = TRUE))) # paste() drops the "hash" class
 if (!identical(input_sha256, EXPECTED_INPUT_SHA256)) {
   pipeline_fail(sprintf(
-    "SHA256 of %s is %s, expected %s (the 2026-09-21 release object) - refusing to report published metrics for a different object",
+    "SHA256 of %s is %s, expected %s - refusing to report metrics for a different object",
     RELEASE_RDS, input_sha256, EXPECTED_INPUT_SHA256
   ))
 }
@@ -167,9 +175,10 @@ invisible(write_count_table(cluster, stage, CLUSTER_COLUMN, "harmonized_life_cyc
 
 stage_totals <- study_by_stage["Sum", ]
 names(stage_totals)[is.na(names(stage_totals))] <- "NA"
-if (!identical(as.integer(stage_totals[names(PUBLISHED_STAGE_TOTALS)]), unname(PUBLISHED_STAGE_TOTALS)) ||
+if (IS_PUBLISHED_RELEASE && (
+  !identical(as.integer(stage_totals[names(PUBLISHED_STAGE_TOTALS)]), unname(PUBLISHED_STAGE_TOTALS)) ||
     stage_totals[["Sum"]] != PUBLISHED_TOTAL_CELLS ||
-    length(stage_totals) != length(PUBLISHED_STAGE_TOTALS) + 1L) {
+    length(stage_totals) != length(PUBLISHED_STAGE_TOTALS) + 1L)) {
   pipeline_fail("study x stage totals differ from the published Table 3 totals")
 }
 
@@ -236,6 +245,33 @@ utils::write.table(integration_metrics, out_path("integration_metrics.tsv"), sep
 # Per-stage cross-study sharing. Continues the same seeded RNG stream as the
 # global subsample above; stage order and sampling calls are fixed so the
 # published values are reproduced.
+#' For every ordered study pair (A, B) within a stage: mean fraction of an
+#' A cell's k neighbours that come from B, against the B share of the stage
+#' expected under complete mixing. Reuses the per-stage kNN graphs, so it
+#' draws no random numbers.
+pairwise_sharing <- function(s, knns, labels, p) {
+  studies <- names(p)
+  rows <- expand.grid(from_study = studies, to_study = studies, stringsAsFactors = FALSE)
+  rows <- rows[rows$from_study != rows$to_study, , drop = FALSE]
+  frac <- function(nn, a, b) {
+    from <- labels == a
+    if (!any(from)) return(NA_real_)
+    nb <- matrix(labels[nn[from, , drop = FALSE]], nrow = sum(from))
+    mean(rowMeans(nb == b))
+  }
+  data.frame(
+    stage = s,
+    from_study = rows$from_study,
+    to_study = rows$to_study,
+    n_from_sampled = vapply(rows$from_study, function(a) sum(labels == a), integer(1)),
+    observed_unintegrated = mapply(function(a, b) frac(knns[["unintegrated"]], a, b), rows$from_study, rows$to_study),
+    observed_integrated = mapply(function(a, b) frac(knns[["integrated"]], a, b), rows$from_study, rows$to_study),
+    expected_complete_mixing = as.numeric(p[rows$to_study]),
+    row.names = NULL
+  )
+}
+pairwise <- list()
+
 stage_study_table <- table(stage, study)
 shared_stages <- names(which(rowSums(stage_study_table > 0) > 1))
 
@@ -243,12 +279,11 @@ per_stage <- do.call(rbind, lapply(shared_stages, function(s) {
   sel <- which(stage == s)
   n_stage <- length(sel)
   if (n_stage > N_PER_STAGE_MAX) sel <- sample(sel, N_PER_STAGE_MAX)
-  observed <- vapply(names(EMBEDDINGS), function(e) {
-    knn <- knn_indices(pcs[[e]][sel, , drop = FALSE], K_NEIGHBOURS)
-    mean_frac_other(knn$nn, study[sel])
-  }, numeric(1))
+  knns <- lapply(setNames(names(EMBEDDINGS), names(EMBEDDINGS)), function(e) knn_indices(pcs[[e]][sel, , drop = FALSE], K_NEIGHBOURS)$nn)
+  observed <- vapply(names(EMBEDDINGS), function(e) mean_frac_other(knns[[e]], study[sel]), numeric(1))
   p <- prop.table(table(study[which(stage == s)]))
   expected <- 1 - sum(p^2)
+  pairwise[[s]] <<- pairwise_sharing(s, knns, study[sel], p)
   data.frame(
     stage = s,
     n_cells_stage = n_stage,
@@ -263,6 +298,10 @@ per_stage <- do.call(rbind, lapply(shared_stages, function(s) {
   )
 }))
 utils::write.table(per_stage, out_path("per_stage_cross_study_sharing.tsv"), sep = "\t", quote = FALSE, row.names = FALSE)
+pairwise <- do.call(rbind, pairwise)
+pairwise$ratio_unintegrated <- pairwise$observed_unintegrated / pairwise$expected_complete_mixing
+pairwise$ratio_integrated <- pairwise$observed_integrated / pairwise$expected_complete_mixing
+utils::write.table(pairwise, out_path("per_stage_pairwise_study_sharing.tsv"), sep = "\t", quote = FALSE, row.names = FALSE)
 
 # ---------------------------------------------------------------------------
 # Regression gate against the published values
@@ -282,13 +321,29 @@ check_published <- function(observed, published, keys, label) {
   }
   invisible(m)
 }
-check_published(integration_metrics[, c("metric", "unintegrated", "integrated")], PUBLISHED_GLOBAL, "metric", "global integration metrics")
-check_published(
-  data.frame(stage = per_stage$stage, unintegrated = per_stage$observed_unintegrated, integrated = per_stage$observed_integrated),
-  PUBLISHED_PER_STAGE, "stage", "per-stage cross-study sharing values"
-)
-if (!setequal(per_stage$stage, PUBLISHED_PER_STAGE$stage)) {
-  pipeline_fail("set of stages shared by more than one study differs from the published list")
+observed_per_stage <- data.frame(stage = per_stage$stage, unintegrated = per_stage$observed_unintegrated, integrated = per_stage$observed_integrated)
+if (IS_PUBLISHED_RELEASE) {
+  check_published(integration_metrics[, c("metric", "unintegrated", "integrated")], PUBLISHED_GLOBAL, "metric", "global integration metrics")
+  check_published(observed_per_stage, PUBLISHED_PER_STAGE, "stage", "per-stage cross-study sharing values")
+  if (!setequal(per_stage$stage, PUBLISHED_PER_STAGE$stage)) {
+    pipeline_fail("set of stages shared by more than one study differs from the published list")
+  }
+} else {
+  # Report-only comparison with the published 2026-09-21 values.
+  cmp <- function(label, observed, published, key) {
+    m <- merge(published, observed, by = key, suffixes = c("_published", "_observed"), all = TRUE)
+    names(m)[1] <- "key"
+    m$diff_unintegrated <- m$unintegrated_observed - m$unintegrated_published
+    m$diff_integrated <- m$integrated_observed - m$integrated_published
+    cbind(table = label, m)
+  }
+  utils::write.table(
+    rbind(
+      cmp("global", integration_metrics[, c("metric", "unintegrated", "integrated")], PUBLISHED_GLOBAL, "metric"),
+      cmp("per_stage", observed_per_stage, PUBLISHED_PER_STAGE, "stage")
+    ),
+    out_path("comparison_to_published.tsv"), sep = "\t", quote = FALSE, row.names = FALSE, na = "NA"
+  )
 }
 
 # ---------------------------------------------------------------------------
@@ -424,8 +479,9 @@ provenance_notes <- sprintf(
 )
 outputs <- out_path(c(
   "study_by_stage.tsv", "study_by_broad_stage.tsv", "cluster_by_study.tsv", "cluster_by_stage.tsv",
-  "integration_metrics.tsv", "per_stage_cross_study_sharing.tsv",
-  "fig2_integration.pdf", "fig2_integration.png"
+  "integration_metrics.tsv", "per_stage_cross_study_sharing.tsv", "per_stage_pairwise_study_sharing.tsv",
+  "fig2_integration.pdf", "fig2_integration.png",
+  if (!IS_PUBLISHED_RELEASE) "comparison_to_published.tsv"
 ))
 for (f in outputs) {
   record_build_manifest(f, SCRIPT_PATH, cell_count = n_cells, seed = SEED, notes = provenance_notes)
@@ -443,5 +499,9 @@ print(format(per_stage[, c(
   "stage", "n_cells_sampled", "observed_unintegrated", "observed_integrated",
   "expected_complete_mixing", "ratio_unintegrated", "ratio_integrated"
 )], digits = 3), row.names = FALSE)
-cat(sprintf("[integration_assessment.R] all values within %.3f of the published values\n", PUBLISHED_TOLERANCE))
+if (IS_PUBLISHED_RELEASE) {
+  cat(sprintf("[integration_assessment.R] all values within %.3f of the published values\n", PUBLISHED_TOLERANCE))
+} else {
+  cat("[integration_assessment.R] non-published release: published values reported in comparison_to_published.tsv, not enforced\n")
+}
 cat(sprintf("[integration_assessment.R] wrote %d files to %s/ and recorded them in build_manifest.tsv\n", length(outputs), OUT_DIR))

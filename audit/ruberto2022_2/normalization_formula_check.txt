@@ -1,6 +1,0 @@
-Deployed normalize_df.rds vs log1p(count / cell_total * 10000)
-cells_compared: 9947
-genes_compared: 6860
-values_compared: 68236420
-n_mismatches_gt_1e-8: 0
-max_abs_difference: 0

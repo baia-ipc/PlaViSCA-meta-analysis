@@ -1,4 +1,0 @@
-run_accession	experiment_accession	sample_accession	study_accession	secondary_study_accession	sample_alias	experiment_alias	instrument_model	library_strategy	library_source	library_selection	scientific_name
-ERR5087438	ERX4893559	SAMEA7804580	PRJEB42435	ERP126293	Pv_sporozoites_rep1	ena-EXPERIMENT-INSTITUT PASTEUR-13-01-2021-11:18:34:040-1	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC	cDNA	Plasmodium vivax
-ERR5087439	ERX4893560	SAMEA7804581	PRJEB42435	ERP126293	Pv_sporozoites_rep2	ena-EXPERIMENT-INSTITUT PASTEUR-13-01-2021-11:18:34:040-2	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC	cDNA	Plasmodium vivax
-ERR5087440	ERX4893561	SAMEA7804582	PRJEB42435	ERP126293	Pv_sporozoites_rep3	ena-EXPERIMENT-INSTITUT PASTEUR-13-01-2021-11:18:34:040-3	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC	cDNA	Plasmodium vivax

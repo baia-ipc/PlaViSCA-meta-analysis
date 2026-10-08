@@ -191,10 +191,14 @@ Results in `results/integration/`: count tables, `integration_metrics.tsv`,
 
 Collects the numbers of the earlier stages into `results/manuscript/`:
 - `values.tsv`, and `values.tex` with one LaTeX command per value;
-- the dataset and stage-count tables (`.tsv` and `.tex`);
+- the dataset and stage-count tables (`.tsv`, and the table rows as `.tex`);
 - the STARsolo options read from the run logs;
 - the parameters and the software versions;
 - the column dictionary;
 - the supplementary figures.
 
-`--copy-to <dir>` copies the `.tex` and `.pdf` files into the manuscript.
+`Rscript R/70_manuscript.R --manuscript <file.tex>` writes the values and
+the table rows into the manuscript, between the lines
+`% BEGIN generated: <name>` and `% END generated: <name>`, and copies the
+figures to `figures/` next to it. The manuscript stays a single file, as
+PLOS requires.

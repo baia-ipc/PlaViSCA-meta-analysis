@@ -1,4 +1,0 @@
-run_accession	sample_accession	sample_title	sample_alias	instrument_model	library_strategy	library_source	library_selection	collection_date	center_name	fastq_ftp
-ERR5087439	SAMEA7804581	Pv2	Pv_sporozoites_rep2	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC	cDNA	2019-11-11	INSTITUT PASTEUR	ftp.sra.ebi.ac.uk/vol1/fastq/ERR508/009/ERR5087439/ERR5087439_1.fastq.gz;ftp.sra.ebi.ac.uk/vol1/fastq/ERR508/009/ERR5087439/ERR5087439_2.fastq.gz
-ERR5087438	SAMEA7804580	Pv1	Pv_sporozoites_rep1	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC	cDNA	2019-09-23	INSTITUT PASTEUR	ftp.sra.ebi.ac.uk/vol1/fastq/ERR508/008/ERR5087438/ERR5087438_1.fastq.gz;ftp.sra.ebi.ac.uk/vol1/fastq/ERR508/008/ERR5087438/ERR5087438_2.fastq.gz
-ERR5087440	SAMEA7804582	Pv3	Pv_sporozoites_rep3	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC	cDNA	2019-11-13	INSTITUT PASTEUR	ftp.sra.ebi.ac.uk/vol1/fastq/ERR508/000/ERR5087440/ERR5087440_1.fastq.gz;ftp.sra.ebi.ac.uk/vol1/fastq/ERR508/000/ERR5087440/ERR5087440_2.fastq.gz

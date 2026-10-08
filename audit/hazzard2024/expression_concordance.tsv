@@ -1,3 +1,0 @@
-artifact	comparison	cells	source_features	compared_values	unequal_values	max_abs_difference	source_cells_missing	source_features_missing
-raw_df.rds	raw	80024	6583	526797992	0	0e+00	0	0
-normalize_df.rds	normalized	80024	6583	526797992	0	0e+00	0	0

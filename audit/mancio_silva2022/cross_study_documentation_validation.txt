@@ -1,7 +1,0 @@
-Prior AUDIT.md preserved byte-for-byte as prefix: PASS
-Only tracked preprocessing change: audit/mancio_silva2022/AUDIT.md
-Application git status clean: PASS
-R inspection logs have no execution errors: PASS
-New evidence limited to audit-only TSV/text, each <2 MiB: PASS
-No production object writes, annotation/integration/export runs or commits requested/performed.
-Old SHA256SUMS.txt preserved; AUDIT.md entry therein predates addition.

@@ -1,9 +1,0 @@
-run_accession	experiment_accession	sample_accession	study_accession	secondary_study_accession	sample_alias	experiment_alias	instrument_model	library_strategy	library_source	library_selection	scientific_name
-SRR20710494	SRX16731416	SAMN30051612	PRJNA863611	SRP388786	pacbio_spz_sample_2	PacBio_spz_2	Sequel II	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Plasmodium vivax
-SRR20710497	SRX16731413	SAMN30051609	PRJNA863611	SRP388786	pacbio_blood_sample_1	PacBio_blood_1	Sequel II	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Plasmodium vivax
-SRR20710498	SRX16731412	SAMN30051608	PRJNA863611	SRP388786	illumina_spz_sample_2	Illumina_spz_2	Illumina NovaSeq 6000	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Plasmodium vivax
-SRR20710500	SRX16731410	SAMN30051606	PRJNA863611	SRP388786	illumina_blood_sample_2	Illumina_Blood_2	Illumina HiSeq 2500	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Plasmodium vivax
-SRR20710495	SRX16731415	SAMN30051611	PRJNA863611	SRP388786	pacbio_spz_sample_1	PacBio_spz_1	Sequel II	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Plasmodium vivax
-SRR20710496	SRX16731414	SAMN30051610	PRJNA863611	SRP388786	pacbio_blood_sample_2	PacBio_blood_2	Sequel II	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Plasmodium vivax
-SRR20710499	SRX16731411	SAMN30051607	PRJNA863611	SRP388786	illumina_spz_sample_1	Illumina_spz_1	Illumina NovaSeq 6000	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Plasmodium vivax
-SRR20710501	SRX16731409	SAMN30051605	PRJNA863611	SRP388786	illumina_blood_sample_1	Illumina_Blood_1	Illumina HiSeq 2500	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Plasmodium vivax

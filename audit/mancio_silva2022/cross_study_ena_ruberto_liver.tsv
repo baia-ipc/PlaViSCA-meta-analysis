@@ -1,7 +1,0 @@
-run_accession	experiment_accession	sample_accession	study_accession	secondary_study_accession	sample_alias	experiment_alias	instrument_model	library_strategy	library_source	library_selection	scientific_name
-SRR19573610	SRX15625588	SAMN28771611	PRJNA843856	SRP378943	Pv_infected_hepatocyte_5dpi_rep2	InfHep5dpi_rep2	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Homo sapiens
-SRR19573613	SRX15625585	SAMN28771608	PRJNA843856	SRP378943	Hepatocyte_9dpi_control_1	Hep9dpi_ctrl_1	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Homo sapiens
-SRR19573614	SRX15625584	SAMN28771607	PRJNA843856	SRP378943	Hepatocyte_5dpi_control_1	Hep5dpi_ctrl_1	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Homo sapiens
-SRR19573609	SRX15625589	SAMN28771612	PRJNA843856	SRP378943	Pv_infected_hepatocyte_9dpi_rep2	InfHep9dpi_rep2	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Homo sapiens
-SRR19573611	SRX15625587	SAMN28771610	PRJNA843856	SRP378943	Pv_infected_hepatocyte_9dpi_rep1	InfHep9dpi_rep1	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Homo sapiens
-SRR19573612	SRX15625586	SAMN28771609	PRJNA843856	SRP378943	Pv_infected_hepatocyte_5dpi_rep1	InfHep5dpi_rep1	HiSeq X Ten	RNA-Seq	TRANSCRIPTOMIC SINGLE CELL	Oligo-dT	Homo sapiens

@@ -1,7 +1,0 @@
-run_id	group	n_candidates	rank1_frac	top5_frac	top10_frac	note
-SRR19573612	B_unaffected	636	0.849056603773585	0.874213836477987	0.930817610062893	spearman over shared genes, candidate pool = same-run same-group PlaViSca cells
-SRR19573611	B_unaffected	255	1	1	1	spearman over shared genes, candidate pool = same-run same-group PlaViSca cells
-SRR19573610	B_unaffected	8	0	0.875	1	spearman over shared genes, candidate pool = same-run same-group PlaViSca cells
-SRR19573610	A_D036_near_empty	15	0.0666666666666667	0.266666666666667	0.6	spearman over shared genes, candidate pool = same-run same-group PlaViSca cells
-SRR19573609	B_unaffected	1	NA	NA	NA	candidate pool too small (<2) for a meaningful rank test
-SRR19573609	A_D036_near_empty	6	0.333333333333333	0.833333333333333	1	spearman over shared genes, candidate pool = same-run same-group PlaViSca cells

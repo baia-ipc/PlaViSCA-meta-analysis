@@ -1,8 +1,0 @@
-cell_id	study_label	total_umi_count	near_empty_expression_flag	source_life_cycle_stage	idc_reference_similarity_label	documented_class
-982_ACAACCAGTAGCACAG	Hazzard2024	9	FALSE	NA	NA	below_10_UMI_inference_threshold
-982_AGCTTCCGTAGGTAGC	Hazzard2024	6	FALSE	NA	NA	below_10_UMI_inference_threshold
-982_ATCGGATAGACGCATG	Hazzard2024	8	FALSE	NA	NA	below_10_UMI_inference_threshold
-982_CAACGATTCCCTCGAT	Hazzard2024	7	FALSE	NA	NA	below_10_UMI_inference_threshold
-982_CCCTAACGTTTGACAC	Hazzard2024	5	FALSE	NA	NA	below_10_UMI_inference_threshold
-982_GGATGTTCATGACTTG	Hazzard2024	8	FALSE	NA	NA	below_10_UMI_inference_threshold
-982_TCCAGAAAGCCTGACC	Hazzard2024	6	FALSE	NA	NA	below_10_UMI_inference_threshold

@@ -1,7 +1,0 @@
-study_file	features_before	rrna_features_removed	rrna_features_nonzero	rrna_umi_removed	features_after
-hazzard2022.rds	5318	0	0	0	5318
-hazzard2024.rds	6583	0	0	0	6583
-ruberto2022_1.rds	6811	0	0	0	6811
-ruberto2022_2.rds	6811	0	0	0	6811
-sa2020.rds	5644	0	0	0	5644
-silva2022.rds	5934	49	45	206690	5885

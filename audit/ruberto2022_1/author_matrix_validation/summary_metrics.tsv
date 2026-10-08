@@ -1,3 +1,0 @@
-group	n_cells	author_median_umi	plavisca_median_umi	median_shared_gene_spearman_intersection	median_shared_gene_spearman_full_panel	median_detected_genes_author	median_detected_genes_plavisca
-B_unaffected	900	980.5	341.5	0.341881729378914	0.265161864787912	699	269
-A_D036_near_empty	538	702.5	0	NA	-0.0033005660146873	537	0

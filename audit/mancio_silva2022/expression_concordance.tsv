@@ -1,3 +1,0 @@
-artifact	reference	genes	unequal_exact	unequal_above_1e_12	max_absolute_error
-raw	source_RNA_counts	5934	0	0	0
-normalize	log1p_source_counts_per_10000	5934	0	0	0

@@ -1,5 +1,0 @@
-run_id	raw_features	raw_barcodes_matrix	raw_nonzero_entries	raw_barcode_lines	raw_unique_barcodes	raw_feature_lines	raw_unique_feature_ids	retained_cells	retained_unique_barcodes	retained_barcodes_present_raw	retained_barcodes_absent_raw
-SRR20710498	6861	6794880	484112	6794880	6794880	6861	6861	1433	1433	1433	0
-SRR20710499	6861	6794880	442672	6794880	6794880	6861	6861	1425	1425	1425	0
-SRR20710500	6861	6794880	670102	6794880	6794880	6861	6861	362	362	362	0
-SRR20710501	6861	6794880	206936	6794880	6794880	6861	6861	74	74	74	0

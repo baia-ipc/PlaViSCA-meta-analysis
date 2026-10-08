@@ -1,5 +1,0 @@
-run_id	run_suffix	n_cells	day_match_n	day_mismatch_n	replicate_match_n	replicate_mismatch_n	liver_form_match_n	liver_form_mismatch_n	run_prefix_mapping_match_n	run_prefix_mapping_mismatch_n
-SRR19573609	609	90	90	0	90	0	90	0	90	0
-SRR19573610	610	457	457	0	457	0	457	0	457	0
-SRR19573611	611	255	255	0	255	0	255	0	255	0
-SRR19573612	612	636	636	0	636	0	636	0	636	0

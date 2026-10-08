@@ -1,9 +1,0 @@
-check_id	status	evidence	impact
-APP-M01	CONFIRMED	config/data_columns.yml maps development_phase->parasite_stage, parasite_stages->life_cycle_stage, and hour_post_invasion->hour_post_invasion; all three physical columns are absent from the candidate.	Current master cannot load/use the Phase-2 candidate contract without repair.
-APP-M02	CONFIRMED	104 obsolete-name occurrences across sourced R files; functions/metadata_filter_module.R directly reads mr_data$development_phase and mr_data$parasite_stages.	AT20 fails on current master and dead code remains a latent trap.
-APP-M03	CONFIRMED	functions/preprocessing.R remains present and contains atlas preprocessing logic.	Stale build logic is shipped with the app.
-APP-M04	CONFIRMED	server.R reads data/data_source.csv for display but has no candidate study-label/PMID foreign-key validation.	Bibliography drift is silent.
-APP-M05	CONFIRMED	server.R defines duplicated hardcoded color_map/color_names maps; functions/embedding_plots.R hardcodes categorical overrides.	Renames can silently desynchronize labels and colors from config.
-APP-M06	CONFIRMED	functions/embedding_plots.R tests color == blood_stage, a nonexistent physical field.	NA-context handling branch is unreachable.
-APP-M07	CONFIRMED	Multiple sourced modules catch errors with NULL or empty handlers (including helpers_server.R and server.R).	Filter/plot failures can degrade silently instead of failing visibly.
-APP-M08	CONFIRMED	master SHA 020f9cbd651750ba92c037399fb84d3b17d389e8 inspected read-only; working tree remained unchanged.	Establishes the pre-repair baseline.

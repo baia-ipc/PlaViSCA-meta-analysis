@@ -1,5 +1,0 @@
-n_cells_hashed: 9947
-n_duplicate_groups: 0
-n_within_run_duplicate_groups: 0
-n_cross_run_duplicate_groups: 0
-n_cells_in_duplicate_groups: 0

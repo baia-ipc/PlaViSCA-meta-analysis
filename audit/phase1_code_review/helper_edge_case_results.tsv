@@ -1,6 +1,0 @@
-test	observed	expected	status
-assert_keyed_join duplicate data keys	FALSE	TRUE	FAIL
-assert_keyed_join NA key	FALSE	TRUE	FAIL
-map_broad_stage factor input	Liver stage;Liver stage	Sporozoite stage;Blood stage	FAIL
-map_broad_stage character input	Sporozoite stage;Blood stage	Sporozoite stage;Blood stage	PASS
-unnamed eligibility indexed by cell ID	NA;NA;NA	TRUE;FALSE;TRUE	FAIL

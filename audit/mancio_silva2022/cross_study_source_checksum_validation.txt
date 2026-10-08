@@ -1,2 +1,0 @@
-data/Proccessed_Data.txt md5=6ede1f7da4e5d57841c9f90883b2b2c1; matches Zenodo 12775216 advertised md5:6ede1f7da4e5d57841c9f90883b2b2c1
-data/pbio.3000711.s034.xlsx SHA256=391e2c8b1a825a170f9fbcbb4464614a0b0f2540c795847c63d7d0172472f90e; publisher SHA256=391e2c8b1a825a170f9fbcbb4464614a0b0f2540c795847c63d7d0172472f90e; identical=True; url=https://journals.plos.org/plosbiology/article/file?type=supplementary&id=10.1371/journal.pbio.3000711.s034

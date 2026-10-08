@@ -1,2 +1,0 @@
-Author unique 9215 mapped unique 9215 present 9018 absent 197 PlaViSca extra 748
-Surviving mosquito cells with cluster-gametocyte prediction 1 final mosquito gametocytes 0

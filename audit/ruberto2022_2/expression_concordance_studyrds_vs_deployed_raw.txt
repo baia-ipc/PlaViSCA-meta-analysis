@@ -1,8 +1,0 @@
-ruberto2022_2.rds vs deployed raw_df.rds
-cells_compared: 9947
-genes_compared: 6811
-values_compared: 67749017
-n_mismatches: 0
-max_abs_difference: 0
-genes_only_in_study_rds_not_deployed_n: 0
-genes_only_in_deployed_not_study_rds_n: 49

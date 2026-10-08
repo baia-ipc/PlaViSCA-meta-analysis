@@ -1,3 +1,0 @@
-PASS all 526797992 study-RDS count values equal deployed raw_df values
-PASS all 526797992 expected log1p(count/cell_total*10000) values equal deployed normalize_df values within 1e-12
-LIMIT this establishes study-RDS to deployed expression lineage, not deposited author count-table to PlaViSca equivalence

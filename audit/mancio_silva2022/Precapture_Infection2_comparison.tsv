@@ -1,5 +1,0 @@
-source_cell_id	expected_upstream_cell_id	source_barcode_token	exact_identifier_matches	barcode_token_matches	upstream_total_columns	status
-D4Seq1_GCTGAATTTCGG	D4Seq1_GCTGAATTTCGG	GCTGAATTTCGG	0	0	280000	No corresponding called barcode column in this deposited matrix
-D4Seq1_GCTGAATTTCGG.1	D4Seq1_GCTGAATTTCGG	GCTGAATTTCGG	0	0	280000	No corresponding called barcode column in this deposited matrix
-D5Seq1_CCCCGATTGACG	D5Seq1_CCCCGATTGACG	CCCCGATTGACG	0	0	280000	No corresponding called barcode column in this deposited matrix
-D5Seq2_CCCCGATTGACG	D5Seq2_CCCCGATTGACG	CCCCGATTGACG	0	0	280000	No corresponding called barcode column in this deposited matrix

@@ -1,9 +1,0 @@
-evidence	url	status
-article.xml	https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11369214/fullTextXML	OK
-supplemental_data_1.xlsx	https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-024-51949-8/MediaObjects/41467_2024_51949_MOESM4_ESM.xlsx	OK
-ena_PRJNA1047651.xml	https://www.ebi.ac.uk/ena/browser/api/xml/PRJNA1047651?download=true	OK
-ena_PRJNA1047651_runs.tsv	https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJNA1047651&result=read_run	OK; copied from checksummed authoritative-audit snapshot
-ncbi_biosamples.xml	https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=biosample&retmode=xml	OK; 43 study BioSample accessions requested
-author_code_v0.1.0-alpha.zip	https://github.com/bhazzard11/Coinfection_Analysis/archive/refs/tags/v0.1.0-alpha.zip	OK
-Proccessed_Data.txt	https://zenodo.org/records/12775216/files/Proccessed_Data.txt/content	LOCAL FILE; MD5 matches deposit
-Single_Cell_Count_Table.txt.zip	https://zenodo.org/records/12775216/files/Single_Cell_Count_Table.txt.zip/content	FAILED HTTP 504; not used

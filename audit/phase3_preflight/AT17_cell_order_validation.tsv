@@ -1,5 +1,0 @@
-artifact	rows	unique_keys	identical_set_to_mr_data	identical_order_to_mr_data	canonical_lexicographic_order	status
-raw_df.rds	105949	TRUE	TRUE	TRUE	TRUE	PASS
-normalize_df.rds	105949	TRUE	TRUE	TRUE	TRUE	PASS
-scale_df.rds	105949	TRUE	TRUE	TRUE	TRUE	PASS
-cleaned_dataset.rds$mr_data	105949	TRUE	TRUE	TRUE	TRUE	PASS

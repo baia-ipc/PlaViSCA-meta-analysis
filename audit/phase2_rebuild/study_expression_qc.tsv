@@ -1,7 +1,0 @@
-study	n_cells	n_features_panel	median_umi	mean_umi	min_umi	max_umi	median_features_detected	n_cells_umi_le_1	source_of_counts	counting_pipeline	count_reference_version	all_counts_nonneg_integer
-mancio_silva2022	1494	5934	294	677.039491298527	62	18230	152	0	author_processed_object_raw_umi	author_upstream_pipeline_undocumented	author_reference_undocumented	TRUE
-sa2020	9766	5644	637	743.488326848249	19	5575	400	0	plavisca_starsolo_raw_umi	STARsolo	PlasmoDB-68_PvivaxP01	TRUE
-hazzard2022	3294	5318	113	346.601396478446	81	10569	91	0	plavisca_starsolo_raw_umi	STARsolo	PlasmoDB-68_PvivaxP01	TRUE
-hazzard2024	80024	6583	828	1292.9343946816	5	22636	472	0	plavisca_starsolo_raw_umi	STARsolo	PlasmoDB-68_PvivaxP01	TRUE
-ruberto2022_1	1438	6811	868	3129.66481223922	51	99643	640.5	0	author_processed_object_raw_umi	kallisto_bustools	PlasmoDB-51_PvivaxP01_AnnotatedTranscripts	TRUE
-ruberto2022_2	9947	6811	183	183.48175329245	26	2272	134	0	plavisca_starsolo_raw_umi	STARsolo	PlasmoDB-68_PvivaxP01	TRUE

@@ -1,7 +1,0 @@
-source_object_class: Seurat
-source_object_seurat_version: 4.1.0
-n_cells_total: 18251
-default_assay: integrated
-commands: FindIntegrationAnchors;withCallingHandlers;ScaleData.integrated;RunPCA.integrated;RunUMAP.integrated.pca;FindNeighbors.integrated.pca
-n_sporozoite: 9947
-n_bloodstage: 8304

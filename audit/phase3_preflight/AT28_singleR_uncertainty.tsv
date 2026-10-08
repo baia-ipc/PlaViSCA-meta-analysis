@@ -1,5 +1,0 @@
-"check"	"tested_cells"	"failures"	"status"
-"raw_label_nonmissing"	90219	0	"PASS"
-"score_delta_nonmissing"	90219	0	"PASS"
-"pruned_flag_nonmissing"	90219	0	"PASS"
-"retained_label_not_flagged_pruned"	90219	0	"PASS"

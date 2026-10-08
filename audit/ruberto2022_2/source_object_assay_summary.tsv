@@ -1,5 +1,0 @@
-assay	n_features	counts_range_min	counts_range_max	counts_integer_like
-originalexp	4254	1	1226	TRUE
-CCA	656	Inf	-Inf	TRUE
-RNA	4170	1	1226	TRUE
-integrated	658	Inf	-Inf	TRUE

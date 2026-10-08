@@ -1,3 +1,0 @@
-cell_id	present	study_label	source_sample_id	run_id	pair_specific_duplicate_or_suspicion_flag_present	decision_id	status
-D5Seq1_CCCCGATTGACG	TRUE	Mancio-Silva2022	SEQ5r1	SRR18134257;SRR18134258	FALSE	DEC02	PASS
-D5Seq2_CCCCGATTGACG	TRUE	Mancio-Silva2022	SEQ5r2	SRR18134259;SRR18134260	FALSE	DEC02	PASS

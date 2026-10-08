@@ -1,9 +1,0 @@
-check	status	evidence	notes
-immutable_commit	PASS	c44cde046acf9791f5dd8a83f884d2f83ec08486 exists on github/plavisca-app-production-repair.	Inspected with git show; app repository was not modified.
-AT19_config_resolution	PASS	audit/phase3_app_repair/field_mapping.tsv and test_at19_at20.R at immutable commit report all 40 configured fields present in metadata/expression exports.	No configured target uses obsolete pre-Phase-2 physical names.
-AT19_schema_definitions	PASS	Config maps broad_stage->parasite_broad_stage, detailed_stage->harmonized_life_cycle_stage, and IDC reference class/uncertainty fields to current schema columns.	Dedicated AT19 tests all PASS.
-AT20_live_obsolete_scan	PASS	audit/phase3_app_repair/obsolete_schema_scan.tsv reports zero live-code AT20 violations.	Historical files are under docs/legacy with explicit headers and are not sourced.
-AT20_stale_preprocessing	PASS	Dedicated test confirms no stale preprocessing generator remains under live functions/.	App preprocessing remains solely upstream.
-AT20_path_safety	PASS	Dedicated tests find no absolute machine-specific path and no hardcoded data/... literal outside the path helper.	No path-safety violation found.
-test_suite	PASS	Immutable evidence reports 68 PASS, 0 FAIL, 0 SKIP, including 9 AT19/AT20 tests.	Closure independently checked committed result files and config; it did not rerun the app suite against mutable code.
-post_closure_retest_required	RETEST	cleaned_dataset.rds order and data_source.csv schema/hash changed after c44cde0 testing.	App team must rerun its contract/bibliography/expression-alignment suite against final hashes.

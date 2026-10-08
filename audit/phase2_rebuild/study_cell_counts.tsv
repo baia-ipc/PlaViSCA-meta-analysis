@@ -1,7 +1,0 @@
-study	file	n_cells	expected_n_cells	matches_expected	n_features
-mancio_silva2022	silva2022.rds	1494	1494	TRUE	5934
-sa2020	sa2020.rds	9766	9766	TRUE	5644
-hazzard2022	hazzard2022.rds	3294	3294	TRUE	5318
-hazzard2024	hazzard2024.rds	80024	80024	TRUE	6583
-ruberto2022_1	ruberto2022_1.rds	1438	1438	TRUE	6811
-ruberto2022_2	ruberto2022_2.rds	9947	9947	TRUE	6811

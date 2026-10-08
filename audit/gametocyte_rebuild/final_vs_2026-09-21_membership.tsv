@@ -1,0 +1,6 @@
+check	value	status
+total_cells_previous	105949	PASS
+total_cells_new	105949	PASS
+cell_id_set_equal	1	PASS
+cells_only_in_previous	0	PASS
+cells_only_in_new	0	PASS

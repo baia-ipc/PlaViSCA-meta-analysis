@@ -1,0 +1,59 @@
+[UNIT-01] PASS   assert_cardinality rejects a length mismatch
+[UNIT-02] PASS   assert_keyed_join rejects duplicate/unmatched/extra keys
+[AT01-unit] PASS   assert_unique_cell_ids rejects duplicates
+[AT06-unit] PASS   assert_no_literal_na_string rejects the literal string "NA"
+[AT16-unit] PASS   assert_rowname_order_equal catches set match but order mismatch
+[AT21-unit] PASS   map_broad_stage: Sporozoite always maps to Sporozoite stage (D020)
+[AT21-unit-2] PASS   map_broad_stage rejects an unmapped harmonized value (fail-loud, not silent NA)
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
+[AT01-mancio_silva2022] PASS   mancio_silva2022: unique cell IDs
+[AT03-mancio_silva2022] PASS   mancio_silva2022: expected cell count (1480)
+[AT06-mancio_silva2022] PASS   mancio_silva2022: no literal "NA" string in character metadata
+[AT01-sa2020] PASS   sa2020: unique cell IDs
+[AT03-sa2020] PASS   sa2020: expected cell count (9766)
+[AT06-sa2020] PASS   sa2020: no literal "NA" string in character metadata
+[AT01-hazzard2022] PASS   hazzard2022: unique cell IDs
+[AT03-hazzard2022] PASS   hazzard2022: expected cell count (3294)
+[AT06-hazzard2022] PASS   hazzard2022: no literal "NA" string in character metadata
+[AT01-hazzard2024] PASS   hazzard2024: unique cell IDs
+[AT03-hazzard2024] PASS   hazzard2024: expected cell count (80024)
+[AT06-hazzard2024] PASS   hazzard2024: no literal "NA" string in character metadata
+[AT01-ruberto2022_1] PASS   ruberto2022_1: unique cell IDs
+[AT03-ruberto2022_1] PASS   ruberto2022_1: expected cell count (1438)
+[AT06-ruberto2022_1] PASS   ruberto2022_1: no literal "NA" string in character metadata
+[AT01-ruberto2022_2] PASS   ruberto2022_2: unique cell IDs
+[AT03-ruberto2022_2] PASS   ruberto2022_2: expected cell count (9947)
+[AT06-ruberto2022_2] PASS   ruberto2022_2: no literal "NA" string in character metadata
+[AT14-DEC01-DEC02] PASS   Final duplicate-policy membership and metadata
+[D036-flag-legacy] PASS   ruberto2022_1: the historical 538-cell STARsolo artifact remains documented in frozen audit evidence (never baked into a live object field, since no artifact ever existed with that field populated pre-Phase-2)
+[D036-phase2-resolved] PASS   ruberto2022_1: adopted author counts no longer reproduce the STARsolo near-empty artifact; provenance populated for all 1438 cells
+[D036-rescue-evidence] PASS   D036_cell_level_rescue.tsv is consistent with classification B (no rescue)
+[AT07] PASS   Source annotations preserved distinct from inferred annotations
+[AT08] PASS   Non-blood-stage cells receive no blood-IDC/HPI inference
+[AT09] PASS   Source-defined sporozoites never broad-labeled Blood stage
+[AT10] PASS   Liver-stage cells never exposed as gametocytes
+[AT11] PASS   Zero/near-zero expression cells receive no expression-derived annotation
+    [AT13 info] 1532 Sa2020 cells matched a source gametocyte-sex annotation
+[AT13] PASS   Sa2020 gametocyte source import: source_sex_annotation populated only for Sa2020, sane cardinality
+[AT21-atlas] PASS   Broad/detailed lifecycle fields consistent on the merged atlas
+[AT22] PASS   Source/inferred/harmonized annotation provenance retained end to end
+[impossible-state-check] PASS   No impossible lifecycle-annotation combinations on the merged atlas
+[AT17] PASS   Export tables explicitly cell-key aligned
+[AT18] PASS   All six studies represented in top-gene export
+[AT24-AT27] PASS   Integration validation metrics table exists and is non-empty
+[AT29-AT30] PASS   Reproducibility/stability check table exists and reports no undocumented instability
+
+==== SUMMARY ====
+
+PASS 
+  42 
+
+All runnable tests passed (SKIP entries require regenerated study objects or the Phase 2 atlas rebuild).

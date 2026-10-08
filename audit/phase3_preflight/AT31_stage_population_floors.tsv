@@ -1,0 +1,16 @@
+population	study_label	harmonized_life_cycle_stage	source_stage_provenance	min_cells	observed_cells	status
+Sa2020 source-defined gametocytes (S5 Data)	Sa2020	Female gametocyte	source_state_defined	1441	1441	PASS
+Sa2020 source-defined gametocytes (S5 Data)	Sa2020	Male gametocyte	source_state_defined	91	91	PASS
+Ruberto2022_1 liver_form	Ruberto2022_1	Hypnozoite	source_selection_defined	1147	1147	PASS
+Ruberto2022_1 liver_form	Ruberto2022_1	Schizont (Liver stage)	source_selection_defined	291	291	PASS
+Mancio-Silva2022 refine_state	Mancio-Silva2022	Hypnozoite	source_state_defined	272	272	PASS
+Mancio-Silva2022 refine_state	Mancio-Silva2022	Schizont (Liver stage)	source_state_defined	1208	1208	PASS
+Source-selection-defined sporozoites	Ruberto2022_2	Sporozoite	source_selection_defined	9947	9947	PASS
+Source-selection-defined sporozoites	Hazzard2022	Sporozoite	source_selection_defined	2858	2858	PASS
+Harmonized gametocytes per study (source label or cluster call)	Sa2020	Female gametocyte	any	1577	1577	PASS
+Harmonized gametocytes per study (source label or cluster call)	Sa2020	Male gametocyte	any	96	96	PASS
+Harmonized gametocytes per study (source label or cluster call)	Hazzard2024	Female gametocyte	any	20769	20769	PASS
+Harmonized gametocytes per study (source label or cluster call)	Hazzard2024	Male gametocyte	any	880	880	PASS
+Harmonized gametocytes per study (source label or cluster call)	Hazzard2022	Female gametocyte	any	46	46	PASS
+Harmonized gametocytes per study (source label or cluster call)	Hazzard2022	Male gametocyte	any	2	2	PASS
+table(study_label, harmonized_life_cycle_stage) has both gametocyte columns	all	Female gametocyte; Male gametocyte	any	NA	NA	PASS

@@ -1,0 +1,10 @@
+Warning: Feature names cannot have underscores ('_'), replacing with dashes ('-')
+Warning: Feature names cannot have underscores ('_'), replacing with dashes ('-')
+Warning message:
+The `slot` argument of `GetAssayData()` is deprecated as of SeuratObject 5.0.0.
+ℹ Please use the `layer` argument instead.
+ℹ The deprecated feature was likely used in the Seurat package.
+  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
+Warning: Feature names cannot have underscores ('_'), replacing with dashes ('-')
+Warning: Feature names cannot have underscores ('_'), replacing with dashes ('-')
+AT25 PASS: production-consistent calls and integrated marker coherence meet all predeclared criteria

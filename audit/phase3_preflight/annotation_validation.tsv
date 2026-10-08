@@ -1,8 +1,8 @@
 check_id	description	status	evidence
 AT08	Non-blood-stage cells receive no blood-IDC/HPI inference	PASS	15723 non-blood cells, 0 with non-NA idc_reference_similarity_label
 AT09	Source-defined sporozoites never broad-labeled Blood stage	PASS	12805 source-defined sporozoite cells, all broad-labeled Sporozoite stage
-AT10	Liver-stage cells never exposed as gametocytes	PASS	2918 liver-stage cells, 0 with non-NA pred_gametocyte_sex
+AT10	Liver-stage cells never exposed as gametocytes	PASS	2918 liver-stage cells, 0 with non-NA pred_gametocyte_sex, 0 liver-tissue cells with a gametocyte harmonized stage
 AT11	Zero/near-zero expression cells receive no expression-derived annotation	PASS	7 near-zero (<10 UMI) cells, 0 with idc label, 0 with gametocyte call
 AT21	Broad/detailed lifecycle fields always consistent	PASS	parasite_broad_stage matches deterministic map_broad_stage(harmonized_life_cycle_stage) for every cell
-gametocyte-presence	At least one cluster cleared the marker-score threshold for gametocyte identity	PASS	22795 cells called Male/Female gametocyte
+gametocyte-presence	At least one cluster cleared the marker-score threshold for gametocyte identity	PASS	23266 cells called Male/Female gametocyte
 idc-eligibility-sane	IDC reference-similarity classification restricted to a plausible blood-stage subset	PASS	90219/105949 cells received an idc_reference_similarity_label

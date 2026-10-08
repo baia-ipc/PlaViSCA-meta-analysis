@@ -401,18 +401,40 @@ not_gametocyte_eligible <- !gametocyte_eligible
 pv.combined.all$pred_gametocyte_sex[not_gametocyte_eligible] <- NA_character_
 
 # ============================================================================
-# PART 8: source-defined stage protection is now final and cannot be
-# re-opened by the gametocyte call above (fixes D045/D049 together) -
-# harmonized_life_cycle_stage only takes the gametocyte call for cells that
-# are NOT already source-selection-defined (Sporozoite populations were
-# fixed in Part 5d and are excluded from gametocyte_eligible/idc_eligible by
-# construction, but this assertion makes the invariant explicit and
-# fail-loud rather than relying on gating alone).
+# PART 8: cluster-level gametocyte call enters harmonized_life_cycle_stage
+# (precedence tier 2 of annotation_precedence.tsv: source-defined label >
+# marker/cluster gametocyte call > IDC heuristic bin). The call replaces the
+# IDC heuristic bin for gametocyte-eligible cells only; source-defined cells
+# (source_selection_defined: sporozoites, Ruberto2022_1 liver forms;
+# source_state_defined: Mancio-Silva2022 refine_state) are never overwritten.
+# idc_heuristic_stage_bin is kept as its own column, so the asexual
+# classification of these cells remains inspectable. Sa2020 source labels
+# (tier 1) are applied on top of this in Part 9.
 # ============================================================================
 male_female_call <- !is.na(pv.combined.all$pred_gametocyte_sex)
-overwrite_target <- male_female_call & is.na(pv.combined.all$harmonized_life_cycle_stage)
+source_defined_stage <- pv.combined.all$source_stage_provenance %in%
+  c("source_selection_defined", "source_state_defined")
+overwrite_target <- male_female_call & gametocyte_eligible & !source_defined_stage
 pv.combined.all$harmonized_life_cycle_stage[overwrite_target] <-
   pv.combined.all$pred_gametocyte_sex[overwrite_target]
+pv.combined.all$source_stage_provenance[overwrite_target] <- "marker_cluster_inferred"
+cat(sprintf(
+  "[singleR.R] Cluster-level gametocyte call written to harmonized_life_cycle_stage for %d cell(s) (%d Female, %d Male)\n",
+  sum(overwrite_target),
+  sum(pv.combined.all$pred_gametocyte_sex[overwrite_target] == "Female gametocyte"),
+  sum(pv.combined.all$pred_gametocyte_sex[overwrite_target] == "Male gametocyte")
+))
+
+# Hazzard2024 source_pseudogroup ("Sexual" carries no sex and no stage) is a
+# source field only and never enters harmonized_life_cycle_stage; its
+# agreement with the cluster call is recorded in the build log.
+hazzard2024_cells <- pv.combined.all$study_label == "Hazzard2024"
+cat("[singleR.R] Hazzard2024 source_pseudogroup x pred_gametocyte_sex (cluster call):\n")
+print(table(
+  source_pseudogroup = pv.combined.all$source_pseudogroup[hazzard2024_cells],
+  cluster = pv.combined.all$pred_gametocyte_sex[hazzard2024_cells],
+  useNA = "ifany"
+))
 
 violation <- male_female_call &
   !is.na(pv.combined.all$source_stage_provenance) &
@@ -479,11 +501,48 @@ has_sa2020_match <- !is.na(sa2020_barcode_idx)
 pv.combined.all$source_sex_annotation[has_sa2020_match] <-
   sa2020_source_sex$type[sa2020_barcode_idx[has_sa2020_match]]
 
-# D009/annotation_precedence.tsv: source_sex_annotation is preserved as its
-# own field, never silently merged into harmonized_life_cycle_stage or
-# pred_gametocyte_sex; reconciliation of the two for Sa2020's known
-# disagreement set is deferred to adjudicated_display_stage (DEC07).
-pv.combined.all$adjudicated_display_stage <- NA_character_
+# Source labels are only ever imported into Sa2020 host-blood cells; a match
+# anywhere else would be a crosswalk error (AT13), never a label to apply.
+bad_match <- has_sa2020_match & (
+  pv.combined.all$study_label != "Sa2020" |
+    pv.combined.all$tissue_or_sample_type != "Host blood" |
+    pv.combined.all$source_stage_provenance == "source_selection_defined"
+)
+if (any(bad_match)) {
+  pipeline_fail(sprintf(
+    "%d Sa2020 source-label match(es) fall outside Sa2020 host-blood cells (AT13 crosswalk regression)",
+    sum(bad_match)
+  ))
+}
+
+# Build-log record of Sa2020 source label vs cluster call, before the
+# source label takes precedence.
+sa2020_cells <- pv.combined.all$study_label == "Sa2020"
+cat("[singleR.R] Sa2020 source_sex_annotation x pred_gametocyte_sex (cluster call):\n")
+print(table(
+  source = pv.combined.all$source_sex_annotation[sa2020_cells],
+  cluster = pv.combined.all$pred_gametocyte_sex[sa2020_cells],
+  useNA = "ifany"
+))
+n_opposite_sex <- sum(has_sa2020_match &
+  !is.na(pv.combined.all$pred_gametocyte_sex) &
+  pv.combined.all$pred_gametocyte_sex != pv.combined.all$source_sex_annotation)
+n_source_no_call <- sum(has_sa2020_match & is.na(pv.combined.all$pred_gametocyte_sex))
+cat(sprintf(
+  "[singleR.R] Sa2020 source/cluster disagreements resolved in favour of the source label: %d opposite-sex cluster call, %d source gametocyte without cluster call (total %d of %d source-labelled cells)\n",
+  n_opposite_sex, n_source_no_call, n_opposite_sex + n_source_no_call, sum(has_sa2020_match)
+))
+
+# Precedence tier 1 (annotation_precedence.tsv): the Sa2020 author labels
+# are source-defined and win over the cluster call for those cells only.
+pv.combined.all$harmonized_life_cycle_stage[has_sa2020_match] <-
+  pv.combined.all$source_sex_annotation[has_sa2020_match]
+pv.combined.all$source_stage_provenance[has_sa2020_match] <- "source_state_defined"
+
+# adjudicated_display_stage follows the same deterministic precedence
+# (source-defined > cluster call > IDC bin) and is therefore identical to
+# harmonized_life_cycle_stage.
+pv.combined.all$adjudicated_display_stage <- pv.combined.all$harmonized_life_cycle_stage
 
 # ============================================================================
 # PART 10: broad/detailed stage consistency (fixes D020 by construction) -
@@ -554,6 +613,29 @@ if (any(!is.na(pv.combined.all$pred_gametocyte_sex[liver_gametocyte]))) {
   pipeline_fail("AT10 regression: pred_gametocyte_sex is non-NA for at least one Liver stage cell")
 }
 
+# A gametocyte harmonized_life_cycle_stage may only come from the Sa2020
+# source labels (source_state_defined, Host blood) or the cluster call
+# (marker_cluster_inferred, gametocyte-eligible cells) - never on a liver,
+# sporozoite or other source-selection-defined cell.
+harmonized_gametocyte <- pv.combined.all$harmonized_life_cycle_stage %in%
+  c("Male gametocyte", "Female gametocyte")
+allowed_gametocyte_route <- (
+  pv.combined.all$source_stage_provenance == "marker_cluster_inferred" &
+    !is.na(pv.combined.all$pred_gametocyte_sex) &
+    pv.combined.all$harmonized_life_cycle_stage == pv.combined.all$pred_gametocyte_sex
+) | (
+  pv.combined.all$source_stage_provenance == "source_state_defined" &
+    !is.na(pv.combined.all$source_sex_annotation) &
+    pv.combined.all$harmonized_life_cycle_stage == pv.combined.all$source_sex_annotation
+)
+if (any(harmonized_gametocyte & !allowed_gametocyte_route) ||
+  any(harmonized_gametocyte & pv.combined.all$tissue_or_sample_type != "Host blood")) {
+  pipeline_fail(sprintf(
+    "%d cell(s) carry a gametocyte harmonized_life_cycle_stage outside the source-label/cluster-call precedence routes or outside host blood",
+    sum(harmonized_gametocyte & (!allowed_gametocyte_route | pv.combined.all$tissue_or_sample_type != "Host blood"))
+  ))
+}
+
 near_zero <- pv.combined.all$total_umi_count < MIN_UMI_FOR_IDC_INFERENCE
 if (any(!is.na(pv.combined.all$idc_reference_similarity_label[near_zero])) ||
   any(!is.na(pv.combined.all$pred_gametocyte_sex[near_zero]))) {
@@ -578,6 +660,15 @@ if (any(mismatch)) {
     sum(mismatch)
   ))
 }
+
+# rRNA genes are removed before normalization in integration.R; none may
+# reach the final object.
+assert_no_rrna_features(rownames(pv.combined.all), gff_rrna_gene_ids(), label = "pv_all_studies.rds (post-singleR.R)")
+
+# AT31: every source-defined population and each study's harmonized
+# gametocyte total must keep at least its recorded cell count.
+floor_check <- assert_stage_population_floors(pv.combined.all@meta.data)
+cat(sprintf("[singleR.R] AT31 stage-population floors: %d/%d PASS\n", sum(floor_check$status == "PASS"), nrow(floor_check)))
 
 # ============================================================================
 # Cleanup and save

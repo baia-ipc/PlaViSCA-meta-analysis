@@ -1,0 +1,41 @@
+Warning: Feature names cannot have underscores ('_'), replacing with dashes ('-')
+Warning: Feature names cannot have underscores ('_'), replacing with dashes ('-')
+Warning message:
+The `slot` argument of `GetAssayData()` is deprecated as of SeuratObject 5.0.0.
+ℹ Please use the `layer` argument instead.
+ℹ The deprecated feature was likely used in the Seurat package.
+  Please report the issue at <https://github.com/satijalab/seurat/issues>. 
+Warning: Feature names cannot have underscores ('_'), replacing with dashes ('-')
+Warning: Feature names cannot have underscores ('_'), replacing with dashes ('-')
+res 0.05 recomputed call reproduces released pred_gametocyte_sex: TRUE (0 mismatches)
+   resolution n_clusters cluster                  call n_total_cells n_eligible_called mean_female_score mean_male_score purity_own_sex_score_above_threshold purity_either_sex_score_above_threshold
+1        0.01          2    <NA> no gametocyte cluster            NA                 0                NA              NA                                   NA                                      NA
+2        0.02          5       1     Female gametocyte         22609             22192            0.3627          0.0339                               0.7218                                  0.8397
+3        0.02          5       3       Male gametocyte          1063               992           -0.0312          1.6533                               0.9657                                  0.9728
+4        0.03          5       2     Female gametocyte         22196             21781            0.3691          0.0321                               0.7291                                  0.8437
+5        0.03          5       3       Male gametocyte          1059               988           -0.0287          1.6628                               0.9706                                  0.9777
+6        0.04          7       1     Female gametocyte         22667             22251            0.3613          0.0339                               0.7199                                  0.8389
+7        0.04          7       4       Male gametocyte          1056               985           -0.0301          1.6632                               0.9695                                  0.9777
+8        0.05          8       1     Female gametocyte         22694             22278            0.3607          0.0336                               0.7191                                  0.8382
+9        0.05          8       4       Male gametocyte          1059               988           -0.0287          1.6628                               0.9706                                  0.9777
+10       0.06          9       2     Female gametocyte         22734             22317            0.3602          0.0334                               0.7187                                  0.8375
+11       0.06          9       5       Male gametocyte          1037               966           -0.0288          1.6955                               0.9803                                  0.9845
+12       0.07          9       2     Female gametocyte         22347             21931            0.3675          0.0290                               0.7276                                  0.8402
+13       0.07          9       5       Male gametocyte          1065               994           -0.0291          1.6536                               0.9668                                  0.9748
+14       0.08          8       2     Female gametocyte         22689             22272            0.3614          0.0333                               0.7201                                  0.8380
+15       0.08          8       6       Male gametocyte          1064               993           -0.0294          1.6554                               0.9678                                  0.9748
+16       0.09          9       2     Female gametocyte         22273             21860            0.3688          0.0305                               0.7292                                  0.8423
+17       0.09          9       5       Male gametocyte          1060               989           -0.0287          1.6616                               0.9707                                  0.9778
+18        0.1          9       2     Female gametocyte         22575             22158            0.3633          0.0327                               0.7228                                  0.8397
+19        0.1          9       5       Male gametocyte          1037               966           -0.0288          1.6955                               0.9803                                  0.9845
+   resolution female_called male_called agreement_with_res_0.05 sa2020_source_agreement
+1        0.01             0           0                  0.7804                  0.0000
+2        0.02         22192         992                  0.9983                  0.9191
+3        0.03         21781         988                  0.9952                  0.9125
+4        0.04         22251         985                  0.9995                  0.9178
+5        0.05         22278         988                  1.0000                  0.9191
+6        0.06         22317         966                  0.9992                  0.9178
+7        0.07         21931         994                  0.9960                  0.9093
+8        0.08         22272         993                  0.9976                  0.9191
+9        0.09         21860         989                  0.9955                  0.9060
+10        0.1         22158         966                  0.9970                  0.9158

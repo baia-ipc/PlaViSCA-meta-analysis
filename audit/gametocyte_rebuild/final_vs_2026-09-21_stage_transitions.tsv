@@ -1,0 +1,22 @@
+study_label	old_stage	new_stage	n_cells
+Hazzard2024	Schizont (Blood stage)	Female gametocyte	14662
+Hazzard2024	Merozoite	Female gametocyte	3746
+Sa2020	Schizont (Blood stage)	Female gametocyte	1347
+Hazzard2024	Ring	Female gametocyte	1308
+Hazzard2024	Trophozoite	Female gametocyte	1053
+Hazzard2024	Schizont (Blood stage)	Male gametocyte	683
+Hazzard2024	Merozoite	Male gametocyte	134
+Sa2020	Merozoite	Female gametocyte	119
+Sa2020	Trophozoite	Female gametocyte	74
+Sa2020	Schizont (Blood stage)	Male gametocyte	59
+Sa2020	Ring	Female gametocyte	37
+Hazzard2024	Ring	Male gametocyte	32
+Hazzard2022	Schizont (Blood stage)	Female gametocyte	31
+Hazzard2024	Trophozoite	Male gametocyte	31
+Sa2020	Merozoite	Male gametocyte	26
+Hazzard2022	Merozoite	Female gametocyte	10
+Sa2020	Trophozoite	Male gametocyte	7
+Hazzard2022	Trophozoite	Female gametocyte	5
+Sa2020	Ring	Male gametocyte	4
+Hazzard2022	Schizont (Blood stage)	Male gametocyte	1
+Hazzard2022	Trophozoite	Male gametocyte	1

@@ -424,3 +424,80 @@ record_build_manifest <- function(
   }
   invisible(row)
 }
+
+# ---------------------------------------------------------------------------
+# AT31: stage-population floors. audit/shared_pipeline/stage_population_floors.tsv
+# records, per population, the minimum number of cells that must carry a
+# given harmonized_life_cycle_stage (optionally restricted to one
+# source_stage_provenance; "any" = no restriction). Every source-defined
+# population and the per-study gametocyte totals are listed, so a future
+# precedence or gating change that drops one fails loudly instead of
+# silently shrinking it.
+# ---------------------------------------------------------------------------
+STAGE_POPULATION_FLOORS_PATH <- "audit/shared_pipeline/stage_population_floors.tsv"
+
+check_stage_population_floors <- function(meta, floors_path = STAGE_POPULATION_FLOORS_PATH) {
+  if (!file.exists(floors_path)) {
+    pipeline_fail(sprintf("Stage-population floor table %s is missing (AT31)", floors_path))
+  }
+  floors <- utils::read.delim(floors_path, stringsAsFactors = FALSE, check.names = FALSE)
+  observed <- vapply(seq_len(nrow(floors)), function(i) {
+    sel <- meta$study_label == floors$study_label[[i]] &
+      meta$harmonized_life_cycle_stage %in% floors$harmonized_life_cycle_stage[[i]]
+    if (floors$source_stage_provenance[[i]] != "any") {
+      sel <- sel & meta$source_stage_provenance %in% floors$source_stage_provenance[[i]]
+    }
+    sum(sel, na.rm = TRUE)
+  }, integer(1))
+  floors$observed_cells <- observed
+  floors$status <- ifelse(observed >= floors$min_cells, "PASS", "FAIL")
+  floors
+}
+
+assert_stage_population_floors <- function(meta, floors_path = STAGE_POPULATION_FLOORS_PATH) {
+  result <- check_stage_population_floors(meta, floors_path)
+  failed <- result[result$status == "FAIL", , drop = FALSE]
+  if (nrow(failed) > 0) {
+    pipeline_fail(sprintf(
+      "AT31 regression: %d stage population(s) fell below their recorded floor: %s",
+      nrow(failed),
+      paste(sprintf(
+        "%s %s [%s] %d < %d", failed$study_label, failed$harmonized_life_cycle_stage,
+        failed$source_stage_provenance, failed$observed_cells, failed$min_cells
+      ), collapse = "; ")
+    ))
+  }
+  invisible(result)
+}
+
+# ---------------------------------------------------------------------------
+# rRNA features. The rRNA genes are the GFF gene records whose biotype is
+# rRNA (ncRNA_gene with ebi_biotype=rRNA). Protein-coding genes whose
+# *description* merely mentions rRNA (rRNA methyltransferases, pre-rRNA-
+# processing proteins, fibrillarin, ...) are mRNAs and are NOT rRNA. The GFF
+# is parsed directly: rtracklayer::import.gff3 queries NCBI for organism
+# metadata and fails offline. Returned IDs use the Seurat feature spelling
+# ("PVP01-..."), as in the per-study objects.
+# ---------------------------------------------------------------------------
+GFF_PATH <- "scripts/ref/PlasmoDB-68_PvivaxP01.gff"
+
+gff_rrna_gene_ids <- function(gff_path = GFF_PATH) {
+  rows <- strsplit(grep("^#", readLines(gff_path), value = TRUE, invert = TRUE), "\t", fixed = TRUE)
+  rows <- rows[lengths(rows) == 9L]
+  type <- vapply(rows, `[[`, character(1), 3L)
+  attrs <- vapply(rows, `[[`, character(1), 9L)
+  is_rrna_gene <- type == "ncRNA_gene" & grepl("(^|;)ebi_biotype=rRNA(;|$)", attrs)
+  ids <- sub("^ID=", "", regmatches(attrs[is_rrna_gene], regexpr("ID=[^;]+", attrs[is_rrna_gene])))
+  if (length(ids) == 0L || anyDuplicated(ids)) {
+    pipeline_fail(sprintf("expected a non-empty, duplicate-free rRNA gene list from %s", gff_path))
+  }
+  gsub("_", "-", ids)
+}
+
+assert_no_rrna_features <- function(features, rrna_ids, label = "object") {
+  hit <- intersect(gsub("_", "-", features), rrna_ids)
+  if (length(hit) > 0) {
+    pipeline_fail(sprintf("%s still contains %d rRNA feature(s): %s", label, length(hit), paste(utils::head(hit, 10), collapse = ", ")))
+  }
+  invisible(TRUE)
+}

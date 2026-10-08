@@ -1,5 +1,5 @@
 "artifact"	"row_count"	"column_count"	"unique_rownames"	"rowname_set_equals_cleaned_metadata"	"rowname_order_equals_cleaned_metadata"	"metadata_column_count"	"gene_column_count"	"suspicious_gene_columns"	"status"	"notes"
-"raw"	105949	6945	TRUE	TRUE	TRUE	85	6860	""	"PASS"	"All cell-indexed exports use canonical lexicographically sorted cell keys. Gene columns are columns absent from mr_data and all use PVP01_ identifiers."
-"normalized"	105949	6945	TRUE	TRUE	TRUE	85	6860	""	"PASS"	"All cell-indexed exports use canonical lexicographically sorted cell keys. Gene columns are columns absent from mr_data and all use PVP01_ identifiers."
+"raw"	105949	6896	TRUE	TRUE	TRUE	85	6811	""	"PASS"	"All cell-indexed exports use canonical lexicographically sorted cell keys. Gene columns are columns absent from mr_data and all use PVP01_ identifiers."
+"normalized"	105949	6896	TRUE	TRUE	TRUE	85	6811	""	"PASS"	"All cell-indexed exports use canonical lexicographically sorted cell keys. Gene columns are columns absent from mr_data and all use PVP01_ identifiers."
 "scaled"	105949	2085	TRUE	TRUE	TRUE	85	2000	""	"PASS"	"All cell-indexed exports use canonical lexicographically sorted cell keys. Gene columns are columns absent from mr_data and all use PVP01_ identifiers."
 "cleaned_metadata"	105949	85	TRUE	TRUE	TRUE	85	0	""	"PASS"	"Reference cell key"

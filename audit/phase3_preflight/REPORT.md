@@ -1,5 +1,12 @@
 # PlaViSca final preprocessing/data acceptance closure
 
+> **Superseded (2026-10-08):** the current release is
+> `plavisca-v1-gametocytes-2026-10-08` (gametocyte stage precedence, rRNA
+> removal, refreshed integration features); see
+> `audit/gametocyte_rebuild/REPORT.md` and
+> `acceptance_matrix_AT01_AT31.tsv`. The text below describes the
+> 2026-09-21 release.
+
 > **Authoritative DEC01/DEC02 update (2026-09-21): FINAL RELEASE DATA CANDIDATE — DEC01/DEC02 RESOLVED.**
 > This section supersedes the historical release-closure narrative below.
 > DEC01 and DEC02 are implemented, AT14 passes, and focused scientific

@@ -1,0 +1,443 @@
+Loading required package: SingleCellExperiment
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: ‘MatrixGenerics’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: GenomicRanges
+Loading required package: stats4
+Loading required package: BiocGenerics
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which.max, which.min
+
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:utils’:
+
+    findMatches
+
+The following objects are masked from ‘package:base’:
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: ‘Biobase’
+
+The following object is masked from ‘package:MatrixGenerics’:
+
+    rowMedians
+
+The following objects are masked from ‘package:matrixStats’:
+
+    anyMissing, rowMedians
+
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘sp’
+
+The following object is masked from ‘package:IRanges’:
+
+    %over%
+
+
+Attaching package: ‘SeuratObject’
+
+The following object is masked from ‘package:SummarizedExperiment’:
+
+    Assays
+
+The following object is masked from ‘package:GenomicRanges’:
+
+    intersect
+
+The following object is masked from ‘package:GenomeInfoDb’:
+
+    intersect
+
+The following object is masked from ‘package:IRanges’:
+
+    intersect
+
+The following object is masked from ‘package:S4Vectors’:
+
+    intersect
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    intersect
+
+The following objects are masked from ‘package:base’:
+
+    intersect, t
+
+
+Attaching package: ‘Seurat’
+
+The following object is masked from ‘package:SummarizedExperiment’:
+
+    Assays
+
+[integration.R] Feature universe: 6860 total (union across 6 studies), 5203 integration-eligible (intersection, measured in all 6 studies), 1657 lost to reference incompatibility (union - intersection)
+[integration.R] RNA assay layers before JoinLayers: counts.1.1.1.1.1, counts.2, counts.2.1, counts.2.1.1, counts.2.1.1.1, counts.2.1.1.1.1
+[integration.R] layer 'counts.1.1.1.1.1': 3294 cells, study/studies = Hazzard2022
+[integration.R] layer 'counts.2': 1480 cells, study/studies = Mancio-Silva2022
+[integration.R] layer 'counts.2.1': 9766 cells, study/studies = Sa2020
+[integration.R] layer 'counts.2.1.1': 9947 cells, study/studies = Ruberto2022_2
+[integration.R] layer 'counts.2.1.1.1': 1438 cells, study/studies = Ruberto2022_1
+[integration.R] layer 'counts.2.1.1.1.1': 80024 cells, study/studies = Hazzard2024
+[integration.R] Verified: one integration group per study, zero ambiguous/mixed-study layers, all 6 studies represented.
+Normalizing layer: counts.1.1.1.1.1
+Performing log-normalization
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Normalizing layer: counts.2
+Performing log-normalization
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Normalizing layer: counts.2.1
+Performing log-normalization
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Normalizing layer: counts.2.1.1
+Performing log-normalization
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Normalizing layer: counts.2.1.1.1
+Performing log-normalization
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Normalizing layer: counts.2.1.1.1.1
+Performing log-normalization
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Finding variable features for layer counts.1.1.1.1.1
+Calculating gene variances
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Calculating feature variances of standardized and clipped values
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Finding variable features for layer counts.2
+Calculating gene variances
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Calculating feature variances of standardized and clipped values
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Finding variable features for layer counts.2.1
+Calculating gene variances
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Calculating feature variances of standardized and clipped values
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Finding variable features for layer counts.2.1.1
+Calculating gene variances
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Calculating feature variances of standardized and clipped values
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Finding variable features for layer counts.2.1.1.1
+Calculating gene variances
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Calculating feature variances of standardized and clipped values
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Finding variable features for layer counts.2.1.1.1.1
+Calculating gene variances
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Calculating feature variances of standardized and clipped values
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+[integration.R] Highly variable genes selected from the 5203-gene integration-eligible universe: 2000 (contributed to PCA)
+Centering and scaling data matrix
+  |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%
+PC_ 1 
+Positive:  PVP01-0611400, PVP01-1110600, PVP01-0836400, PVP01-1125100, PVP01-1020800, PVP01-1119200, PVP01-1002900, PVP01-1204100, PVP01-1240200, PVP01-1109400 
+	   PVP01-0937100, PVP01-0508600, PVP01-1023000, PVP01-1341700, PVP01-1128100, PVP01-1433400, PVP01-1024400, PVP01-0712800, PVP01-1136700, PVP01-1245100 
+	   PVP01-1417100, PVP01-1029500, PVP01-1439600, PVP01-0508500, PVP01-0728100, PVP01-0603700, PVP01-1417200, PVP01-1231600, PVP01-0518600, PVP01-1410400 
+Negative:  PVP01-0938700, PVP01-0835600, PVP01-1402200, PVP01-0412300, PVP01-1344100, PVP01-0405000, PVP01-0734300, PVP01-0611800, PVP01-1218700, PVP01-1402600 
+	   PVP01-0601600, PVP01-0515900, PVP01-1440100, PVP01-0505600, PVP01-0837900, PVP01-1132600, PVP01-0423300, PVP01-0715100, PVP01-0934200, PVP01-0533700 
+	   PVP01-0801000, PVP01-0808700, PVP01-1217000, PVP01-1402300, PVP01-1271400, PVP01-0410000, PVP01-1271300, PVP01-0917500, PVP01-1440300, PVP01-0004290 
+PC_ 2 
+Positive:  PVP01-1243900, PVP01-1032600, PVP01-0518600, PVP01-1240200, PVP01-1433400, PVP01-1119200, PVP01-0608400, PVP01-1204100, PVP01-0836400, PVP01-1110600 
+	   PVP01-0611400, PVP01-1245100, PVP01-1104400, PVP01-1410400, PVP01-0421800, PVP01-1013800, PVP01-0508500, PVP01-1344200, PVP01-1128100, PVP01-1024400 
+	   PVP01-0508600, PVP01-1300900, PVP01-1029500, PVP01-1109400, PVP01-0719600, PVP01-0925900, PVP01-0309700, PVP01-1231600, PVP01-0615900, PVP01-1227300 
+Negative:  PVP01-0602200, PVP01-0107500, PVP01-1237700, PVP01-1033500, PVP01-0703800, PVP01-0517600, PVP01-1428700, PVP01-0318000, PVP01-1446800, PVP01-0729100 
+	   PVP01-0733500, PVP01-0620600, PVP01-1219300, PVP01-1469200, PVP01-0210500, PVP01-1318100, PVP01-1220300, PVP01-0734800, PVP01-0946000, PVP01-0728900 
+	   PVP01-1139200, PVP01-0818700, PVP01-0304300, PVP01-1325700, PVP01-0106400, PVP01-1033400, PVP01-1204300, PVP01-1313400, PVP01-1255000, PVP01-0816900 
+PC_ 3 
+Positive:  PVP01-0917400, PVP01-0532400, PVP01-1463600, PVP01-0803500, PVP01-0418500, PVP01-0803400, PVP01-0611800, PVP01-0511500, PVP01-0602700, PVP01-1033800 
+	   PVP01-0206100, PVP01-0405000, PVP01-1212100, PVP01-1008000, PVP01-1463500, PVP01-1457000, PVP01-0715000, PVP01-0210500, PVP01-1402200, PVP01-0521500 
+	   PVP01-0824100, PVP01-0715100, PVP01-0917500, PVP01-1411700, PVP01-1008500, PVP01-0601700, PVP01-0410300, PVP01-0917300, PVP01-0206400, PVP01-0944600 
+Negative:  PVP01-0622500, PVP01-1138600, PVP01-0622300, PVP01-1240800, PVP01-1113200, PVP01-0906000, PVP01-1302200, PVP01-1211700, PVP01-0622400, PVP01-0208900 
+	   PVP01-1459900, PVP01-1224200, PVP01-1006900, PVP01-1144700, PVP01-0914200, PVP01-0106500, PVP01-0730400, PVP01-1311300, PVP01-1442800, PVP01-1303500 
+	   PVP01-1112300, PVP01-0727900, PVP01-0726400, PVP01-1243900, PVP01-0207700, PVP01-1446800, PVP01-0526100, PVP01-0925700, PVP01-0728000, PVP01-0928900 
+PC_ 4 
+Positive:  PVP01-0938700, PVP01-0835600, PVP01-0712800, PVP01-1132600, PVP01-0319000, PVP01-1005400, PVP01-1128100, PVP01-1110600, PVP01-0616300, PVP01-1341700 
+	   PVP01-1238400, PVP01-1203900, PVP01-1258000, PVP01-1002900, PVP01-0712900, PVP01-0508600, PVP01-0728100, PVP01-0505600, PVP01-0836400, PVP01-1136700 
+	   PVP01-1433400, PVP01-0945900, PVP01-0508500, PVP01-0937100, PVP01-1204100, PVP01-1029500, PVP01-0510800, PVP01-1132700, PVP01-1421900, PVP01-0518800 
+Negative:  PVP01-0312600, PVP01-1235700, PVP01-0106500, PVP01-0004210, PVP01-1120100, PVP01-1313200, PVP01-1327800, PVP01-0916100, PVP01-1114900, PVP01-0004220 
+	   PVP01-0622300, PVP01-0519800, PVP01-0622400, PVP01-1209800, PVP01-0512900, PVP01-0944000, PVP01-0202500, PVP01-1246200, PVP01-0914200, PVP01-1311300 
+	   PVP01-0522300, PVP01-1240800, PVP01-1224200, PVP01-1033800, PVP01-0405000, PVP01-0810500, PVP01-0622500, PVP01-0422600, PVP01-0724700, PVP01-0819500 
+PC_ 5 
+Positive:  PVP01-0620900, PVP01-1430200, PVP01-0511500, PVP01-0418100, PVP01-0521500, PVP01-0414300, PVP01-1342400, PVP01-0106600, PVP01-0511400, PVP01-0412300 
+	   PVP01-1419500, PVP01-1411800, PVP01-1246200, PVP01-0733300, PVP01-1203200, PVP01-0613800, PVP01-0418500, PVP01-0613700, PVP01-0943700, PVP01-1233300 
+	   PVP01-0824100, PVP01-1436100, PVP01-0920400, PVP01-0928200, PVP01-0620300, PVP01-0943800, PVP01-0414400, PVP01-0831900, PVP01-0934200, PVP01-1008100 
+Negative:  PVP01-1402600, PVP01-1402200, PVP01-0837900, PVP01-1217000, PVP01-0601600, PVP01-0423300, PVP01-0004290, PVP01-0103900, PVP01-0515900, PVP01-0115300 
+	   PVP01-0410000, PVP01-0810500, PVP01-0522700, PVP01-0533700, PVP01-0734300, PVP01-1402300, PVP01-0202500, PVP01-1440100, PVP01-0409900, PVP01-0724400 
+	   PVP01-0524100, PVP01-0516500, PVP01-1147500, PVP01-0724700, PVP01-0206400, PVP01-1271400, PVP01-1201500, PVP01-0119200, PVP01-0524200, PVP01-0103800 
+Warning: The following arguments are not used: n.threads
+Warning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric
+To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'
+This message will be shown once per session
+09:55:27 UMAP embedding parameters a = 0.9922 b = 1.112
+09:55:27 Read 105949 rows and found 30 numeric columns
+09:55:27 Using Annoy for neighbor search, n_neighbors = 30
+09:55:27 Building Annoy index with metric = cosine, n_trees = 50
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+09:55:40 Writing NN index file to temp file /tmp/Rtmp51xKob/file32f66e4bc189e
+09:55:41 Searching Annoy index using 1 thread, search_k = 3000
+09:56:18 Annoy recall = 100%
+09:56:19 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
+09:56:20 2 smooth knn distance failures
+09:56:25 Initializing from normalized Laplacian + noise (using RSpectra)
+09:56:38 Commencing optimization for 200 epochs, with 4927496 positive edges
+09:56:38 Using rng type: pcg
+Using method 'umap'
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+09:57:53 Optimization finished
+The `features` argument is ignored by `HarmonyIntegration`.
+This message is displayed once per session.
+Warning messages:
+1: Quick-TRANSfer stage steps exceeded maximum (= 5297450) 
+2: Quick-TRANSfer stage steps exceeded maximum (= 5297450) 
+3: Quick-TRANSfer stage steps exceeded maximum (= 5297450) 
+Warning: The following arguments are not used: n.threads
+10:01:56 UMAP embedding parameters a = 0.9922 b = 1.112
+10:01:56 Read 105949 rows and found 30 numeric columns
+10:01:56 Using Annoy for neighbor search, n_neighbors = 30
+10:01:56 Building Annoy index with metric = cosine, n_trees = 50
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+10:02:08 Writing NN index file to temp file /tmp/Rtmp51xKob/file32f66e4e6801b8
+10:02:08 Searching Annoy index using 1 thread, search_k = 3000
+10:02:48 Annoy recall = 100%
+10:02:50 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
+10:02:51 2 smooth knn distance failures
+10:02:56 Initializing from normalized Laplacian + noise (using RSpectra)
+10:03:05 Commencing optimization for 200 epochs, with 4996070 positive edges
+10:03:05 Using rng type: pcg
+Using method 'umap'
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+10:04:21 Optimization finished
+Warning message:
+Key ‘umap_’ taken, using ‘jlcfk_’ instead 
+Computing nearest neighbor graph
+Computing SNN
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9902
+Number of communities: 4
+Elapsed time: 31 seconds
+2 singletons identified. 2 final clusters.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9848
+Number of communities: 6
+Elapsed time: 38 seconds
+2 singletons identified. 4 final clusters.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9814
+Number of communities: 6
+Elapsed time: 35 seconds
+2 singletons identified. 4 final clusters.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9780
+Number of communities: 7
+Elapsed time: 40 seconds
+2 singletons identified. 5 final clusters.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9747
+Number of communities: 8
+Elapsed time: 34 seconds
+2 singletons identified. 6 final clusters.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9727
+Number of communities: 9
+Elapsed time: 38 seconds
+2 singletons identified. 7 final clusters.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9709
+Number of communities: 10
+Elapsed time: 38 seconds
+2 singletons identified. 8 final clusters.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9692
+Number of communities: 9
+Elapsed time: 40 seconds
+2 singletons identified. 7 final clusters.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9674
+Number of communities: 10
+Elapsed time: 37 seconds
+2 singletons identified. 8 final clusters.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 105949
+Number of edges: 3330260
+
+Running Louvain algorithm...
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Maximum modularity in 10 random starts: 0.9651
+Number of communities: 9
+Elapsed time: 40 seconds
+2 singletons identified. 7 final clusters.
+
+real	45m5.819s
+user	57m3.034s
+sys	1m39.611s

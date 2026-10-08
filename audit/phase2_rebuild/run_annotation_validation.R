@@ -57,10 +57,15 @@ add_check(
 )
 
 liver <- meta$parasite_broad_stage == "Liver stage" & !is.na(meta$parasite_broad_stage)
+# Gametocyte labels also reach harmonized_life_cycle_stage (source label or
+# cluster call), so liver tissue is checked on that field as well.
+harmonized_gametocyte <- meta$harmonized_life_cycle_stage %in% c("Male gametocyte", "Female gametocyte")
+liver_tissue_gametocyte <- meta$tissue_or_sample_type %in% "Host liver" & harmonized_gametocyte
 add_check(
   "AT10", "Liver-stage cells never exposed as gametocytes",
-  sum(liver) > 0 && !any(!is.na(meta$pred_gametocyte_sex[liver])),
-  sprintf("%d liver-stage cells, %d with non-NA pred_gametocyte_sex", sum(liver), sum(!is.na(meta$pred_gametocyte_sex[liver])))
+  sum(liver) > 0 && !any(!is.na(meta$pred_gametocyte_sex[liver])) && !any(liver_tissue_gametocyte),
+  sprintf("%d liver-stage cells, %d with non-NA pred_gametocyte_sex, %d liver-tissue cells with a gametocyte harmonized stage",
+          sum(liver), sum(!is.na(meta$pred_gametocyte_sex[liver])), sum(liver_tissue_gametocyte))
 )
 
 near_zero <- meta$total_umi_count < 10
@@ -101,10 +106,11 @@ write.table(annotation_validation_tbl, file.path(out_dir, "annotation_validation
 ## ------------------------------------------------------------------
 liver_or_spz <- meta$parasite_broad_stage %in% c("Liver stage", "Sporozoite stage")
 bad_idc <- liver_or_spz & !is.na(meta$idc_reference_similarity_label)
-bad_gam <- liver_or_spz & !is.na(meta$pred_gametocyte_sex)
+bad_gam <- (liver_or_spz & !is.na(meta$pred_gametocyte_sex)) |
+  (harmonized_gametocyte & !(meta$tissue_or_sample_type %in% "Host blood"))
 bad_source_provenance <- !is.na(meta$source_stage_provenance) &
   meta$source_stage_provenance == "source_selection_defined" &
-  !is.na(meta$pred_gametocyte_sex)
+  (!is.na(meta$pred_gametocyte_sex) | harmonized_gametocyte)
 
 impossible_cells <- unique(c(
   rownames(meta)[bad_idc], rownames(meta)[bad_gam], rownames(meta)[bad_source_provenance]
@@ -118,8 +124,8 @@ if (length(impossible_cells) > 0) {
       source_stage_provenance, idc_reference_similarity_label, pred_gametocyte_sex,
       violation = case_when(
         cell_id %in% rownames(meta)[bad_idc] ~ "Liver/Sporozoite stage with non-NA idc_reference_similarity_label",
-        cell_id %in% rownames(meta)[bad_gam] ~ "Liver/Sporozoite stage with non-NA pred_gametocyte_sex",
-        TRUE ~ "source-selection-defined cell with non-NA pred_gametocyte_sex"
+        cell_id %in% rownames(meta)[bad_gam] ~ "Liver/Sporozoite stage or non-blood cell with a gametocyte call or label",
+        TRUE ~ "source-selection-defined cell with a gametocyte call or label"
       )
     )
 } else {

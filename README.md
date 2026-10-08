@@ -37,6 +37,7 @@ Supporting utilities:
 | `scripts/data_source_manipulation.R` | Build `data/data_source.csv` publication table |
 | `scripts/hazzard2024_merge_all.R` | Merge per-batch Hazzard 2024 Seurat objects |
 | `scripts/run_all_hazzard2024.sh` | Shell wrapper for batch Hazzard 2024 scripts |
+| `scripts/integration_assessment.R` | Read-only integration metrics + Fig 2 for the release object (`pixi run integration-assessment`; see [results/README.md](results/README.md)) |
 
 ---
 

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Run pipeline stages in the pixi environment and keep a log of each.
+#
+# Usage:  ./run.sh all            run every stage, in order
+#         ./run.sh 30 40          run the given stages
+#         ./run.sh list           list the stages
+#
+# Logs go to <workspace>/runs/<run>/logs/<stage>.log (see config/local.env).
+set -euo pipefail
+cd "$(dirname "$0")"
+
+[ -f config/local.env ] && set -a && . config/local.env && set +a
+: "${PLAVISCA_WORKSPACE:?set it in config/local.env (see config/local.env.example)}"
+log_dir="$PLAVISCA_WORKSPACE/runs/${PLAVISCA_RUN:-main}/logs"
+mkdir -p "$log_dir"
+
+stages=$(ls R/[0-9][0-9]_*.R | xargs -n1 basename | sed 's/\.R$//')
+
+if [ "${1:-}" = "" ] || [ "$1" = "list" ]; then
+  echo "$stages"; exit 0
+fi
+[ "$1" = "all" ] && set -- $(echo "$stages" | cut -c1-2)
+
+for n in "$@"; do
+  stage=$(echo "$stages" | grep "^$n" || true)
+  [ -n "$stage" ] || { echo "no stage $n" >&2; exit 1; }
+  echo "=== $stage ($(date '+%F %T'))"
+  pixi run Rscript --vanilla "R/$stage.R" 2>&1 | tee "$log_dir/$stage.log"
+done

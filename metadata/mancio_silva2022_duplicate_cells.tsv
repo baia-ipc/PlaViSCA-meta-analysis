@@ -1,0 +1,15 @@
+removed_cell_id	kept_cell_id	author_sample	geo_sample	geo_matrix	geo_matrix_column	reason
+D1SEQ100_GGTGCCCGGGGG.1	D1SEQ100_GGTGCCCGGGGG	D1SEQ100	GSM5916705	Postcapture_data_Infection1	10010	identical counts; both copies come from the same column of the GEO count matrix
+D1SEQ100_ACTCATGAAACG.1	D1SEQ100_ACTCATGAAACG	D1SEQ100	GSM5916705	Postcapture_data_Infection1	10033	identical counts; both copies come from the same column of the GEO count matrix
+D1SEQ100_CCGTCGCTAACA.1	D1SEQ100_CCGTCGCTAACA	D1SEQ100	GSM5916705	Postcapture_data_Infection1	10038	identical counts; both copies come from the same column of the GEO count matrix
+D1SEQ100_TGTGCTGAGTGA.1	D1SEQ100_TGTGCTGAGTGA	D1SEQ100	GSM5916705	Postcapture_data_Infection1	10048	identical counts; both copies come from the same column of the GEO count matrix
+D1SEQ100_TTAGCCAAGGAT.1	D1SEQ100_TTAGCCAAGGAT	D1SEQ100	GSM5916705	Postcapture_data_Infection1	10071	identical counts; both copies come from the same column of the GEO count matrix
+D1SEQ100_TGCCAGTTTCCA.1	D1SEQ100_TGCCAGTTTCCA	D1SEQ100	GSM5916705	Postcapture_data_Infection1	10166	identical counts; both copies come from the same column of the GEO count matrix
+D1SEQ100_GGAATCACCACA.1	D1SEQ100_GGAATCACCACA	D1SEQ100	GSM5916705	Postcapture_data_Infection1	10443	identical counts; both copies come from the same column of the GEO count matrix
+D1SEQ100_CAGAGCCGGGGT.1	D1SEQ100_CAGAGCCGGGGT	D1SEQ100	GSM5916705	Postcapture_data_Infection1	10461	identical counts; both copies come from the same column of the GEO count matrix
+D1SEQ100_GTAACATTCTTA.1	D1SEQ100_GTAACATTCTTA	D1SEQ100	GSM5916705	Postcapture_data_Infection1	11348	identical counts; both copies come from the same column of the GEO count matrix
+D5SEQ50_CAAAGGATGTCG.1	D5SEQ50_CAAAGGATGTCG	D5SEQ50	GSM5916706	Postcapture_data_Infection1	20033	identical counts; both copies come from the same column of the GEO count matrix
+D5SEQ100_TCTTCGAGATCC.1	D5SEQ100_TCTTCGAGATCC	D5SEQ100	GSM5916707	Postcapture_data_Infection1	30112	identical counts; both copies come from the same column of the GEO count matrix
+D11SEQ100_ATCTCGCAGCGA.1	D11SEQ100_ATCTCGCAGCGA	D11SEQ100	GSM5916711	Postcapture_data_Infection1	70687	identical counts; both copies come from the same column of the GEO count matrix
+D14SEQ100_TCCGCGAGTAAG.1	D14SEQ100_TCCGCGAGTAAG	D14SEQ100	GSM5916713	Postcapture_data_Infection1	90033	identical counts; both copies come from the same column of the GEO count matrix
+D4Seq1_GCTGAATTTCGG.1	D4Seq1_GCTGAATTTCGG	D4Seq1	GSM5916726	Postcapture_merged_Infection2	33197	identical counts; both copies come from the same column of the GEO count matrix

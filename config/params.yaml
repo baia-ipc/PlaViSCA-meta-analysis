@@ -1,0 +1,77 @@
+# Analysis parameters of the PlaViSca preprocessing pipeline.
+# Every stage reads its parameters from here; stage 70 copies them into
+# results/manuscript/parameters.tsv so the manuscript cites the values used.
+
+reference:
+  gff: reference/PlasmoDB-68_PvivaxP01.gff
+  annotation_release: PlasmoDB-68 PvivaxP01
+
+# Stage 10: how the cells of each study are obtained.
+#   matrix:      STARsolo GeneFull matrix to read ("filtered" or "raw")
+#   min_cells / min_features: CreateSeuratObject() filters
+#   emptydrops:  droplet calling on the raw matrix (only Hazzard2022)
+import:
+  Sa2020:
+    source: starsolo
+    matrix: filtered
+    min_cells: 1
+    min_features: 1
+  Hazzard2022:
+    source: starsolo
+    matrix: raw
+    min_cells: 1
+    min_features: 1
+    emptydrops:
+      lower: 1
+      fdr: 0.001
+      seed: 123456
+  Hazzard2024:
+    source: starsolo
+    matrix: raw
+    min_cells: 1
+    min_features: 1
+    author_cells: author_data/Proccessed_Data.txt
+  Ruberto2022_2:
+    source: starsolo
+    matrix: raw
+    min_cells: 0
+    min_features: 0
+    author_cells: author_data/6_PvSPZ.BS.combined.rds
+  Ruberto2022_1:
+    source: author_matrix
+    object: author_data/Hep59.1.2.seu_20aug2025.rds
+  Mancio-Silva2022:
+    source: author_matrix
+    object: author_data/PvData_CHM_Final.RDS
+    cell_table: author_data/TableS2_Cell_Metadata.xls
+
+# Stage 30: merge, normalisation, integration, embeddings, clustering.
+integration:
+  n_variable_genes: 2000
+  variable_gene_method: vst
+  n_pcs_used: 30
+  umap_components: 3
+  tsne_components: 3
+  tsne_seed: 123
+  cluster_resolutions: [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10]
+  threads: 10
+
+# Stage 40: stage annotation.
+annotation:
+  idc_reference: reference/Zhu_SciReps_2016.xls
+  idc_reference_sheet: SMRU1
+  idc_orthologs: reference/GenesByOrthologs_Summary.xlsx
+  idc_min_umi: 10
+  # The stage assigned to each reference time point: metadata/idc_timepoints.tsv
+  sa2020_gametocytes: author_data/pbio.3000711.s034.xlsx
+  cluster_resolution: 0.05
+  gametocyte_min_score: 0.10
+  gametocyte_min_margin: 0.05
+
+# Stage 60: integration assessment.
+assessment:
+  seed: 1
+  n_cells: 8000
+  k_neighbours: 30
+  n_pcs: 30
+  max_cells_per_stage: 3000

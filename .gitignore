@@ -1,35 +1,14 @@
-# Intermediate Seurat objects (large binaries — not version-controlled)
-*.rds
-*.RDS
+# Workstation settings (copy from config/local.env.example)
+config/local.env
 
-# Raw count matrices (STARsolo output — very large)
-counts/
+# Pixi environment
+.pixi/
 
-# Knee-plot PDFs (generated outputs)
-*_knee_plots.pdf
-
-# Supplementary data files (binary/Excel — managed separately)
-data/*.rds
-data/*.xls
-data/*.xlsx
-data/*.txt
-data/*.csv
-
-# Pixi environment cache
-scripts/.pixi/
-scripts/pixi.lock
-
-# R session artifacts
+# R session files
 .Rhistory
 .RData
 .Rproj.user/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Personal Claude Code permission overrides (not shared with the team)
-.claude/settings.local.json
-
-# Stray default R plotting device output
 Rplots.pdf
+
+# Claude Code personal settings
+.claude/settings.local.json

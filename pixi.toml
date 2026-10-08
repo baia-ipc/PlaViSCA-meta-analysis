@@ -1,0 +1,41 @@
+[workspace]
+name = "plavisca-preprocessing"
+authors = ["Sopheap Oeng <osopheap@pasteur-kh.org>", "Giorgio Gonnella <ggonnella@pasteur-kh.org>"]
+channels = ["conda-forge", "bioconda", "r", "default"]
+platforms = ["linux-64"]
+version = "1.0.0"
+
+[activation]
+# Bioconda's Bioconductor data packages (GenomeInfoDbData, needed by
+# DropletUtils) download their data in a conda post-link script, which pixi
+# does not run. This script does that step once; see its header.
+scripts = ["env/ensure_bioc_data_packages.sh"]
+
+[activation.env]
+# Use only the packages of this environment, never a personal R library.
+R_LIBS_USER = "/dev/null"
+
+[tasks]
+test = "Rscript --vanilla tests/run_tests.R"
+
+[dependencies]
+r-base = "4.3.*"
+r-tidyverse = "*"
+r-seurat = "*"
+r-harmony = "*"
+r-readxl = "*"
+r-janitor = "*"
+r-mclust = "*"
+r-yaml = "*"
+r-openssl = "*"
+r-cluster = "*"
+r-patchwork = "*"
+r-ggrastr = "*"
+r-ragg = "*"
+r-sccustomize = ">=3.2.0,<4"
+bioconductor-dropletutils = "*"
+bioconductor-scater = "*"
+bioconductor-singlecellexperiment = "*"
+bioconductor-rtracklayer = "*"
+bioconductor-genomeinfodbdata = "*"
+bioconductor-singler = "*"

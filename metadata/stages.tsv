@@ -1,0 +1,12 @@
+stage	broad_stage	order	label_in_text
+Ring	Blood stage	1	ring
+Trophozoite	Blood stage	2	trophozoite
+Schizont (Blood stage)	Blood stage	3	schizont
+Merozoite	Blood stage	4	late schizont/merozoite
+Asexual (unresolved stage)	Blood stage	5	asexual, unresolved
+Female gametocyte	Blood stage	6	female gametocyte
+Male gametocyte	Blood stage	7	male gametocyte
+EEF	Liver stage	8	exo-erythrocytic form
+Hypnozoite	Liver stage	9	hypnozoite
+Schizont (Liver stage)	Liver stage	10	liver schizont
+Sporozoite	Sporozoite stage	11	sporozoite

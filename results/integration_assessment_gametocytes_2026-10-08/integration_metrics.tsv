@@ -1,0 +1,5 @@
+metric	unintegrated	integrated	better_if	n_cells	k	dims	seed
+knn_other_study	0.0426	0.220370833333333	higher (study mixing)	8000	30	1:30	1
+knn_other_stage	0.243820833333333	0.278941666666667	lower (stage preservation)	8000	30	1:30	1
+silhouette_study	-0.0671566472273513	-0.225225991141195	lower (study mixing)	8000	30	1:30	1
+silhouette_stage	-0.0130057630149964	-0.0911873414642267	higher (stage preservation)	8000	30	1:30	1

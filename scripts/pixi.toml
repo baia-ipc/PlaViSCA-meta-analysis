@@ -16,6 +16,10 @@ scripts = ["setup/ensure_bioc_data_packages.sh"]
 
 [tasks]
 test-env = "Rscript --vanilla tests/test_environment.R"
+# Read-only post-integration assessment of the release object (manuscript
+# Table 3 / Fig 2). R_LIBS_USER points at a non-directory so a personal R
+# library can never shadow the locked packages (R drops non-existent paths).
+integration-assessment = { cmd = "Rscript --vanilla integration_assessment.R", env = { R_LIBS_USER = "/dev/null" } }
 
 [dependencies]
 r-base = "4.3.*"

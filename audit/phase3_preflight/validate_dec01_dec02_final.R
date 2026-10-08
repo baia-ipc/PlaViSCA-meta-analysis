@@ -63,7 +63,15 @@ embedding_hashes <- do.call(rbind, lapply(embedding_names, function(nm) {
 }))
 write_tsv(embedding_hashes, "final_embedding_hashes.tsv")
 
-old_so <- readRDS(file.path(previous_root, "pv_all_studies.rds"))
+# The previous (phase-2/closure, 105,963-cell) atlas is archived in
+# archive/phase2-atlas-pv_all_studies-2026-09-20.tar; extract it and point
+# PLAVISCA_PREVIOUS_CANDIDATE_ROOT at the directory holding pv_all_studies.rds.
+previous_atlas <- file.path(previous_root, "pv_all_studies.rds")
+if (!file.exists(previous_atlas)) {
+    stop("previous atlas not found: ", previous_atlas,
+         " - extract archive/phase2-atlas-pv_all_studies-2026-09-20.tar and set PLAVISCA_PREVIOUS_CANDIDATE_ROOT")
+}
+old_so <- readRDS(previous_atlas)
 old_md <- old_so@meta.data
 comparison <- data.frame(
     metric = c("total_cells", paste0("study_cells:", names(expected)),

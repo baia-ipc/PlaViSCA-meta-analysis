@@ -110,7 +110,10 @@ PUBLISHED_TOTAL_CELLS <- 105949L
 # Input: verify identity, then read slots without attaching Seurat
 # ---------------------------------------------------------------------------
 if (!file.exists(RELEASE_RDS)) {
-  pipeline_fail(sprintf("release object not found: %s", RELEASE_RDS))
+  pipeline_fail(sprintf(
+    "release object not found: %s - the 2026-09-21 release is archived in archive/plavisca-v1-dec01-dec02-2026-09-21.tar (see archive/README.md); extract it back to deployments/data/releases/ or set PLAVISCA_RELEASE_RDS",
+    RELEASE_RDS
+  ))
 }
 input_sha256 <- paste(openssl::sha256(file(RELEASE_RDS, raw = TRUE))) # paste() drops the "hash" class
 if (!identical(input_sha256, EXPECTED_INPUT_SHA256)) {

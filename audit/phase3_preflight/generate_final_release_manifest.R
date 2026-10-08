@@ -2,7 +2,13 @@
 
 options(stringsAsFactors = FALSE)
 repo <- normalizePath(getwd())
-candidate_root <- Sys.getenv("PLAVISCA_CANDIDATE_ROOT", repo)
+# Study objects and the Ruberto author object are recorded relative to the
+# repository root and the released outputs relative to the release directory,
+# so the manifest stays valid in any checkout of the standard project layout
+# (no worktree-specific absolute paths).
+candidate_root <- Sys.getenv("PLAVISCA_CANDIDATE_ROOT", "")
+input_path <- function(p) if (nzchar(candidate_root)) file.path(candidate_root, p) else p
+release_dir <- Sys.getenv("PLAVISCA_RELEASE_DIR", "../deployments/data/releases/plavisca-v1-gametocytes-2026-10-08")
 code_commit <- Sys.getenv("PLAVISCA_FINAL_CODE_COMMIT", unset = NA_character_)
 if (is.na(code_commit) || !nzchar(code_commit)) stop("Set PLAVISCA_FINAL_CODE_COMMIT to the committed scientific rebuild SHA")
 ancestor_check <- system2("git", c("merge-base", "--is-ancestor", code_commit, "HEAD"))
@@ -58,13 +64,13 @@ rows <- list(
   fact("provenance", "Ruberto2022_1_source_of_counts", "author_processed_object_raw_umi"),
   fact("provenance", "Ruberto2022_1_counting_pipeline", "kallisto_bustools"),
   fact("provenance", "Ruberto2022_1_reference", "PlasmoDB-51_PvivaxP01_AnnotatedTranscripts"),
-  artifact("scientific_input", "Mancio-Silva2022_study_object", file.path(candidate_root, "silva2022.rds"), 1480, "Mancio-Silva2022"),
-  artifact("scientific_input", "Sa2020_study_object", file.path(candidate_root, "sa2020.rds"), 9766, "Sa2020"),
-  artifact("scientific_input", "Hazzard2022_study_object", file.path(candidate_root, "hazzard2022.rds"), 3294, "Hazzard2022"),
-  artifact("scientific_input", "Hazzard2024_study_object", file.path(candidate_root, "hazzard2024.rds"), 80024, "Hazzard2024"),
-  artifact("scientific_input", "Ruberto2022_1_study_object", file.path(candidate_root, "ruberto2022_1.rds"), 1438, "Ruberto2022_1"),
-  artifact("scientific_input", "Ruberto2022_2_study_object", file.path(candidate_root, "ruberto2022_2.rds"), 9947, "Ruberto2022_2"),
-  artifact("scientific_input", "Ruberto2022_1_author_source", file.path(candidate_root, "data/Hep59.1.2.seu_20aug2025.rds"), 1438, "Ruberto2022_1"),
+  artifact("scientific_input", "Mancio-Silva2022_study_object", input_path("silva2022.rds"), 1480, "Mancio-Silva2022"),
+  artifact("scientific_input", "Sa2020_study_object", input_path("sa2020.rds"), 9766, "Sa2020"),
+  artifact("scientific_input", "Hazzard2022_study_object", input_path("hazzard2022.rds"), 3294, "Hazzard2022"),
+  artifact("scientific_input", "Hazzard2024_study_object", input_path("hazzard2024.rds"), 80024, "Hazzard2024"),
+  artifact("scientific_input", "Ruberto2022_1_study_object", input_path("ruberto2022_1.rds"), 1438, "Ruberto2022_1"),
+  artifact("scientific_input", "Ruberto2022_2_study_object", input_path("ruberto2022_2.rds"), 9947, "Ruberto2022_2"),
+  artifact("scientific_input", "Ruberto2022_1_author_source", input_path("data/Hep59.1.2.seu_20aug2025.rds"), 1438, "Ruberto2022_1"),
   artifact("reference_input", "PlasmoDB68_GFF", "scripts/ref/PlasmoDB-68_PvivaxP01.gff"),
   artifact("reference_input", "STARsolo_feature_panel", "scripts/ref/starsolo_feature_panel.tsv"),
   artifact("reference_input", "Ruberto2022_1_feature_coverage", "audit/ruberto2022_1/phase2_feature_coverage.tsv"),
@@ -75,13 +81,13 @@ rows <- list(
   artifact("decision_evidence", "AT31_stage_population_floors", "audit/shared_pipeline/stage_population_floors.tsv"),
   artifact("decision_evidence", "DEC01_removal_manifest", "audit/mancio_silva2022/dec01_removed_duplicate_cells.tsv", 14, "Mancio-Silva2022"),
   artifact("reused_input_checksums", "reused_validated_inputs", "audit/phase3_preflight/dec01_dec02_reused_input_checksums.sha256"),
-  artifact("scientific_output", "pv_all_studies", file.path(candidate_root, "pv_all_studies.rds"), 105949),
-  artifact("application_output", "normalize_df", file.path(candidate_root, "data/candidate_export/normalize_df.rds"), 105949),
-  artifact("application_output", "raw_df", file.path(candidate_root, "data/candidate_export/raw_df.rds"), 105949),
-  artifact("application_output", "scale_df", file.path(candidate_root, "data/candidate_export/scale_df.rds"), 105949),
-  artifact("application_output", "cleaned_dataset", file.path(candidate_root, "data/candidate_export/cleaned_dataset.rds"), 105949,
+  artifact("scientific_output", "pv_all_studies", file.path(release_dir, "pv_all_studies.rds"), 105949),
+  artifact("application_output", "normalize_df", file.path(release_dir, "normalize_df.rds"), 105949),
+  artifact("application_output", "raw_df", file.path(release_dir, "raw_df.rds"), 105949),
+  artifact("application_output", "scale_df", file.path(release_dir, "scale_df.rds"), 105949),
+  artifact("application_output", "cleaned_dataset", file.path(release_dir, "cleaned_dataset.rds"), 105949,
            note = "AT17 canonical lexicographic cell order; non-cell tables unchanged"),
-  artifact("application_output", "data_source", file.path(candidate_root, "data/data_source.csv"), 6,
+  artifact("application_output", "data_source", file.path(release_dir, "data_source.csv"), 6,
            note = "Six bibliography rows with verified study_pmid")
 )
 

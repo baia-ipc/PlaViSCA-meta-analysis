@@ -1,0 +1,11 @@
+[workspace]
+name = "plavisca-starsolo"
+channels = ["conda-forge", "bioconda"]
+platforms = ["linux-64"]
+
+[dependencies]
+star = "==2.7.11b"
+seqtk = "*"
+python = "3.12.*"
+docopt = "*"
+loguru = "*"

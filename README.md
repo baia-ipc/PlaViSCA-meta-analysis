@@ -40,6 +40,7 @@ been verified about the input data is in [docs/validation.md](docs/validation.md
 
 ```
 R/                 stage scripts (NN_name.R), lib/ (shared code), tools/
+starsolo/          from reads to STARsolo count matrices (own environment)
 config/            params.yaml (analysis parameters), local.env.example
 metadata/          curated tables: studies, runs, stages, markers, columns,
                    expected cell counts, input files and checksums
@@ -81,9 +82,10 @@ cp config/local.env.example config/local.env   # then set PLAVISCA_WORKSPACE
 pixi run test                                  # tests (no data needed)
 ```
 
-The STARsolo counts are made from the SRA/ENA reads (runs in
-`metadata/runs.tsv`) with
-[sRNA_nextflow_starsolo](https://github.com/Sopheap15/sRNA_nextflow_starsolo).
+**Starting from the reads.** `starsolo/` makes the STARsolo count
+matrices, the input of stage 10, from the reads of the runs in
+`metadata/runs.tsv`. It reproduces the counts exactly; see
+[starsolo/README.md](starsolo/README.md).
 
 **Starting from count objects.** Importing the STARsolo matrices (stage 10)
 is the slowest step. `R/tools/import_count_objects.R` can be used instead. It

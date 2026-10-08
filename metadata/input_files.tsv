@@ -1,0 +1,11 @@
+path	bytes	sha256	description	source_url
+author_data/6_PvSPZ.BS.combined.rds	205753524	6ed948ccab4d57649e8e37b5148e5fdd219c9e02e0c7dead1c3009a2436893ba	Ruberto et al. 2022 (sporozoites), authors' Seurat object of sporozoites and blood stages	to be confirmed
+author_data/Hep59.1.2.seu_20aug2025.rds	13771658	87a64c47530ff5b1b140cc064269fbd8bf1160903efe7fb0b14a1bed5a998bce	Ruberto et al. 2022 (liver), authors' Seurat object Hep59.1.2.seu	to be confirmed
+author_data/pbio.3000711.s034.xlsx	1142411	391e2c8b1a825a170f9fbcbb4464614a0b0f2540c795847c63d7d0172472f90e	Sa et al. 2020, PLoS Biol, S5 Data (gametocyte cells)	https://journals.plos.org/plosbiology/article/file?type=supplementary&id=10.1371/journal.pbio.3000711.s034
+author_data/Proccessed_Data.txt	9792598	fb22feceedfca890e93ca7dfd7573ff6ef0ab2b8b3f8b0d617d5fc51b97be26a	Hazzard et al. 2024, Zenodo record 12775216 (retained cells, PseudoGroup)	https://zenodo.org/records/12775216/files/Proccessed_Data.txt
+author_data/PvData_CHM_Final.RDS	73729652	c80e25bd8046b784cad92c98b73d73fb504889a1a4017c41e574e57054f89659	Mancio-Silva et al. 2022, Zenodo record 6280956 (Seurat object)	https://zenodo.org/records/6280956
+author_data/TableS2_Cell_Metadata.xls	14882816	c87abe44acb8927e9bedad7a84f9cd880d845ca2c6eaa34c585bd6669512c59c	Mancio-Silva et al. 2022, Cell Host Microbe, Table S2 (cell metadata)	to be confirmed
+reference/GenesByOrthologs_Summary.xlsx	220981	d7052aadb85b68c6dabb58b1b50e949267ebe3138976f93a77c232430b7afdc7	PlasmoDB ortholog search, P. vivax Sal-1 (PVX) to P01 (PVP01)	to be confirmed
+reference/PlasmoDB-68_PvivaxP01.gff	8132311	51c505fea934d33fa32c1fcb9e7d1ff0e7ffd67f2f0ae6f7f3a1ea1c366861c2	PlasmoDB release 68	https://plasmodb.org/common/downloads/release-68/PvivaxP01/gff/data/PlasmoDB-68_PvivaxP01.gff
+reference/Zhu_SciReps_2016.xls	4076032	cf5a65c414f91d8d83ee554cf90a6f1a7a3e10d13a734a3041f2019a320fa4e2	Zhu et al. 2016, Sci Rep 6:20498, supplementary data (SMRU1 time course)	to be confirmed
+starsolo_counts/<PMID>/<run>_solo_out/		see metadata/starsolo_counts.sha256	STARsolo output per run (Solo.out/GeneFull matrices, Log.out), made from the SRA/ENA reads of metadata/runs.tsv	https://github.com/Sopheap15/sRNA_nextflow_starsolo

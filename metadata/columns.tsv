@@ -1,0 +1,62 @@
+column	group	description
+barcode	identity	Cell name: <last 3 digits of the run accession>_<cell barcode>; for Mancio-Silva2022 the authors' cell name
+study_label	identity	Study (see the data sources table)
+study_pmid	identity	PubMed ID of the study
+run_id	identity	Sequencing run accession (Mancio-Silva2022: the runs of the author sample, separated by ";")
+author_cell_id	identity	Name of the cell in the authors' data, where the authors provide cell names
+n_count_rna	counts	Number of UMIs of the cell (rRNA genes excluded)
+n_feature_rna	counts	Number of genes detected in the cell
+count_source	counts	How the counts were obtained
+host_species	sample	Host species of the sample
+tissue	sample	Host and tissue of the sample: Host blood, Host liver or Vector salivary gland
+strain	sample	Parasite strain or isolate
+parasite_origin_location	sample	Geographic origin of the parasite strain or isolate
+infection_design	sample	Hazzard2024 infection design (single strain, consecutive, simultaneous, sporozoite infection)
+day_post_infection	sample	Day after infection at sampling
+treatment	sample	Drug treatment of the sample
+replicate_id	sample	Biological replicate (animal or infection)
+replicate_type	sample	What the replicate is: animal or infection
+sc_technology	sample	Single-cell technology
+sequencer	sample	Sequencing instrument registered for the run
+author_stage	author	Stage assigned by the authors (Sa2020 gametocytes, liver forms of Ruberto2022_1 and Mancio-Silva2022, sporozoite samples)
+author_sex	author	Sa2020: gametocyte sex given by the authors (S5 Data)
+author_state	author	Mancio-Silva2022, Table S2: State
+author_sex_state	author	Mancio-Silva2022, Table S2: sex.state
+author_ap2g	author	Mancio-Silva2022, Table S2: AP2G
+author_pseudogroup	author	Hazzard2024: the authors' sexual/asexual group (PseudoGroup)
+sa2020_main_analysis	author	Sa2020: the cell is in the authors' main analysis
+stage	stage	Life-cycle stage: the authors' stage if given, else the cluster gametocyte call, else idc_stage
+broad_stage	stage	Blood, liver or sporozoite stage
+stage_source	stage	Where stage comes from: author, gametocyte_markers or idc_reference
+idc_timepoint	stage	Time point (hours) of the reference blood-stage time course most similar to the cell (SingleR pruned label); blood cells with at least 10 UMIs only
+idc_delta	stage	SingleR delta to the next best time point
+idc_stage	stage	Stage of idc_timepoint (metadata/idc_timepoints.tsv)
+cluster	stage	Louvain cluster on the integrated data, resolution 0.05
+cluster_res_0_01	stage	Louvain cluster, resolution 0.01
+cluster_res_0_02	stage	Louvain cluster, resolution 0.02
+cluster_res_0_03	stage	Louvain cluster, resolution 0.03
+cluster_res_0_04	stage	Louvain cluster, resolution 0.04
+cluster_res_0_05	stage	Louvain cluster, resolution 0.05
+cluster_res_0_06	stage	Louvain cluster, resolution 0.06
+cluster_res_0_07	stage	Louvain cluster, resolution 0.07
+cluster_res_0_08	stage	Louvain cluster, resolution 0.08
+cluster_res_0_09	stage	Louvain cluster, resolution 0.09
+cluster_res_0_10	stage	Louvain cluster, resolution 0.10
+cluster_gametocyte_call	stage	Gametocyte call of the cell's cluster (blood cells with at least 10 UMIs only)
+female_gam_score	stage	Module score of the female gametocyte markers
+male_gam_score	stage	Module score of the male gametocyte markers
+umap_u_1	embedding	UMAP 1, before integration
+umap_u_2	embedding	UMAP 2, before integration
+umap_u_3	embedding	UMAP 3, before integration
+umap_i_1	embedding	UMAP 1, after integration
+umap_i_2	embedding	UMAP 2, after integration
+umap_i_3	embedding	UMAP 3, after integration
+pca_u_1	embedding	PC 1, before integration
+pca_u_2	embedding	PC 2, before integration
+pca_u_3	embedding	PC 3, before integration
+pca_i_1	embedding	PC 1, after integration (Harmony)
+pca_i_2	embedding	PC 2, after integration (Harmony)
+pca_i_3	embedding	PC 3, after integration (Harmony)
+t_sne_1	embedding	t-SNE 1, after integration
+t_sne_2	embedding	t-SNE 2, after integration
+t_sne_3	embedding	t-SNE 3, after integration

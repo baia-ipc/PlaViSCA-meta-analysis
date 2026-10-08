@@ -4,6 +4,7 @@
 # Usage:  ./run.sh all            run every stage, in order
 #         ./run.sh 30 40          run the given stages
 #         ./run.sh list           list the stages
+#         ./run.sh check-inputs   verify the input files against their checksums
 #
 # Logs go to <workspace>/runs/<run>/logs/<stage>.log (see config/local.env).
 set -euo pipefail
@@ -15,6 +16,15 @@ log_dir="$PLAVISCA_WORKSPACE/runs/${PLAVISCA_RUN:-main}/logs"
 mkdir -p "$log_dir"
 
 stages=$(ls R/[0-9][0-9]_*.R | xargs -n1 basename | sed 's/\.R$//')
+
+if [ "${1:-}" = "check-inputs" ]; then
+  inputs="$PLAVISCA_WORKSPACE/inputs"
+  (cd "$inputs" && tail -n +2 "$OLDPWD/metadata/input_files.tsv" | awk -F'\t' '$3 ~ /^[0-9a-f]{64}$/ {print $3 "  " $1}' | sha256sum -c --quiet) &&
+  (cd "$inputs/starsolo_counts" && sha256sum -c --quiet "$OLDPWD/metadata/starsolo_counts.sha256") &&
+  (cd "$inputs/study_count_objects" && sha256sum -c --quiet "$OLDPWD/metadata/study_count_objects.sha256") &&
+  echo "all input files match their checksums"
+  exit
+fi
 
 if [ "${1:-}" = "" ] || [ "$1" = "list" ]; then
   echo "$stages"; exit 0

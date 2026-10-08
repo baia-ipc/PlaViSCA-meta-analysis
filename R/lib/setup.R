@@ -101,7 +101,7 @@ check_expected_counts <- function(observed, check_name) {
   expected <- read_meta("expected_counts.tsv")
   expected <- expected[expected$check == check_name, , drop = FALSE]
   check(nrow(expected) > 0, "no rows for '", check_name, "' in metadata/expected_counts.tsv")
-  key <- function(df) paste(df$study_label, df$stage, sep = " / ")
+  key <- function(df) paste(df$study_label, ifelse(is.na(df$stage), "", df$stage), sep = " / ")
   merged <- merge(
     data.frame(key = key(expected), expected = as.integer(expected$cells)),
     data.frame(key = key(observed), observed = observed$cells),

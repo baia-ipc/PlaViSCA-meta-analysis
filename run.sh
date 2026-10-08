@@ -10,7 +10,12 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-[ -f config/local.env ] && set -a && . config/local.env && set +a
+# settings from config/local.env, unless already set in the environment
+if [ -f config/local.env ]; then
+  while IFS='=' read -r key value; do
+    [[ "$key" =~ ^[A-Z_]+$ ]] && [ -z "${!key:-}" ] && export "$key=$value"
+  done < <(grep -E '^[A-Z_]+=' config/local.env)
+fi
 : "${PLAVISCA_WORKSPACE:?set it in config/local.env (see config/local.env.example)}"
 log_dir="$PLAVISCA_WORKSPACE/runs/${PLAVISCA_RUN:-main}/logs"
 mkdir -p "$log_dir"

@@ -146,7 +146,7 @@ star_options <- c("soloType", "soloCBwhitelist", "soloCBlen", "soloUMIlen", "cli
   "soloUMIfiltering", "soloFeatures", "alignIntronMin", "alignIntronMax", "sjdbGTFfile", "sjdbOverhang")
 starsolo <- do.call(rbind, lapply(studies$study_label[studies$study_label %in% runs$study_label], function(study) {
   pmid <- studies$study_pmid[studies$study_label == study]
-  logs <- Sys.glob(file.path(INPUTS, "starsolo_counts", pmid, "*_solo_out", "Log.out"))
+  logs <- Sys.glob(file.path(INPUTS, PARAMS$import$starsolo_counts, pmid, "*_solo_out", "Log.out"))
   if (length(logs) == 0) return(NULL)
   per_run <- lapply(logs, function(f) {
     lines <- readLines(f, n = 200)
@@ -237,9 +237,9 @@ write_table(columns, file.path(out, "columns.tsv"))
 
 # --- figures ----------------------------------------------------------------
 
-file.copy(file.path(integration_dir, "integration.pdf"), file.path(out, "figure_integration.pdf"), overwrite = TRUE)
+invisible(file.copy(file.path(integration_dir, "integration.pdf"), file.path(out, "figure_integration.pdf"), overwrite = TRUE))
 record_output(file.path(out, "figure_integration.pdf"))
-file.copy(file.path(annotation_dir, "idc_delta_distribution.pdf"), file.path(out, "supplementary_idc_delta.pdf"), overwrite = TRUE)
+invisible(file.copy(file.path(annotation_dir, "idc_delta_distribution.pdf"), file.path(out, "supplementary_idc_delta.pdf"), overwrite = TRUE))
 record_output(file.path(out, "supplementary_idc_delta.pdf"))
 
 qc <- mr_data |>

@@ -11,6 +11,8 @@ reference:
 #   min_cells / min_features: CreateSeuratObject() filters
 #   emptydrops:  droplet calling on the raw matrix (only Hazzard2022)
 import:
+  # folder of the STARsolo outputs, under <workspace>/inputs/
+  starsolo_counts: starsolo_counts
   Sa2020:
     source: starsolo
     matrix: filtered

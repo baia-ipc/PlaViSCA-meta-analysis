@@ -46,7 +46,9 @@ RUN_DIR <- file.path(WORKSPACE, "runs", RUN_ID)
 RESULTS <- file.path(RUN_DIR, "results")
 dir.create(RESULTS, recursive = TRUE, showWarnings = FALSE)
 
-PARAMS <- yaml::read_yaml(file.path(CODE_DIR, "config", "params.yaml"))
+# PLAVISCA_PARAMS can name another parameter file (e.g. for a test run)
+PARAMS_FILE <- Sys.getenv("PLAVISCA_PARAMS", file.path(CODE_DIR, "config", "params.yaml"))
+PARAMS <- yaml::read_yaml(PARAMS_FILE)
 
 input_path <- function(...) {
   path <- file.path(INPUTS, ...)

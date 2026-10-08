@@ -46,7 +46,7 @@ import_starsolo <- function(study, cfg) {
   pmid <- study_table$study_pmid[study_table$study_label == study]
   # the import keeps every run of the study listed in metadata/runs.tsv
   matrices <- lapply(setNames(study_runs$run_id, study_runs$run_id), function(run) {
-    path <- input_path("starsolo_counts", pmid, paste0(run, "_solo_out"), "Solo.out", "GeneFull", cfg$matrix)
+    path <- input_path(PARAMS$import$starsolo_counts, pmid, paste0(run, "_solo_out"), "Solo.out", "GeneFull", cfg$matrix)
     sce <- read10xCounts(path, col.names = TRUE)
     sce[!rownames(sce) %in% rrna_genes, ]
   })

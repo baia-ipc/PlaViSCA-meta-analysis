@@ -60,10 +60,10 @@ save_object(annotation, file.path(out, "gene_annotation.rds"))
 
 # --- genes counted by STARsolo ----------------------------------------------
 
-feature_files <- list.files(file.path(INPUTS, "starsolo_counts"), pattern = "^features.tsv$",
+feature_files <- list.files(file.path(INPUTS, PARAMS$import$starsolo_counts), pattern = "^features.tsv$",
   recursive = TRUE, full.names = TRUE)
 feature_files <- grep("/GeneFull/(raw|filtered)/features.tsv$", feature_files, value = TRUE)
-check(length(feature_files) > 0, "no STARsolo features.tsv found under ", file.path(INPUTS, "starsolo_counts"))
+check(length(feature_files) > 0, "no STARsolo features.tsv found under ", file.path(INPUTS, PARAMS$import$starsolo_counts))
 feature_lists <- lapply(feature_files, function(f) utils::read.delim(f, header = FALSE)$V1)
 check(all(vapply(feature_lists, identical, TRUE, feature_lists[[1]])),
   "the STARsolo runs were not all counted against the same gene list")

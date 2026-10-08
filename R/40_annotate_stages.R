@@ -45,7 +45,7 @@ meta <- atlas@meta.data
 eligible <- meta$tissue == "Host blood" & meta$nCount_RNA >= p$idc_min_umi
 eligibility <- meta |>
   mutate(eligible = eligible) |>
-  count(study_label, tissue, eligible, name = "cells")
+  dplyr::count(study_label, tissue, eligible, name = "cells")
 write_table(eligibility, file.path(res, "eligible_cells.tsv"))
 message(sprintf("%d of %d cells eligible for blood-stage inference", sum(eligible), ncol(atlas)))
 
@@ -132,7 +132,7 @@ author_vs_call <- meta |>
   transmute(study_label,
     author_label = coalesce(author_stage, author_pseudogroup),
     cluster_gametocyte_call = coalesce(cluster_gametocyte_call, "none")) |>
-  count(study_label, author_label, cluster_gametocyte_call, name = "cells")
+  dplyr::count(study_label, author_label, cluster_gametocyte_call, name = "cells")
 write_table(author_vs_call, file.path(res, "author_labels_vs_cluster_call.tsv"))
 
 # --- checks -----------------------------------------------------------------
@@ -146,7 +146,7 @@ check(all(meta$tissue[gametocyte] == "Host blood"), "gametocyte stage outside ho
 check(all(meta$broad_stage[meta$tissue == "Host liver"] %in% c(NA, "Liver stage")), "a liver cell has a non-liver stage")
 stage_counts <- meta |>
   mutate(stage = coalesce(stage, "(none)")) |>
-  count(study_label, stage, name = "cells")
+  dplyr::count(study_label, stage, name = "cells")
 check_expected_counts(stage_counts, "stage_cells")
 
 atlas@meta.data <- meta

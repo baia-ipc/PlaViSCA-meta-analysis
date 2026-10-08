@@ -17,10 +17,16 @@ Acceptance: `audit/phase3_preflight/acceptance_matrix_AT01_AT31.tsv`, 31 PASS / 
    The order is now: source-defined label > cluster-level gametocyte call >
    IDC bin (`annotation_precedence.tsv`). `adjudicated_display_stage` equals
    `harmonized_life_cycle_stage`.
-2. **rRNA removal (integration.R).** 49 rRNA genes, all carrying counts only in
-   Mancio-Silva2022 (206,690 UMIs), are removed before normalisation. silva.R
+2. **rRNA removal (integration.R).** 49 of the 50 GFF rRNA genes
+   (`ncRNA_gene`, `ebi_biotype=rRNA`) were in the atlas and are removed before
+   normalisation. The 50th, PVP01_MIT02100 (a 21-bp mitochondrial rRNA
+   fragment), was never in it: the STARsolo study scripts already filter rRNA
+   and the Mancio-Silva2022 author object lacks it. Counts came only from
+   Mancio-Silva2022 (206,690 UMIs over 45 genes; 4 had zero counts). silva.R
    never filtered rRNA, and the feature union re-added those rows to every
-   study. Atlas features: 6,860 → 6,811.
+   study. Atlas features: 6,860 → 6,811; IDs in
+   `audit/phase2_rebuild/rrna_removal_by_study.tsv` (counts) and
+   `gff_rrna_gene_ids()` (definition).
    The 19 protein-coding rRNA-processing genes are kept.
 3. **Integration features (integration.R).** Measured feature sets are the
    quantification panels: the STARsolo panel, Mancio-Silva genes, and

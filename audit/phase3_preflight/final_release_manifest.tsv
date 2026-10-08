@@ -16,7 +16,7 @@ environment	Seurat	5.3.0	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 environment	SeuratObject	5.2.0	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 environment	harmony	1.2.3	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
 environment	SingleR	2.4.0	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	.
-environment	pixi_manifest	.	AVAILABLE_AND_VERIFIED	scripts/pixi.toml	1096	d9f3b1ec79cc17d19fb78bef1de75b406052342ab186f6a2c3a1c120f57a895a	NA	.	Closure validation environment definition
+environment	pixi_manifest	.	AVAILABLE_AND_VERIFIED	scripts/pixi.toml	1438	f49b4217e7bf4eda5fb79c12ba2c9106cefee6f07f911470d0dbacc567ced9c1	NA	.	Closure validation environment definition
 environment	pixi_lock	.	AVAILABLE_AND_VERIFIED	scripts/pixi.lock	213307	c4378b47a51419af2f38d329b739830348c0b69616467ce238999ecc0d4cc11c	NA	.	Resolved closure validation environment
 parameter	integration_seed	123	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	Recorded by Phase-2 integration manifest row
 parameter	integration_feature_count	4709	AVAILABLE_AND_VERIFIED	.	NA	.	NA	.	Intersection of measured panels: STARsolo panel, Mancio-Silva2022 genes, Ruberto2022_1 author_present; after rRNA removal

@@ -31,8 +31,8 @@ serves release-68 files.
   `contig_pairs.tsv`. For 7 of them the pairing is fixed by the splice
   motifs of the junctions found in the original STARsolo runs: only one
   candidate sequence has the right motif at every junction. Contig
-  `Transfer.PvP01_00_208.final` has no junctions; its pairing is tested by
-  comparing the counts.
+  `Transfer.PvP01_00_208.final` has no junctions; of its two candidates,
+  only one gives counts identical to the original (run ERR5087440).
 - The 64 ENA contigs without genes are kept, under their ENA names, so that
   reads mapping there are not counted as unique.
 

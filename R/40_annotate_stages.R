@@ -190,8 +190,8 @@ blood_meta$umap_b_2 <- blood_cells$umap_b_2[match(rownames(blood_meta), blood_ce
 state_levels <- c("Developing gametocyte", "Early female", "Late female", "Early male", "Late male")
 blood_levels <- c("Ring", "Trophozoite", "Schizont (Blood stage)", "Merozoite", state_levels)
 blood_colours <- c("Ring" = "#A9D18E", "Trophozoite" = "#F4D35E", "Schizont (Blood stage)" = "#8EC5E8",
-  "Merozoite" = "#2E75B6", "Developing gametocyte" = "#D2B4DE", "Early female" = "#8E44AD",
-  "Late female" = "#4A235A", "Early male" = "#F5B041", "Late male" = "#BA4A00")
+  "Merozoite" = "#2E75B6", "Developing gametocyte" = "#66454C", "Early female" = "#759F8B",
+  "Late female" = "#4E6E59", "Early male" = "#7F88B3", "Late male" = "#42517C")
 blood_labels <- c("Ring" = "Ring", "Trophozoite" = "Trophozoite", "Schizont (Blood stage)" = "Schizont",
   "Merozoite" = "Late schizont / merozoite", setNames(state_levels, state_levels))
 set.seed(1)

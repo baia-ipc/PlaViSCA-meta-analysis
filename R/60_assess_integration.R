@@ -159,8 +159,8 @@ write_table(pairwise, file.path(out, "per_stage_pairwise_sharing.tsv"))
 study_colours <- c("Hazzard2022" = "#E69F00", "Hazzard2024" = "#56B4E9", "Mancio-Silva2022" = "#009E73",
   "Ruberto2022_1" = "#CC79A7", "Ruberto2022_2" = "#D55E00", "Sa2020" = "#0072B2")
 stage_order <- c("Sporozoite", "Hypnozoite", "Schizont (Liver stage)", "Ring", "Trophozoite",
-  "Schizont (Blood stage)", "Merozoite", "Female gametocyte", "Male gametocyte")
-tol_muted <- c("#332288", "#88CCEE", "#44AA99", "#117733", "#999933", "#DDCC77", "#CC6677", "#882255", "#AA4499")
+  "Schizont (Blood stage)", "Merozoite", "Developing gametocyte", "Female gametocyte", "Male gametocyte")
+tol_muted <- c("#332288", "#88CCEE", "#44AA99", "#117733", "#999933", "#DDCC77", "#CC6677", "#882255", "#AA4499", "#6699CC")
 no_stage <- "Unassigned (NA)"
 embedding_colours <- c("Unintegrated" = "#BBBBBB", "Integrated (Harmony)" = "#004488")
 

@@ -44,7 +44,8 @@ test("the merge order lists every study once", setequal(PARAMS$integration$merge
 test("broad stages are blood, liver or sporozoite",
   all(stages$broad_stage %in% c("Blood stage", "Liver stage", "Sporozoite stage")))
 test("time point stages are known stages", all(read_meta("idc_timepoints.tsv")$stage %in% stages$stage))
-test("gametocyte markers are female or male", all(read_meta("gametocyte_markers.tsv")$sex %in% c("female", "male")))
+test("gametocyte marker sets are known", all(read_meta("gametocyte_markers.tsv")$marker_set %in%
+  c("female", "male", "panel_commitment", "panel_male", "panel_female", "panel_both_sexes")))
 test("exported columns are unique", !anyDuplicated(columns$column))
 test("expected counts: one total per study", setequal(expected$study_label[expected$check == "study_cells"], studies$study_label))
 test("expected counts: stage totals add up to study totals", {

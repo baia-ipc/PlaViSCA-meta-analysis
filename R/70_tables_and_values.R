@@ -1,8 +1,9 @@
-# Stage 70: tables, values and supplementary material for the manuscript.
+# Stage 70: tables, values and figures for reporting the results.
 #
-# Collects the numbers produced by the earlier stages, in the form used in
-# the manuscript. Writes to results/manuscript/:
-#   values.tsv / values.tex       every number cited in the text; values.tex
+# Collects the numbers produced by the earlier stages in a form ready to be
+# cited (e.g. in the manuscript, which is edited separately using these
+# files). Writes to results/tables_and_values/:
+#   values.tsv / values.tex       the numbers cited in the text; values.tex
 #                                 defines one LaTeX command per value
 #                                 (\pvCellsTotal, ...)
 #   table_datasets.tsv, table_datasets_rows.tex          studies, accessions, cells
@@ -16,18 +17,15 @@
 #   supplementary_qc.pdf          UMIs and genes per cell, per study
 #   supplementary_gametocyte_scores.pdf  module scores per cluster
 #   supplementary_idc_delta.pdf   copy of the SingleR delta distribution
-#
-# With --manuscript <file.tex>, also updates the generated parts of the
-# manuscript (see the end of this script).
 
-STAGE <- "70_manuscript"
+STAGE <- "70_tables_and_values"
 source("R/lib/setup.R")
 suppressPackageStartupMessages({
   library(ggplot2)
   library(tidyr)
 })
 
-out <- results_dir("manuscript")
+out <- results_dir("tables_and_values")
 annotation_dir <- file.path(RESULTS, "stage_annotation")
 integration_dir <- file.path(RESULTS, "integration")
 read_result <- function(path) utils::read.delim(path, stringsAsFactors = FALSE, check.names = FALSE)
@@ -42,6 +40,7 @@ mr_data <- readRDS(file.path(RESULTS, "app_data", "cleaned_dataset.rds"))$mr_dat
 values <- list()
 add <- function(key, value, description, source, digits = NA, percent = FALSE) {
   check(grepl("^[A-Za-z]+$", key), "value key must be letters only (LaTeX command name): ", key)
+  check(is.null(values[[key]]), "value key defined twice: ", key)
   formatted <- if (percent) sprintf("%.0f\\%%", 100 * value)
     else if (!is.na(digits)) paste0(if (value < 0) "$-$" else "", formatC(abs(value), format = "f", digits = digits))
     else formatC(value, format = "d", big.mark = ",")
@@ -91,11 +90,22 @@ add("ReferenceGenes", reference$reference_genes, "genes of the reference time co
 add("ReferenceGenesMapped", reference$with_pvp01_ortholog, "reference genes with a PvP01 ortholog", "results/stage_annotation/idc_reference.tsv")
 add("ReferenceGenesUnmapped", reference$without_ortholog, "reference genes without a PvP01 ortholog", "results/stage_annotation/idc_reference.tsv")
 markers <- read_meta("gametocyte_markers.tsv")
-add("MarkersFemale", sum(markers$sex == "female"), "female gametocyte marker genes", "metadata/gametocyte_markers.tsv")
-add("MarkersMale", sum(markers$sex == "male"), "male gametocyte marker genes", "metadata/gametocyte_markers.tsv")
-add("GametocyteMinScore", PARAMS$annotation$gametocyte_min_score, "minimum mean module score of a gametocyte cluster", "config/params.yaml", digits = 2)
+add("MarkersFemale", sum(markers$marker_set == "female"), "female gametocyte marker genes", "metadata/gametocyte_markers.tsv")
+add("MarkersMale", sum(markers$marker_set == "male"), "male gametocyte marker genes", "metadata/gametocyte_markers.tsv")
+add("GametocyteMinScore", PARAMS$annotation$gametocyte_female_min_score, "minimum mean module score of a gametocyte cluster", "config/params.yaml", digits = 2)
 add("GametocyteMinMargin", PARAMS$annotation$gametocyte_min_margin, "minimum margin over the other sex", "config/params.yaml", digits = 2)
-add("ClusterResolution", PARAMS$annotation$cluster_resolution, "clustering resolution", "config/params.yaml", digits = 2)
+add("ClusterResolution", PARAMS$blood_embedding$cluster_resolution, "resolution of the blood-stage clusters used for gametocytes", "config/params.yaml", digits = 2)
+add("AtlasClusterResolution", PARAMS$annotation$atlas_cluster_resolution, "resolution of the atlas clusters", "config/params.yaml", digits = 2)
+add("GametocyteMaleMinScore", PARAMS$annotation$gametocyte_male_min_score, "minimum mean male score of a male gametocyte cluster", "config/params.yaml", digits = 2)
+add("LateMaleMinScore", PARAMS$annotation$late_male_min_score, "minimum mean mature-male panel score of a late male cluster", "config/params.yaml", digits = 2)
+add("UndecidedMinMaleScore", PARAMS$annotation$undecided_min_male_score, "minimum mean male score for a female-branch cluster to be left without sex", "config/params.yaml", digits = 2)
+add("DevelopingMaxUmi", PARAMS$annotation$developing_max_umi, "median UMIs below which a female-branch cluster is developing gametocytes", "config/params.yaml")
+add("LateFemaleMinUmi", PARAMS$annotation$late_female_min_umi, "median UMIs from which a female-branch cluster is late female", "config/params.yaml")
+add("MarkersPanelMale", sum(markers$marker_set == "panel_male"), "genes of the mature-male panel", "metadata/gametocyte_markers.tsv")
+gstate <- table(mr_data$gametocyte_state)
+for (g in names(gstate)) add(paste0("CellsState", gsub("[^A-Za-z]", "", tools::toTitleCase(g))), as.integer(gstate[[g]]), paste("cells with gametocyte_state", g), "results/app_data")
+add("FemaleMaleRatio", sum(mr_data$stage == "Female gametocyte", na.rm = TRUE) / sum(mr_data$stage == "Male gametocyte", na.rm = TRUE),
+  "female to male gametocytes", "results/app_data", digits = 1)
 
 calls <- read_result(file.path(annotation_dir, "author_labels_vs_cluster_call.tsv"))
 n_calls <- function(study, author, call = NULL) {
@@ -105,6 +115,8 @@ n_calls <- function(study, author, call = NULL) {
 }
 add("SaFemaleAuthor", n_calls("Sa2020", "Female gametocyte"), "Sa2020 cells labelled female gametocytes by the authors", "results/stage_annotation/author_labels_vs_cluster_call.tsv")
 add("SaFemaleAgree", n_calls("Sa2020", "Female gametocyte", "Female gametocyte"), "... of which in a female gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv")
+add("SaFemaleDeveloping", n_calls("Sa2020", "Female gametocyte", "Developing gametocyte"), "... of which in a developing gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv")
+add("SaFemaleInMale", n_calls("Sa2020", "Female gametocyte", "Male gametocyte"), "... of which in a male gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv")
 add("SaMaleAuthor", n_calls("Sa2020", "Male gametocyte"), "Sa2020 cells labelled male gametocytes by the authors", "results/stage_annotation/author_labels_vs_cluster_call.tsv")
 add("SaMaleAgree", n_calls("Sa2020", "Male gametocyte", "Male gametocyte"), "... of which in a male gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv")
 sexual <- n_calls("Hazzard2024", "Sexual")
@@ -188,18 +200,18 @@ write_table(params_table(PARAMS), file.path(out, "parameters.tsv"))
 values <- do.call(rbind, values)
 check_unique(values$key, "value keys")
 write_table(values, file.path(out, "values.tsv"))
-writeLines(c("% Generated by R/70_manuscript.R: do not edit", sprintf("\\newcommand{\\pv%s}{%s}", values$key, values$formatted)),
+writeLines(c("% Generated by R/70_tables_and_values.R", sprintf("\\newcommand{\\pv%s}{%s}", values$key, values$formatted)),
   file.path(out, "values.tex"))
 record_output(file.path(out, "values.tex"))
 
 # --- tables -----------------------------------------------------------------
-# The .tex files hold the body rows of the manuscript tables; the header and
-# caption stay in the manuscript.
+# The .tex files hold the body rows of the tables (header and caption are
+# written where the table is used).
 
 comma <- function(x) formatC(x, format = "d", big.mark = ",")
 tex_escape <- function(x) gsub("([&%_#])", "\\\\\\1", x)
 tex_rows <- function(cells, path) {
-  writeLines(c("% Generated by R/70_manuscript.R: do not edit", paste0(apply(cells, 1, paste, collapse = " & "), " \\\\")), path)
+  writeLines(c("% Generated by R/70_tables_and_values.R", paste0(apply(cells, 1, paste, collapse = " & "), " \\\\")), path)
   record_output(path)
 }
 study_name <- setNames(sprintf("%s \\textit{et al.}, %s%s", studies$first_author, substr(studies$publication_date, 1, 4),
@@ -262,25 +274,3 @@ ggsave(file.path(out, "supplementary_gametocyte_scores.pdf"), width = 7.5, heigh
     scale_fill_manual(values = c(Female = "#DAA520", Male = "#1F78B4")) +
     labs(x = "Cluster", y = "Module score", fill = "Marker set") + theme_classic(base_size = 8))
 record_output(file.path(out, "supplementary_gametocyte_scores.pdf"))
-
-# --- update the manuscript --------------------------------------------------
-# Rscript R/70_manuscript.R --manuscript <file.tex> replaces, in that file,
-# the lines between "% BEGIN generated: <name>" and "% END generated: <name>"
-# with results/manuscript/<name>.tex (values, table_datasets_rows,
-# table_stage_counts_rows), and copies the figures next to it (figures/).
-
-args <- commandArgs(TRUE)
-if (length(args) == 2 && args[1] == "--manuscript") {
-  tex <- readLines(args[2], encoding = "UTF-8")
-  for (name in c("values", "table_datasets_rows", "table_stage_counts_rows")) {
-    begin <- which(tex == paste("% BEGIN generated:", name))
-    end <- which(tex == paste("% END generated:", name))
-    check(length(begin) == 1 && length(end) == 1 && begin < end, "markers for '", name, "' not found once in ", args[2])
-    tex <- c(tex[seq_len(begin)], readLines(file.path(out, paste0(name, ".tex")), encoding = "UTF-8"), tex[end:length(tex)])
-  }
-  writeLines(tex, args[2], useBytes = TRUE)
-  figures <- file.path(dirname(args[2]), "figures")
-  dir.create(figures, showWarnings = FALSE)
-  file.copy(list.files(out, pattern = "\\.pdf$", full.names = TRUE), figures, overwrite = TRUE)
-  message("updated ", args[2], " and copied the figures to ", figures)
-}

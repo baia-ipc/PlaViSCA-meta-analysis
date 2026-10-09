@@ -1,6 +1,6 @@
 # Analysis parameters of the PlaViSca preprocessing pipeline.
 # Every stage reads its parameters from here; stage 70 copies them into
-# results/manuscript/parameters.tsv so the manuscript cites the values used.
+# results/tables_and_values/parameters.tsv.
 
 reference:
   gff: reference/PlasmoDB-68_PvivaxP01.gff
@@ -63,6 +63,13 @@ integration:
   pca_seed: 42         # Seurat default
   threads: 10
 
+# Stage 35: embedding and clusters of the blood-stage cells.
+blood_embedding:
+  n_variable_genes: 2000
+  n_pcs_used: 30
+  seed: 42
+  cluster_resolution: 1
+
 # Stage 40: stage annotation.
 annotation:
   idc_reference: reference/Zhu_SciReps_2016.xls
@@ -71,9 +78,26 @@ annotation:
   idc_min_umi: 10
   # The stage assigned to each reference time point: metadata/idc_timepoints.tsv
   sa2020_gametocytes: author_data/pbio.3000711.s034.xlsx
-  cluster_resolution: 0.05
-  gametocyte_min_score: 0.10
+  # resolution of the atlas-wide clusters exported as `cluster` (stage 30)
+  atlas_cluster_resolution: 0.05
+  # Gametocytes are called per cluster of stage 35 (blood_cluster), on the
+  # mean module scores of metadata/gametocyte_markers.tsv over the cluster:
+  #   female branch: female >= female_min_score and >= male + min_margin
+  #   male branch:   male >= male_min_score and >= female + min_margin
+  #   late male:     male branch and male_mature >= late_male_min_score
+  #   developing gametocyte (sex not called; stage "Developing gametocyte"):
+  #                  female branch with median UMIs < developing_max_umi, or
+  #                  with mean male score >= undecided_min_male_score (cells
+  #                  where the branch splits towards the male arm)
+  #   late female:   female branch with median UMIs >= late_female_min_umi
+  #   early female:  the other female-branch clusters
+  gametocyte_female_min_score: 0.10
+  gametocyte_male_min_score: 0.30
   gametocyte_min_margin: 0.05
+  late_male_min_score: 0.20
+  developing_max_umi: 500
+  undecided_min_male_score: 0.10
+  late_female_min_umi: 3000
 
 # Stage 60: integration assessment.
 assessment:

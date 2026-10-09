@@ -13,7 +13,7 @@
 #
 # Cells are sorted by name. Gene IDs are written as in PlasmoDB ("PVP01_...").
 
-STAGE <- "50_export_app"
+STAGE <- "50_export_app_data"
 source("R/lib/setup.R")
 suppressPackageStartupMessages({
   library(Seurat)
@@ -38,6 +38,10 @@ mr_data <- atlas@meta.data |>
   cbind(embedding("umap_unintegrated", "umap_u_"), embedding("umap_integrated", "umap_i_"),
     embedding("pca_unintegrated", "pca_u_"), embedding("pca_integrated", "pca_i_"),
     embedding("tsne_integrated", "t_sne_"))
+# blood-stage UMAP (stage 35), only for the cells of the blood-stage analysis
+blood_cells <- utils::read.delim(file.path(stage_dir("35_blood_embedding"), "blood_cells.tsv"), stringsAsFactors = FALSE)
+mr_data$umap_b_1 <- blood_cells$umap_b_1[match(rownames(mr_data), blood_cells$cell)]
+mr_data$umap_b_2 <- blood_cells$umap_b_2[match(rownames(mr_data), blood_cells$cell)]
 missing <- setdiff(columns$column, colnames(mr_data))
 check(length(missing) == 0, "columns of metadata/columns.tsv missing from the atlas: ", paste(missing, collapse = ", "))
 mr_data <- mr_data[sort(colnames(atlas)), columns$column]

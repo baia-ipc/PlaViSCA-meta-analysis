@@ -3,8 +3,9 @@ Ring	Blood stage	1	ring
 Trophozoite	Blood stage	2	trophozoite
 Schizont (Blood stage)	Blood stage	3	schizont
 Merozoite	Blood stage	4	late schizont/merozoite
-Female gametocyte	Blood stage	5	female gametocyte
-Male gametocyte	Blood stage	6	male gametocyte
-Hypnozoite	Liver stage	7	hypnozoite
-Schizont (Liver stage)	Liver stage	8	liver schizont
-Sporozoite	Sporozoite stage	9	sporozoite
+Developing gametocyte	Blood stage	5	developing gametocyte
+Female gametocyte	Blood stage	6	female gametocyte
+Male gametocyte	Blood stage	7	male gametocyte
+Hypnozoite	Liver stage	8	hypnozoite
+Schizont (Liver stage)	Liver stage	9	liver schizont
+Sporozoite	Sporozoite stage	10	sporozoite

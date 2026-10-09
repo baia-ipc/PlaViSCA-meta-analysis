@@ -5,28 +5,31 @@ study_cells	Mancio-Silva2022		1480
 study_cells	Ruberto2022_1		1438
 study_cells	Ruberto2022_2		9947
 study_cells	Sa2020		9766
-stage_cells	Hazzard2022	Female gametocyte	46
-stage_cells	Hazzard2022	Male gametocyte	2
+stage_cells	Hazzard2022	Developing gametocyte	12
+stage_cells	Hazzard2022	Female gametocyte	25
+stage_cells	Hazzard2022	Male gametocyte	12
 stage_cells	Hazzard2022	Merozoite	10
 stage_cells	Hazzard2022	Ring	31
 stage_cells	Hazzard2022	Schizont (Blood stage)	299
 stage_cells	Hazzard2022	Sporozoite	2858
-stage_cells	Hazzard2022	Trophozoite	48
+stage_cells	Hazzard2022	Trophozoite	47
 stage_cells	Hazzard2024	(none)	7
-stage_cells	Hazzard2024	Female gametocyte	20769
-stage_cells	Hazzard2024	Male gametocyte	880
-stage_cells	Hazzard2024	Merozoite	2083
-stage_cells	Hazzard2024	Ring	6656
-stage_cells	Hazzard2024	Schizont (Blood stage)	34992
-stage_cells	Hazzard2024	Trophozoite	14637
+stage_cells	Hazzard2024	Developing gametocyte	9887
+stage_cells	Hazzard2024	Female gametocyte	9840
+stage_cells	Hazzard2024	Male gametocyte	2812
+stage_cells	Hazzard2024	Merozoite	2034
+stage_cells	Hazzard2024	Ring	6459
+stage_cells	Hazzard2024	Schizont (Blood stage)	34606
+stage_cells	Hazzard2024	Trophozoite	14379
 stage_cells	Mancio-Silva2022	Hypnozoite	272
 stage_cells	Mancio-Silva2022	Schizont (Liver stage)	1208
 stage_cells	Ruberto2022_1	Hypnozoite	1147
 stage_cells	Ruberto2022_1	Schizont (Liver stage)	291
 stage_cells	Ruberto2022_2	Sporozoite	9947
-stage_cells	Sa2020	Female gametocyte	1577
-stage_cells	Sa2020	Male gametocyte	96
-stage_cells	Sa2020	Merozoite	212
-stage_cells	Sa2020	Ring	453
-stage_cells	Sa2020	Schizont (Blood stage)	5638
-stage_cells	Sa2020	Trophozoite	1790
+stage_cells	Sa2020	Developing gametocyte	50
+stage_cells	Sa2020	Female gametocyte	1526
+stage_cells	Sa2020	Male gametocyte	107
+stage_cells	Sa2020	Merozoite	211
+stage_cells	Sa2020	Ring	452
+stage_cells	Sa2020	Schizont (Blood stage)	5634
+stage_cells	Sa2020	Trophozoite	1786

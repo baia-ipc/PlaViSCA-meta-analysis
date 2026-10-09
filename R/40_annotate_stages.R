@@ -9,12 +9,15 @@
 #     (idc_timepoint, pruned SingleR label; idc_delta, SingleR delta.next),
 #     which is converted to a stage with metadata/idc_timepoints.tsv
 #     (idc_stage).
-#  3. Gametocytes by cluster: module scores of female and male markers
-#     (metadata/gametocyte_markers.tsv) are averaged over the eligible cells
-#     of each cluster; a cluster is called female (male) gametocytes if its
-#     mean female (male) score is at least gametocyte_min_score and exceeds
-#     the other score by at least gametocyte_min_margin
-#     (cluster_gametocyte_call, set for eligible cells only).
+#  3. Gametocytes, per cluster of the blood-only clustering of stage 35
+#     (blood_cluster): module scores of the marker sets of
+#     metadata/gametocyte_markers.tsv are averaged over each cluster, and the
+#     rule documented in config/params.yaml (annotation) assigns each cluster
+#     to the female or male branch (cluster_gametocyte_call) and to a state
+#     along it (gametocyte_state: developing gametocyte, early/late female,
+#     early/late male),
+#     using the marker scores and the cluster's median UMIs, which grow as
+#     gametocytes mature.
 #  4. Final stage, first available of: the stage given by the authors
 #     (author_stage), the cluster gametocyte call, the stage from the
 #     reference time course. stage_source says which one was used, and
@@ -27,6 +30,8 @@ STAGE <- "40_annotate_stages"
 source("R/lib/setup.R")
 suppressPackageStartupMessages({
   library(Seurat)
+  library(ggplot2)
+  library(patchwork)
   library(SingleR)
   library(SummarizedExperiment)
   library(readxl)
@@ -86,32 +91,58 @@ print(plotDeltaDistribution(prediction, ncol = 4))
 dev.off()
 record_output(file.path(res, "idc_delta_distribution.pdf"))
 
-# --- 3. gametocyte clusters -------------------------------------------------
+# --- 3. gametocytes ---------------------------------------------------------
 
-cluster_column <- paste0("cluster_res_", sub(".", "_", formatC(p$cluster_resolution, format = "f", digits = 2), fixed = TRUE))
-meta$cluster <- meta[[cluster_column]]
+atlas_cluster <- paste0("cluster_res_", sub(".", "_", formatC(p$atlas_cluster_resolution, format = "f", digits = 2), fixed = TRUE))
+meta$cluster <- meta[[atlas_cluster]]
+
+blood_cells <- utils::read.delim(file.path(stage_dir("35_blood_embedding"), "blood_cells.tsv"), stringsAsFactors = FALSE)
+check_same_set(blood_cells$cell, rownames(meta)[eligible], "cells of stage 35 and cells eligible for blood-stage inference")
+meta$blood_cluster <- NA_character_
+meta$blood_cluster[eligible] <- as.character(blood_cells$blood_cluster[match(rownames(meta)[eligible], blood_cells$cell)])
 
 markers <- read_meta("gametocyte_markers.tsv")
 check(all(markers$gene_id %in% rownames(atlas)), "gametocyte marker genes missing from the atlas")
-atlas <- AddModuleScore(atlas, features = list(markers$gene_id[markers$sex == "female"]), name = "female_gam_score")
-atlas <- AddModuleScore(atlas, features = list(markers$gene_id[markers$sex == "male"]), name = "male_gam_score")
-meta$female_gam_score <- atlas$female_gam_score1
-meta$male_gam_score <- atlas$male_gam_score1
+module_score <- function(set) {
+  scored <- AddModuleScore(atlas, features = list(markers$gene_id[markers$marker_set == set]), name = "score")
+  scored$score1
+}
+meta$female_gam_score <- module_score("female")
+meta$male_gam_score <- module_score("male")
+male_mature_score <- module_score("panel_male")
 
-cluster_scores <- meta[eligible, ] |>
-  group_by(cluster) |>
-  summarise(eligible_cells = n(), mean_female_score = mean(female_gam_score), mean_male_score = mean(male_gam_score), .groups = "drop") |>
-  mutate(call = case_when(
-    mean_female_score >= p$gametocyte_min_score & mean_female_score - mean_male_score >= p$gametocyte_min_margin ~ "Female gametocyte",
-    mean_male_score >= p$gametocyte_min_score & mean_male_score - mean_female_score >= p$gametocyte_min_margin ~ "Male gametocyte",
-    TRUE ~ NA_character_
-  ))
-print(as.data.frame(cluster_scores))
+cluster_scores <- data.frame(blood_cluster = meta$blood_cluster, female = meta$female_gam_score, male = meta$male_gam_score,
+  male_mature = male_mature_score, umi = meta$nCount_RNA)[eligible, ] |>
+  group_by(blood_cluster) |>
+  summarise(cells = n(), mean_female_score = mean(female), mean_male_score = mean(male),
+    mean_male_mature_score = mean(male_mature), median_umi = median(umi), .groups = "drop") |>
+  mutate(
+    call = case_when(
+      mean_female_score >= p$gametocyte_female_min_score & mean_female_score - mean_male_score >= p$gametocyte_min_margin ~ "Female gametocyte",
+      mean_male_score >= p$gametocyte_male_min_score & mean_male_score - mean_female_score >= p$gametocyte_min_margin ~ "Male gametocyte",
+      TRUE ~ NA_character_),
+    state = case_when(
+      call == "Male gametocyte" & mean_male_mature_score >= p$late_male_min_score ~ "Late male",
+      call == "Male gametocyte" ~ "Early male",
+      call == "Female gametocyte" & median_umi < p$developing_max_umi ~ "Developing gametocyte",
+      call == "Female gametocyte" & mean_male_score >= p$undecided_min_male_score ~ "Developing gametocyte",
+      call == "Female gametocyte" & median_umi >= p$late_female_min_umi ~ "Late female",
+      call == "Female gametocyte" ~ "Early female",
+      TRUE ~ NA_character_)
+  ) |>
+  # developing gametocytes: on the female branch by the scores, but too
+  # early (few UMIs) for the sex to be called
+  mutate(call = ifelse(state %in% "Developing gametocyte", "Developing gametocyte", call)) |>
+  arrange(call, state, desc(mean_female_score))
+print(as.data.frame(cluster_scores), digits = 2)
 write_table(cluster_scores, file.path(res, "cluster_gametocyte_scores.tsv"))
-check(any(!is.na(cluster_scores$call)), "no cluster passes the gametocyte thresholds; see cluster_gametocyte_scores.tsv")
+check(any(cluster_scores$call %in% "Female gametocyte") && any(cluster_scores$call %in% "Male gametocyte"),
+  "the rule finds no female or no male cluster; see cluster_gametocyte_scores.tsv")
 
 meta$cluster_gametocyte_call <- NA_character_
-meta$cluster_gametocyte_call[eligible] <- cluster_scores$call[match(meta$cluster[eligible], cluster_scores$cluster)]
+meta$gametocyte_state <- NA_character_
+meta$cluster_gametocyte_call[eligible] <- cluster_scores$call[match(meta$blood_cluster[eligible], cluster_scores$blood_cluster)]
+meta$gametocyte_state[eligible] <- cluster_scores$state[match(meta$blood_cluster[eligible], cluster_scores$blood_cluster)]
 
 # --- 4. final stage ---------------------------------------------------------
 
@@ -137,17 +168,77 @@ write_table(author_vs_call, file.path(res, "author_labels_vs_cluster_call.tsv"))
 
 # --- checks -----------------------------------------------------------------
 
-blood_only <- c("idc_timepoint", "cluster_gametocyte_call")
+blood_only <- c("idc_timepoint", "cluster_gametocyte_call", "gametocyte_state", "blood_cluster")
 for (column in blood_only) {
   check(all(is.na(meta[[column]][!eligible])), column, " is set for a cell not eligible for blood-stage inference")
 }
-gametocyte <- meta$stage %in% c("Female gametocyte", "Male gametocyte")
+gametocyte <- meta$stage %in% c("Developing gametocyte", "Female gametocyte", "Male gametocyte")
 check(all(meta$tissue[gametocyte] == "Host blood"), "gametocyte stage outside host blood")
 check(all(meta$broad_stage[meta$tissue == "Host liver"] %in% c(NA, "Liver stage")), "a liver cell has a non-liver stage")
 stage_counts <- meta |>
   mutate(stage = coalesce(stage, "(none)")) |>
   dplyr::count(study_label, stage, name = "cells")
 check_expected_counts(stage_counts, "stage_cells")
+
+# --- figures: gametocytes on the blood-only UMAP ---------------------------
+# (a) female and (b) male marker scores, (c) UMIs, (d) gametocyte states;
+# and the curated marker panel per state.
+
+blood_meta <- meta[eligible, ]
+blood_meta$umap_b_1 <- blood_cells$umap_b_1[match(rownames(blood_meta), blood_cells$cell)]
+blood_meta$umap_b_2 <- blood_cells$umap_b_2[match(rownames(blood_meta), blood_cells$cell)]
+state_levels <- c("Developing gametocyte", "Early female", "Late female", "Early male", "Late male")
+blood_levels <- c("Ring", "Trophozoite", "Schizont (Blood stage)", "Merozoite", state_levels)
+blood_colours <- c("Ring" = "#A9D18E", "Trophozoite" = "#F4D35E", "Schizont (Blood stage)" = "#8EC5E8",
+  "Merozoite" = "#2E75B6", "Developing gametocyte" = "#D2B4DE", "Early female" = "#8E44AD",
+  "Late female" = "#4A235A", "Early male" = "#F5B041", "Late male" = "#BA4A00")
+blood_labels <- c("Ring" = "Ring", "Trophozoite" = "Trophozoite", "Schizont (Blood stage)" = "Schizont",
+  "Merozoite" = "Late schizont / merozoite", setNames(state_levels, state_levels))
+set.seed(1)
+blood_meta <- blood_meta[sample(nrow(blood_meta)), ]
+umap_panel <- function(colour, title, continuous = TRUE) {
+  g <- ggplot(blood_meta, aes(umap_b_1, umap_b_2, colour = .data[[colour]])) +
+    ggrastr::rasterise(geom_point(size = 0.05, stroke = 0, shape = 16), dpi = 300, dev = "ragg") +
+    coord_equal() + labs(title = title, x = "UMAP 1", y = "UMAP 2", colour = NULL) +
+    theme_classic(base_size = 8, base_family = "Helvetica") +
+    theme(axis.text = element_blank(), axis.ticks = element_blank(), plot.title = element_text(size = 9, face = "bold"))
+  if (continuous) g + scale_colour_viridis_c(limits = quantile(blood_meta[[colour]], c(0.01, 0.99)), oob = scales::squish)
+  else g
+}
+# blood stage: the gametocyte state where there is one, else the stage
+blood_meta$blood_stage <- factor(coalesce(blood_meta$gametocyte_state, blood_meta$stage), levels = blood_levels)
+blood_meta$log10_umi <- log10(blood_meta$nCount_RNA)
+figure <- (umap_panel("female_gam_score", "Female marker score") | umap_panel("male_gam_score", "Male marker score")) /
+  (umap_panel("log10_umi", "UMIs (log10)") |
+    (umap_panel("blood_stage", "Blood stage", continuous = FALSE) +
+      scale_colour_manual(values = blood_colours, labels = blood_labels, na.value = "#D9D9D9", na.translate = FALSE, drop = FALSE) +
+      guides(colour = guide_legend(override.aes = list(size = 2.5))))) +
+  plot_annotation(tag_levels = "A")
+ggsave(file.path(res, "gametocytes_umap.pdf"), figure, width = 7.5, height = 7, device = cairo_pdf)
+record_output(file.path(res, "gametocytes_umap.pdf"))
+ggsave(file.path(res, "gametocytes_umap.png"), figure, width = 7.5, height = 7, dpi = 300)
+record_output(file.path(res, "gametocytes_umap.png"))
+
+panel <- markers[startsWith(markers$marker_set, "panel_"), ]
+panel_data <- GetAssayData(atlas, layer = "data")[panel$gene_id, rownames(blood_meta)]
+group <- factor(ifelse(is.na(blood_meta$gametocyte_state), "Asexual", blood_meta$gametocyte_state), levels = c("Asexual", state_levels))
+dots <- do.call(rbind, lapply(levels(group), function(g) {
+  x <- panel_data[, group == g, drop = FALSE]
+  data.frame(state = g, gene_id = panel$gene_id, gene = panel$gene, marker_set = sub("^panel_", "", panel$marker_set),
+    detected = Matrix::rowMeans(x > 0), mean = Matrix::rowMeans(x))
+}))
+write_table(dots, file.path(res, "gametocyte_marker_panel.tsv"))
+dots$label <- factor(paste0(dots$gene, " (", sub("PVP01-", "", dots$gene_id), ")"), levels = rev(unique(paste0(panel$gene, " (", sub("PVP01-", "", panel$gene_id), ")"))))
+dots$state <- factor(dots$state, levels = levels(group))
+dotplot <- ggplot(dots, aes(state, label, size = detected, colour = mean)) + geom_point() +
+  scale_colour_viridis_c() + scale_size_area(max_size = 4) +
+  facet_grid(marker_set ~ ., scales = "free_y", space = "free_y") +
+  labs(x = NULL, y = NULL, size = "Fraction detected", colour = "Mean expression") +
+  theme_bw(base_size = 7) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+for (ext in c("pdf", "png")) {
+  ggsave(file.path(res, paste0("gametocyte_marker_panel.", ext)), dotplot, width = 5.5, height = 7.5, dpi = 300)
+  record_output(file.path(res, paste0("gametocyte_marker_panel.", ext)))
+}
 
 atlas@meta.data <- meta
 save_object(atlas, file.path(out, "atlas.rds"))

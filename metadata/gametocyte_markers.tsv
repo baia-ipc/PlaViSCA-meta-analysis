@@ -1,26 +1,64 @@
-gene_id	sex	source
-PVP01-1207200	female	Sa et al. 2020
-PVP01-0616100	female	Sa et al. 2020
-PVP01-1119300	female	Sa et al. 2020
-PVP01-1465500	female	Sa et al. 2020
-PVP01-1259400	female	Sa et al. 2020
-PVP01-1441000	female	Sa et al. 2020
-PVP01-0702600	female	Sa et al. 2020
-PVP01-1306800	female	Sa et al. 2020
-PVP01-0946800	female	Sa et al. 2020
-PVP01-0517400	female	Sa et al. 2020
-PVP01-1027600	female	Sa et al. 2020
-PVP01-1003000	female	Sa et al. 2020
-PVP01-1143200	female	Sa et al. 2020
-PVP01-1017500	female	Sa et al. 2020
-PVP01-1024300	female	Sa et al. 2020
-PVP01-0806000	female	Sa et al. 2020
-PVP01-1240300	female	Sa et al. 2020
-PVP01-0603600	female	Sa et al. 2020
-PVP01-0712800	female	Sa et al. 2020
-PVP01-1262200	male	Sa et al. 2020
-PVP01-0530800	male	Sa et al. 2020
-PVP01-1412100	male	Sa et al. 2020
-PVP01-1025600	male	Sa et al. 2020
-PVP01-1266500	male	Sa et al. 2020
-PVP01-1229400	male	Sa et al. 2020
+gene_id	marker_set	gene	source
+PVP01-1207200	female	conserved protein	Sa et al. 2020 (sex calls)
+PVP01-0616100	female	P25	Sa et al. 2020 (sex calls)
+PVP01-1119300	female	PSOP6	Sa et al. 2020 (sex calls)
+PVP01-1465500	female	conserved Plasmodium protein	Sa et al. 2020 (sex calls)
+PVP01-1259400	female	conserved protein	Sa et al. 2020 (sex calls)
+PVP01-1441000	female	conserved Plasmodium protein	Sa et al. 2020 (sex calls)
+PVP01-0702600	female	PH	Sa et al. 2020 (sex calls)
+PVP01-1306800	female	41-3 protein	Sa et al. 2020 (sex calls)
+PVP01-0946800	female	PH-like domain-containing protein	Sa et al. 2020 (sex calls)
+PVP01-0517400	female	HMGB2	Sa et al. 2020 (sex calls)
+PVP01-1027600	female	conserved Plasmodium protein	Sa et al. 2020 (sex calls)
+PVP01-1003000	female	CPW-WPC family protein	Sa et al. 2020 (sex calls)
+PVP01-1143200	female	conserved Plasmodium protein	Sa et al. 2020 (sex calls)
+PVP01-1017500	female	MFS1	Sa et al. 2020 (sex calls)
+PVP01-1024300	female	conserved Plasmodium protein	Sa et al. 2020 (sex calls)
+PVP01-0806000	female	conserved Plasmodium protein	Sa et al. 2020 (sex calls)
+PVP01-1240300	female	conserved Plasmodium protein	Sa et al. 2020 (sex calls)
+PVP01-0603600	female	conserved Plasmodium protein	Sa et al. 2020 (sex calls)
+PVP01-0712800	female	protein KIC3	Sa et al. 2020 (sex calls)
+PVP01-1262200	male	fructose 1	Sa et al. 2020 (sex calls)
+PVP01-0530800	male	alpha tubulin 2	Sa et al. 2020 (sex calls)
+PVP01-1412100	male	meiosis-specific nuclear structural protein 1	Sa et al. 2020 (sex calls)
+PVP01-1025600	male	CFA20 domain-containing protein	Sa et al. 2020 (sex calls)
+PVP01-1266500	male	allantoicase	Sa et al. 2020 (sex calls)
+PVP01-1229400	male	lactate dehydrogenase	Sa et al. 2020 (sex calls)
+PVP01-1440800	panel_commitment	AP2-G	sexual commitment / early gametocyte genes
+PVP01-0734100	panel_commitment	GDV1	sexual commitment / early gametocyte genes
+PVP01-0725700	panel_commitment	gametocyte development protein GD1	sexual commitment / early gametocyte genes
+PVP01-0422700	panel_commitment	gamete antigen 27/25	sexual commitment / early gametocyte genes
+PVP01-0422600	panel_commitment	ETRAMP11.2	sexual commitment / early gametocyte genes
+PVP01-0204100	panel_male	kinesin-8B	male gamete and male development genes
+PVP01-0820800	panel_male	kinesin-8X	male gamete and male development genes
+PVP01-0215600	panel_male	dynein heavy chain	male gamete and male development genes
+PVP01-0313800	panel_male	dynein heavy chain	male gamete and male development genes
+PVP01-0608300	panel_male	dynein heavy chain	male gamete and male development genes
+PVP01-0703700	panel_male	dynein heavy chain	male gamete and male development genes
+PVP01-0923500	panel_male	dynein heavy chain	male gamete and male development genes
+PVP01-0313300	panel_male	CDPK4	male gamete and male development genes
+PVP01-0914700	panel_male	MAPK2	male gamete and male development genes
+PVP01-0530800	panel_male	alpha tubulin 2	male gamete and male development genes
+PVP01-0814300	panel_male	HAP2	male gamete and male development genes
+PVP01-1108200	panel_male	GEX1	male gamete and male development genes
+PVP01-0824500	panel_male	male development protein MD3	male gamete and male development genes
+PVP01-1145300	panel_male	male development protein MD4	male gamete and male development genes
+PVP01-0521000	panel_male	male development protein MD5	male gamete and male development genes
+PVP01-0616100	panel_female	P25	female gametocyte / ookinete genes
+PVP01-0616000	panel_female	P28	female gametocyte / ookinete genes
+PVP01-1208000	panel_female	P47	female gametocyte / ookinete genes
+PVP01-1251100	panel_female	CCp2	female gametocyte / ookinete genes
+PVP01-0702200	panel_female	CCp4	female gametocyte / ookinete genes
+PVP01-0206000	panel_female	CCp5	female gametocyte / ookinete genes
+PVP01-1255400	panel_female	LAP5	female gametocyte / ookinete genes
+PVP01-1007900	panel_female	NEK2	female gametocyte / ookinete genes
+PVP01-0314900	panel_female	serine/threonine-protein kinase NEK4	female gametocyte / ookinete genes
+PVP01-0947400	panel_female	female development protein FD2	female gametocyte / ookinete genes
+PVP01-0819400	panel_female	DOZI	female gametocyte / ookinete genes
+PVP01-0317400	panel_female	PSOP1	female gametocyte / ookinete genes
+PVP01-0206300	panel_female	PSOP24	female gametocyte / ookinete genes
+PVP01-1258000	panel_female	GEST	female gametocyte / ookinete genes
+PVP01-1119300	panel_female	PSOP6	female gametocyte / ookinete genes
+PVP01-0415800	panel_both_sexes	P230	gamete surface and egress genes of both sexes
+PVP01-1208100	panel_both_sexes	P48/45	gamete surface and egress genes of both sexes
+PVP01-1018300	panel_both_sexes	GEP	gamete surface and egress genes of both sexes

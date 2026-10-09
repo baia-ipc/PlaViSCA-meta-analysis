@@ -28,10 +28,11 @@ before it.
 | `10_import_counts` | count matrices; which barcodes are cells | one object per study |
 | `20_cell_metadata` | study, run and author annotations of each cell | one object per study |
 | `30_integrate` | merge, normalise, Harmony, UMAP, t-SNE, clusters | `atlas_integrated.rds` |
+| `35_blood_embedding` | embedding and clusters of the blood-stage cells alone | `blood.rds` |
 | `40_annotate_stages` | life-cycle stage of each cell | `atlas.rds` |
-| `50_export_app` | data files of the app | `results/app_data/` |
+| `50_export_app_data` | data files of the app | `results/app_data/` |
 | `60_assess_integration` | integration metrics and figure | `results/integration/` |
-| `70_manuscript` | manuscript tables, values, parameters, versions | `results/manuscript/` |
+| `70_tables_and_values` | tables, cited values, parameters, software versions, figures | `results/tables_and_values/` |
 
 [docs/pipeline.md](docs/pipeline.md) describes each stage in detail. What has
 been verified about the input data is in [docs/validation.md](docs/validation.md).

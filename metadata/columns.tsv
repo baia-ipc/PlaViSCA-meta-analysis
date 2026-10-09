@@ -42,7 +42,9 @@ cluster_res_0_07	stage	Louvain cluster, resolution 0.07
 cluster_res_0_08	stage	Louvain cluster, resolution 0.08
 cluster_res_0_09	stage	Louvain cluster, resolution 0.09
 cluster_res_0_10	stage	Louvain cluster, resolution 0.10
-cluster_gametocyte_call	stage	Gametocyte call of the cell's cluster (blood cells with at least 10 UMIs only)
+blood_cluster	stage	Cluster in the blood-stage clustering (stage 35; blood cells with at least 10 UMIs only)
+cluster_gametocyte_call	stage	Gametocyte call (female or male) of the cell's blood-stage cluster
+gametocyte_state	stage	State along the sexual branch: Developing gametocyte, Early female, Late female, Early male, Late male
 female_gam_score	stage	Module score of the female gametocyte markers
 male_gam_score	stage	Module score of the male gametocyte markers
 umap_u_1	embedding	UMAP 1, before integration
@@ -51,6 +53,8 @@ umap_u_3	embedding	UMAP 3, before integration
 umap_i_1	embedding	UMAP 1, after integration
 umap_i_2	embedding	UMAP 2, after integration
 umap_i_3	embedding	UMAP 3, after integration
+umap_b_1	embedding	UMAP 1 of the blood-stage cells (stage 35)
+umap_b_2	embedding	UMAP 2 of the blood-stage cells (stage 35)
 pca_u_1	embedding	PC 1, before integration
 pca_u_2	embedding	PC 2, before integration
 pca_u_3	embedding	PC 3, before integration

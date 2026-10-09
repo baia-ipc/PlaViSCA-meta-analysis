@@ -109,6 +109,16 @@ The order of the steps in the script is therefore part of the method.
 Outputs: `atlas_integrated.rds`, `rrna_genes_removed.tsv`,
 `measured_genes.tsv` (which genes each study measured).
 
+## 35 Blood embedding
+
+The cells eligible for blood-stage inference (host blood, at least 10 UMIs)
+are analysed on their own, so that the asexual cycle and the sexual branch
+shape their own embedding, without the liver and sporozoite cells:
+- 2,000 variable genes, PCA, and Harmony with one batch per study;
+- a 2D UMAP (`umap_b_1`, `umap_b_2` in the exported data);
+- Louvain clusters at resolution 1 on the Harmony PCs 1–30
+  (`blood_cluster`), used by stage 40 to call gametocytes.
+
 ## 40 Annotate stages
 
 1. **Eligible cells.** Cells of host blood samples with at least 10 UMIs
@@ -125,15 +135,26 @@ Outputs: `atlas_integrated.rds`, `rrna_genes_removed.tsv`,
    SingleR's `delta.next`. `metadata/idc_timepoints.tsv` turns time points
    into stages (`idc_stage`): 6–12 h ring, 24 h trophozoite, 32–42 h
    schizont, 48 h late schizont/merozoite.
-3. **Gametocytes.**
-   - Module scores (`AddModuleScore`) are computed for 19 female and 6 male
-     marker genes (`metadata/gametocyte_markers.tsv`, from Sa et al. 2020).
-   - For each cluster (resolution 0.05), the scores are averaged over its
-     eligible cells.
-   - A cluster is called female (male) gametocytes if its mean female (male)
-     score is at least 0.10 and exceeds the other mean by at least 0.05.
-   - Eligible cells take the call of their cluster
-     (`cluster_gametocyte_call`).
+3. **Gametocytes.** Module scores (`AddModuleScore`) are computed for the
+   marker sets of `metadata/gametocyte_markers.tsv`: 19 female and 6 male
+   genes from Sa et al. 2020, and a curated panel of mature-male genes.
+   They are averaged over each blood-stage cluster of stage 35, and each
+   cluster is assigned by this rule (thresholds in `config/params.yaml`):
+
+   | Assignment | Condition (cluster means) |
+   |---|---|
+   | female branch | female score ≥ 0.10 and ≥ male score + 0.05 |
+   | male branch | male score ≥ 0.30 and ≥ female score + 0.05 |
+   | late male | male branch and mature-male panel score ≥ 0.20 |
+   | early male | other male-branch clusters |
+   | developing gametocyte | female branch with median UMIs < 500, or with male score ≥ 0.10 (where the branch splits; sex not called) |
+   | late female | female branch with median UMIs ≥ 3,000 |
+   | early female | other female-branch clusters |
+
+   The UMI cut-offs use the growth of gametocytes as they mature (more RNA
+   per cell). Developing gametocytes get the stage "Developing gametocyte",
+   not a sex. Eligible cells take the call (`cluster_gametocyte_call`) and
+   the state (`gametocyte_state`) of their cluster.
 4. **Final stage.**
    - `stage` takes the first available of: the authors' stage, the cluster
      gametocyte call, `idc_stage`. `stage_source` records which one was
@@ -154,10 +175,14 @@ Results (`results/stage_annotation/`):
 - `eligible_cells.tsv`;
 - `idc_reference.tsv` (genes of the reference and how many were mapped);
 - `idc_delta_distribution.pdf`;
-- `cluster_gametocyte_scores.tsv` (mean scores and call per cluster);
+- `cluster_gametocyte_scores.tsv` (mean scores, median UMIs, call and
+  state per blood-stage cluster);
+- `gametocytes_umap.pdf` (blood-stage UMAP: female and male scores, UMIs,
+  gametocyte states) and `gametocyte_marker_panel.pdf` (curated sexual-stage
+  genes per state);
 - `author_labels_vs_cluster_call.tsv`.
 
-## 50 Export for the app
+## 50 Export of the app data
 
 `results/app_data/` contains:
 - `cleaned_dataset.rds`, a list of:
@@ -187,18 +212,17 @@ Results in `results/integration/`: count tables, `integration_metrics.tsv`,
 `per_stage_sharing.tsv`, `per_stage_pairwise_sharing.tsv` and the figure
 `integration.pdf`.
 
-## 70 Manuscript
+## 70 Tables and values
 
-Collects the numbers of the earlier stages into `results/manuscript/`:
-- `values.tsv`, and `values.tex` with one LaTeX command per value;
+Collects the numbers of the earlier stages into `results/tables_and_values/`,
+ready to be cited:
+- `values.tsv` (one row per number, with its source file), and
+  `values.tex` with one LaTeX command per value;
 - the dataset and stage-count tables (`.tsv`, and the table rows as `.tex`);
 - the STARsolo options read from the run logs;
 - the parameters and the software versions;
 - the column dictionary;
-- the supplementary figures.
+- copies of the figures.
 
-`Rscript R/70_manuscript.R --manuscript <file.tex>` writes the values and
-the table rows into the manuscript, between the lines
-`% BEGIN generated: <name>` and `% END generated: <name>`, and copies the
-figures to `figures/` next to it. The manuscript stays a single file, as
-PLOS requires.
+The manuscript is not changed by the pipeline: it is edited separately,
+using these files.

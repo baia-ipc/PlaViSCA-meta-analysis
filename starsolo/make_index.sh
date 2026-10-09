@@ -8,9 +8,9 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 [ -f ../config/local.env ] && . ../config/local.env
-ref="$PLAVISCA_WORKSPACE/inputs/reference"
+ref="${STARSOLO_REFERENCE:-$PLAVISCA_WORKSPACE/inputs/reference}"
 
-pixi run python -W ignore make_reference.py -v "$ref/PlasmoDB-68_PvivaxP01.gff" "$ref/GCA_900093555.2.fasta" \
+pixi run python -W ignore make_reference.py -v "$ref/PlasmoDB-68_PvivaxP01.gff" "$ref/GCA_900093555.2.fasta" contig_pairs.tsv \
   "$ref/PlasmoDB-68_PvivaxP01_Genome.fasta" "$ref/PlasmoDB-68_PvivaxP01_utr2exon.gtf" "$ref/sequence_names.tsv"
 for overhang in 74 90; do
   index="$ref/star_index_overhang$overhang"

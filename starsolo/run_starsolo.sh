@@ -19,7 +19,8 @@ cd "$(dirname "$0")"
 
 pmid=$1; run=$2; fastq_dir=$3; out_dir=$4; threads=${5:-15}
 [ -f ../config/local.env ] && . ../config/local.env
-ref="$PLAVISCA_WORKSPACE/inputs/reference"
+# STARSOLO_REFERENCE: another reference folder (default: the workspace one)
+ref="${STARSOLO_REFERENCE:-$PLAVISCA_WORKSPACE/inputs/reference}"
 
 if [ "$pmid" = 32365102 ]; then
   whitelist=737K-august-2016.txt; umi=10; clip="26 0"; index=star_index_overhang74; keep=75
@@ -31,13 +32,16 @@ mkdir -p "$out_dir/$pmid"
 work=$(mktemp -d "$out_dir/$pmid/.$run.XXXX")
 trap 'rm -rf "$work"' EXIT
 
-r1="$fastq_dir/$pmid/${run}_1.fastq.gz"
-r2="$fastq_dir/$pmid/${run}_2.fastq.gz"
+# reads already trimmed to $keep bases are named <run>_trimmed_<1|2>.fastq.gz
+reads=$run
+[ -f "$fastq_dir/$pmid/${run}_1.fastq.gz" ] || reads=${run}_trimmed
+r1="$fastq_dir/$pmid/${reads}_1.fastq.gz"
+r2="$fastq_dir/$pmid/${reads}_2.fastq.gz"
 if [ -n "$keep" ]; then
   # keep the first $keep bases of each read (3' trimming)
   for i in 1 2; do
-    fq="$fastq_dir/$pmid/${run}_$i.fastq.gz"
-    len=$(zcat "$fq" | awk 'NR == 2 { print length($0); exit }')
+    fq="$fastq_dir/$pmid/${reads}_$i.fastq.gz"
+    len=$( (zcat "$fq" || true) | awk 'NR == 2 { print length($0); exit }')
     if [ "$len" -gt "$keep" ]; then
       pixi run seqtk trimfq -e $((len - keep)) "$fq" | gzip -1 > "$work/${run}_$i.fastq.gz"
     else

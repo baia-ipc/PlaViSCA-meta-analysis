@@ -1,0 +1,9 @@
+plasmodb_name	ena_name	evidence
+Transfer.PvP01_00_161.final	PVP01_00_148	splice motifs of the 32 junctions in the original STARsolo runs (146: 7/32)
+Transfer.PvP01_00_199.final	PVP01_00_184	splice motifs of 31/31 junctions (185: 11/31)
+Transfer.PvP01_00_200.final	PVP01_00_185	splice motifs of 11/11 junctions (184: 4/11)
+Transfer.PvP01_00_201.final	PVP01_00_186	splice motifs of 4/4 junctions (187: 1/4, 188: 2/4)
+Transfer.PvP01_00_203.final	PVP01_00_188	splice motifs of 3/3 junctions (186: 1/3, 187: 1/3)
+Transfer.PvP01_00_208.final	PVP01_00_193	no junctions; TO BE TESTED by realignment
+Transfer.PvP01_00_209.final	PVP01_00_194	splice motifs of 5/5 junctions (192: 1/5, 193: 1/5)
+Transfer.PvP01_00_223.final	PVP01_00_208	splice motifs of 37/37 junctions (209: 20/37)

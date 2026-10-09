@@ -26,8 +26,18 @@ folder; paths below of the form `audit/...` refer to files in that archive.
 - **Author matrices.** The import of Ruberto2022_1 and Mancio-Silva2022 from
   the authors' objects gives exactly the same cells, genes and counts as the
   per-study objects of data release v1.0-rc2.
-- **Release comparison.** The outputs of stages 20 to 50 were compared, cell
-  by cell, with data release v1.0-rc2 (see the run's `comparison_*.tsv`).
+- **Release comparison.** The outputs were compared, cell by cell, with
+  data release v1.0-rc2:
+  - identical: cells and their order, genes, counts, normalised
+    expression, all metadata and stages, variable genes, the clusters at
+    every resolution, the integrated UMAP, and all integration metrics;
+  - 21 of the 50 principal components (and of the Harmony components) have
+    the opposite sign. The sign of a component is arbitrary and changes no
+    distance;
+  - the unintegrated UMAP and the t-SNE differ slightly, as expected for
+    approximate methods. UMAP: median shift 0.07 on a range of 21.5,
+    correlation 0.9996 per axis, 43 cells shifted by more than 1 unit.
+    t-SNE: median shift 0.0002, correlation 1.000.
 
 The current atlas contains 105,949 cells from six studies:
 

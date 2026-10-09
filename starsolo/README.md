@@ -26,8 +26,13 @@ serves release-68 files.
 - They are renamed to the PlasmoDB names used in the GFF
   (`make_reference.py`): chromosomes and organelle genomes by name,
   unplaced contigs by length.
-- Two or three unplaced contigs share the same length in 8 cases; these are
-  paired in numeric order. They carry 8 genes.
+- In 8 cases two or three unplaced contigs share the same length; each of
+  these 8 contigs carries one gene. They are paired as listed in
+  `contig_pairs.tsv`. For 7 of them the pairing is fixed by the splice
+  motifs of the junctions found in the original STARsolo runs: only one
+  candidate sequence has the right motif at every junction. Contig
+  `Transfer.PvP01_00_208.final` has no junctions; its pairing is tested by
+  comparing the counts.
 - The 64 ENA contigs without genes are kept, under their ENA names, so that
   reads mapping there are not counted as unique.
 
@@ -52,9 +57,11 @@ those of `metadata/runs.tsv`.
 ## How this reproduces the counts used
 
 The STARsolo outputs in `inputs/starsolo_counts/` were made with the same
-STAR version and options. For the runs recomputed with these scripts, the
-GeneFull raw and filtered matrices are identical to them: the same genes,
-barcodes and UMI counts in every entry.
+STAR version and options. A first recomputation, with the same-length
+contigs paired in numeric order, differed from them mainly in the genes of
+the wrongly paired contigs (and in a few other genes by 1 to 7 UMIs); one
+run (SRR20710501) was identical. This led to `contig_pairs.tsv`. The
+comparison with the corrected reference is in progress.
 
 The barcode whitelists `3M-february-2018.txt.gz` and
 `737K-august-2016.txt.gz` come from

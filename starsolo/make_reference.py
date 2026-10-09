@@ -4,11 +4,13 @@ Build the STARsolo reference files from the PlasmoDB-68 PvivaxP01 GFF and the
 ENA assembly of P. vivax P01 (GCA_900093555.2).
 
 Usage:
-    make_reference.py [options] <gff> <ena_fasta> <out_fasta> <out_gtf> <out_names>
+    make_reference.py [options] <gff> <ena_fasta> <pairs> <out_fasta> <out_gtf> <out_names>
 
 Arguments:
     <gff>        PlasmoDB-68_PvivaxP01.gff
     <ena_fasta>  ENA assembly GCA_900093555.2 (FASTA)
+    <pairs>      table of the contigs that cannot be matched by length
+                 (contig_pairs.tsv: plasmodb_name, ena_name, evidence)
     <out_fasta>  genome FASTA with the PlasmoDB sequence names
     <out_gtf>    GTF for STAR
     <out_names>  table: PlasmoDB sequence name, ENA sequence name
@@ -23,9 +25,9 @@ Genome: the ENA sequences are renamed to the PlasmoDB names (PvP01_01_v2,
 ..., Transfer.PvP01_00_1.final) and written in the order of the GFF
 ##sequence-region lines, followed by the ENA contigs without genes (which are
 not in the GFF; they keep their ENA name). Chromosomes, apicoplast and mitochondrion are
-matched by name, the unplaced contigs by length; when several ENA contigs
-have the same length they are paired in numeric order. Every sequence must
-have the length given in the GFF.
+matched by name, the unplaced contigs by length; contigs whose length is
+shared by other contigs are matched with the pairs table. Every sequence
+must have the length given in the GFF.
 
 GTF: one transcript per gene (mRNA, ncRNA types, pseudogenic transcripts).
 Its exon lines are the GFF exon, five_prime_UTR and three_prime_UTR records
@@ -68,7 +70,7 @@ def ena_name(plasmodb_name):
     return None
 
 
-def match_sequences(regions, ena):
+def match_sequences(regions, ena, pairs):
     matched, used = {}, set()
     for name, length in regions:
         e = ena_name(name)
@@ -82,10 +84,17 @@ def match_sequences(regions, ena):
             by_length[len(s)].append(e)
     for length in by_length:
         by_length[length].sort(key=contig_number)
+    for name, ena_contig in pairs.items():
+        matched[name] = ena_contig
+        for candidates in by_length.values():
+            if ena_contig in candidates:
+                candidates.remove(ena_contig)
     for name, length in sorted((r for r in regions if r[0] not in matched), key=lambda r: contig_number(r[0])):
         candidates = by_length.get(length)
         if not candidates:
             sys.exit(f"no ENA sequence of length {length} for {name}")
+        if len(candidates) > 1:
+            sys.exit(f"{name}: several ENA contigs of length {length} ({', '.join(candidates)}); add it to the pairs table")
         matched[name] = candidates.pop(0)
     return matched
 
@@ -137,10 +146,11 @@ def set_logger(verbose: bool, quiet: bool) -> None:
         logger.add(lambda msg: sys.stderr.write(msg), level="WARNING")
 
 
-def make_reference(gff: str, ena_fasta: str, out_fasta: str, out_gtf: str, out_names: str) -> None:
+def make_reference(gff: str, ena_fasta: str, pairs_file: str, out_fasta: str, out_gtf: str, out_names: str) -> None:
     regions = sequence_regions(gff)
     ena = read_fasta(ena_fasta)
-    matched = match_sequences(regions, ena)
+    pairs = dict(l.rstrip("\n").split("\t")[:2] for l in list(open(pairs_file))[1:])
+    matched = match_sequences(regions, ena, pairs)
     logger.info(f"{len(regions)} GFF sequences matched to ENA; {len(ena) - len(regions)} ENA contigs without genes added")
     write_fasta(regions, ena, matched, out_fasta)
     write_gtf(gff, out_gtf)
@@ -153,4 +163,4 @@ def make_reference(gff: str, ena_fasta: str, out_fasta: str, out_gtf: str, out_n
 if __name__ == "__main__":
     args = docopt(__doc__, version="make_reference.py 1.0")
     set_logger(args["--verbose"], args["--quiet"])
-    make_reference(args["<gff>"], args["<ena_fasta>"], args["<out_fasta>"], args["<out_gtf>"], args["<out_names>"])
+    make_reference(args["<gff>"], args["<ena_fasta>"], args["<pairs>"], args["<out_fasta>"], args["<out_gtf>"], args["<out_names>"])

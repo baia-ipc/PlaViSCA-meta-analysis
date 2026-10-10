@@ -188,7 +188,7 @@ set.seed(1)
 blood_meta <- blood_meta[sample(nrow(blood_meta)), ]
 umap_panel <- function(colour, title, continuous = TRUE) {
   g <- ggplot(blood_meta, aes(umap_b_1, umap_b_2, colour = .data[[colour]])) +
-    ggrastr::rasterise(geom_point(size = 0.05, stroke = 0, shape = 16), dpi = 300, dev = "ragg") +
+    ggrastr::rasterise(geom_point(size = 0.2, stroke = 0, shape = 16), dpi = 300, dev = "ragg") +
     coord_equal() + labs(title = title, x = "UMAP 1", y = "UMAP 2", colour = NULL) +
     theme_classic(base_size = 8, base_family = "Helvetica") +
     theme(axis.text = element_blank(), axis.ticks = element_blank(), plot.title = element_text(size = 9, face = "bold"))
@@ -208,6 +208,25 @@ ggsave(file.path(res, "gametocytes_umap.pdf"), figure, width = 7.5, height = 7, 
 record_output(file.path(res, "gametocytes_umap.pdf"))
 ggsave(file.path(res, "gametocytes_umap.png"), figure, width = 7.5, height = 7, dpi = 300)
 record_output(file.path(res, "gametocytes_umap.png"))
+
+# supplementary: (a) the blood-stage clusters of stage 35, labelled at their
+# median position, and (b) the blood stage
+cluster_labels <- blood_meta |>
+  group_by(blood_cluster) |>
+  summarise(umap_b_1 = median(umap_b_1), umap_b_2 = median(umap_b_2), .groups = "drop")
+label_layer <- geom_label(data = cluster_labels, aes(umap_b_1, umap_b_2, label = blood_cluster), inherit.aes = FALSE,
+  size = 2.2, label.padding = unit(0.08, "lines"), alpha = 0.8)
+blood_meta$blood_cluster <- factor(blood_meta$blood_cluster, levels = sort(as.integer(unique(blood_meta$blood_cluster))))
+cluster_figure <- (umap_panel("blood_cluster", sprintf("Blood-stage clusters (resolution %s)", PARAMS$blood_embedding$cluster_resolution),
+    continuous = FALSE) + guides(colour = "none") + label_layer) |
+  (umap_panel("blood_stage", "Blood stage", continuous = FALSE) + label_layer +
+    scale_colour_manual(values = blood_colours, labels = blood_labels, na.value = "#D9D9D9", na.translate = FALSE, drop = FALSE) +
+    guides(colour = guide_legend(override.aes = list(size = 2.5)))) +
+  plot_annotation(tag_levels = "A")
+ggsave(file.path(res, "blood_clusters_umap.pdf"), cluster_figure, width = 7.5, height = 4, device = cairo_pdf)
+record_output(file.path(res, "blood_clusters_umap.pdf"))
+ggsave(file.path(res, "blood_clusters_umap.png"), cluster_figure, width = 7.5, height = 4, dpi = 300)
+record_output(file.path(res, "blood_clusters_umap.png"))
 
 panel <- markers[startsWith(markers$marker_set, "panel_"), ]
 panel_data <- GetAssayData(atlas, layer = "data")[panel$gene_id, rownames(blood_meta)]

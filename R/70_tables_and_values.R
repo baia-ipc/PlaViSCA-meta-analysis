@@ -16,6 +16,7 @@
 #   figure_integration.pdf        copy of results/integration/integration.pdf
 #   supplementary_qc.pdf          UMIs and genes per cell, per study
 #   supplementary_gametocyte_scores.pdf  marker enrichment per blood-stage cluster
+#   supplementary_blood_clusters.pdf  copy of the blood-stage clusters and their stage
 #   supplementary_idc_delta.pdf   copy of the SingleR delta distribution
 
 STAGE <- "70_tables_and_values"
@@ -260,6 +261,8 @@ invisible(file.copy(file.path(integration_dir, "integration.pdf"), file.path(out
 record_output(file.path(out, "figure_integration.pdf"))
 invisible(file.copy(file.path(annotation_dir, "idc_delta_distribution.pdf"), file.path(out, "supplementary_idc_delta.pdf"), overwrite = TRUE))
 record_output(file.path(out, "supplementary_idc_delta.pdf"))
+invisible(file.copy(file.path(annotation_dir, "blood_clusters_umap.pdf"), file.path(out, "supplementary_blood_clusters.pdf"), overwrite = TRUE))
+record_output(file.path(out, "supplementary_blood_clusters.pdf"))
 
 qc <- mr_data |>
   select(study_label, UMIs = n_count_rna, Genes = n_feature_rna) |>

@@ -205,8 +205,9 @@ nearest neighbours):
   the silhouette width by study and by stage, on 8,000 random cells (seed 1);
 - for each stage present in more than one study, on up to 3,000 cells of the
   stage: the fraction of same-stage neighbours from another study, divided
-  by its value under complete mixing, 1 − Σ pᵢ² (pᵢ = share of study i in
-  the stage).
+  by its value under complete mixing, Σ pᵢ (n − nᵢ)/(n − 1) (n cells used,
+  nᵢ of them from study i, pᵢ = nᵢ/n): the neighbours of a cell are then a
+  random draw of the other n − 1 cells.
 
 Results in `results/integration/`: count tables, `integration_metrics.tsv`,
 `per_stage_sharing.tsv`, `per_stage_pairwise_sharing.tsv` and the figure

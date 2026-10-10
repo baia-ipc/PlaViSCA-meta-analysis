@@ -17,8 +17,11 @@
 # Per-stage sharing, for each stage present in more than one study, on up to
 # max_cells_per_stage cells of the stage: fraction of a cell's neighbours
 # among the cells of the same stage that come from another study (observed),
-# against the value under complete mixing, 1 - sum(p_i^2), where p_i is the
-# share of study i among all cells of the stage (ratio 1 = complete mixing).
+# against the value under complete mixing (ratio 1 = complete mixing). Under
+# complete mixing the neighbours of a cell of study i are a random draw of
+# the other n - 1 cells, so the expected value is sum_i p_i (n - n_i) / (n - 1),
+# where n_i is the number of cells of study i among the n cells used and
+# p_i = n_i / n.
 # The random draws continue the same random number stream as the global
 # subsample, stage after stage.
 #
@@ -125,7 +128,8 @@ pairwise_sharing <- function(stage_name, knns, labels, shares) {
     n_from_sampled = vapply(pairs$from_study, function(a) sum(labels == a), 1L),
     observed_unintegrated = mapply(function(a, b) fraction(knns$unintegrated, a, b), pairs$from_study, pairs$to_study),
     observed_integrated = mapply(function(a, b) fraction(knns$integrated, a, b), pairs$from_study, pairs$to_study),
-    expected_complete_mixing = as.numeric(shares[pairs$to_study]), row.names = NULL)
+    expected_complete_mixing = vapply(pairs$to_study, function(b) sum(labels == b) / (length(labels) - 1), 1),
+    row.names = NULL)
 }
 
 shared_stages <- names(which(rowSums(table(stage, study) > 0) > 1))
@@ -136,8 +140,9 @@ per_stage <- do.call(rbind, lapply(shared_stages, function(s) {
   if (n_stage > p$max_cells_per_stage) cells <- sample(cells, p$max_cells_per_stage)
   knns <- lapply(pcs, function(x) nearest_neighbours(x[cells, , drop = FALSE], p$k_neighbours)$nn)
   observed <- vapply(knns, fraction_other, 1, labels = study[cells])
-  shares <- prop.table(table(study[stage %in% s]))
-  expected <- 1 - sum(shares^2)
+  n_by_study <- table(study[cells])
+  shares <- n_by_study / length(cells)
+  expected <- sum(shares * (length(cells) - n_by_study) / (length(cells) - 1))
   pairwise[[s]] <<- pairwise_sharing(s, knns, study[cells], shares)
   data.frame(stage = s, n_cells_stage = n_stage, n_cells_sampled = length(cells), n_studies = length(shares),
     observed_unintegrated = observed[["unintegrated"]], observed_integrated = observed[["integrated"]],

@@ -111,6 +111,13 @@ check_expected_counts <- function(observed, check_name) {
   )
   merged[is.na(merged)] <- 0
   bad <- merged[merged$expected != merged$observed, , drop = FALSE]
+  if (nrow(bad) > 0 && Sys.getenv("PLAVISCA_COUNT_CHECK") == "report") {
+    # counts changed on purpose: list the differences and go on; once they
+    # are reviewed, copy the new counts into metadata/expected_counts.tsv
+    write_table(merged, file.path(stage_dir(STAGE), paste0("expected_counts_", check_name, ".tsv")))
+    warning(sprintf("cell counts differ from metadata/expected_counts.tsv (%s) in %d row(s)", check_name, nrow(bad)), call. = FALSE)
+    return(invisible(FALSE))
+  }
   if (nrow(bad) > 0) {
     print(bad, row.names = FALSE)
     stop(sprintf("cell counts differ from metadata/expected_counts.tsv (%s) in %d row(s)", check_name, nrow(bad)), call. = FALSE)

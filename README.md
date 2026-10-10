@@ -108,8 +108,11 @@ example:
 - a cell gets a stage that is not possible for its tissue;
 - cell numbers differ from `metadata/expected_counts.tsv`.
 
-To accept new cell numbers on purpose, update that file in the same commit
-as the change that causes them.
+To accept new cell numbers on purpose, run with
+`PLAVISCA_COUNT_CHECK=report ./run.sh ...`: the stages then go on and write
+the expected and observed numbers to `expected_counts_<check>.tsv` in their
+output folder. Review them, then update `metadata/expected_counts.tsv` in the
+same commit as the change that causes them.
 
 ## Contact
 

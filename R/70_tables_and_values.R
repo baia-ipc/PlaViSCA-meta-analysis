@@ -224,10 +224,10 @@ study_name <- setNames(sprintf("%s \\textit{et al.}, %s%s", studies$first_author
   studies$study_label)
 
 chemistry <- c("737K-august-2016.txt" = "10x (v2)", "3M-february-2018.txt" = "10x (v3)")
-platform <- setNames(chemistry[starsolo$soloCBwhitelist], starsolo$study_label)
-platform[["Mancio-Silva2022"]] <- "Seq-Well"
+check(all(chemistry[starsolo$soloCBwhitelist] == studies$platform[match(starsolo$study_label, studies$study_label)]),
+  "the platform in metadata/studies.tsv does not match the STARsolo barcode whitelist")
 datasets <- studies |>
-  transmute(study_label, sample_types, platform = unname(platform[study_label]), project_accession,
+  transmute(study_label, sample_types, platform, project_accession,
     cells = as.integer(table(mr_data$study_label)[study_label]))
 check_no_na(datasets$platform, "platform of each study")
 write_table(datasets, file.path(out, "table_datasets.tsv"))

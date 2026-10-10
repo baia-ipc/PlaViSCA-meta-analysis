@@ -66,7 +66,12 @@ integration:
 # Stage 35: embedding and clusters of the blood-stage cells.
 blood_embedding:
   n_variable_genes: 2000
-  n_pcs_used: 30
+  n_pcs_used: 15
+  # neighbours of the graph the clusters are built on
+  n_neighbours: 50
+  # layout of the UMAP
+  umap_neighbours: 100
+  umap_min_dist: 0.5
   seed: 42
   cluster_resolution: 1
 
@@ -75,7 +80,7 @@ annotation:
   idc_reference: reference/Zhu_SciReps_2016.xls
   idc_reference_sheet: SMRU1
   idc_orthologs: reference/GenesByOrthologs_Summary.xlsx
-  idc_min_umi: 10
+  idc_min_umi: 300
   # The stage assigned to each reference time point: metadata/idc_timepoints.tsv
   sa2020_gametocytes: author_data/pbio.3000711.s034.xlsx
   # resolution of the atlas-wide clusters exported as `cluster` (stage 30)

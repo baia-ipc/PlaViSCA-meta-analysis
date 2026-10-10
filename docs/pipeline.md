@@ -111,17 +111,18 @@ Outputs: `atlas_integrated.rds`, `rrna_genes_removed.tsv`,
 
 ## 35 Blood embedding
 
-The cells eligible for blood-stage inference (host blood, at least 10 UMIs)
-are analysed on their own, so that the asexual cycle and the sexual branch
-shape their own embedding, without the liver and sporozoite cells:
+The cells eligible for blood-stage inference (host blood, at least 300
+UMIs) are analysed on their own, so that the asexual cycle and the sexual
+branch shape their own embedding, without the liver and sporozoite cells:
 - 2,000 variable genes, PCA, and Harmony with one batch per study;
-- a 2D UMAP (`umap_b_1`, `umap_b_2` in the exported data);
-- Louvain clusters at resolution 1 on the Harmony PCs 1–30
-  (`blood_cluster`), used by stage 40 to call gametocytes.
+- a 2D UMAP on the Harmony PCs 1–15, with 100 neighbours and minimum
+  distance 0.5 (`umap_b_1`, `umap_b_2` in the exported data);
+- Louvain clusters at resolution 1 on a 50-neighbour graph of the Harmony
+  PCs 1–15 (`blood_cluster`), used by stage 40 to call gametocytes.
 
 ## 40 Annotate stages
 
-1. **Eligible cells.** Cells of host blood samples with at least 10 UMIs
+1. **Eligible cells.** Cells of host blood samples with at least 300 UMIs
    are eligible for blood-stage inference.
 2. **Asexual stage.** SingleR (default settings) compares each eligible
    cell with the SMRU1 time course of Zhu et al. 2016:

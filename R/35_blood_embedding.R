@@ -38,8 +38,9 @@ blood <- ScaleData(blood)
 blood <- RunPCA(blood, npcs = 50, seed.use = p$seed)
 blood <- IntegrateLayers(blood, method = HarmonyIntegration, orig.reduction = "pca", new.reduction = "harmony", verbose = FALSE)
 blood <- JoinLayers(blood)
-blood <- RunUMAP(blood, reduction = "harmony", dims = dims, n.components = 2, seed.use = p$seed, reduction.name = "umap_blood")
-blood <- FindNeighbors(blood, reduction = "harmony", dims = dims)
+blood <- RunUMAP(blood, reduction = "harmony", dims = dims, n.components = 2, n.neighbors = p$umap_neighbours, min.dist = p$umap_min_dist,
+  seed.use = p$seed, reduction.name = "umap_blood")
+blood <- FindNeighbors(blood, reduction = "harmony", dims = dims, k.param = p$n_neighbours)
 blood <- FindClusters(blood, resolution = p$cluster_resolution, random.seed = 0)
 blood$blood_cluster <- blood$seurat_clusters
 message(sprintf("%d clusters at resolution %s", length(levels(blood$blood_cluster)), p$cluster_resolution))

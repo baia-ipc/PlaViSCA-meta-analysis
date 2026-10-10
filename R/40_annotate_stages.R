@@ -10,14 +10,16 @@
 #     which is converted to a stage with metadata/idc_timepoints.tsv
 #     (idc_stage).
 #  3. Gametocytes, per cluster of the blood-only clustering of stage 35
-#     (blood_cluster): module scores of the marker sets of
-#     metadata/gametocyte_markers.tsv are averaged over each cluster, and the
-#     rule documented in config/params.yaml (annotation) assigns each cluster
-#     to the female or male branch (cluster_gametocyte_call) and to a state
-#     along it (gametocyte_state: developing gametocyte, early/late female,
-#     early/late male),
-#     using the marker scores and the cluster's median UMIs, which grow as
-#     gametocytes mature.
+#     (blood_cluster): the detection of the marker sets of
+#     metadata/gametocyte_markers.tsv in each cluster, against control genes
+#     of similar expression (R/lib/gametocytes.R), and the cluster's median
+#     UMIs relative to the other clusters (UMIs grow as gametocytes mature)
+#     assign each cluster to the female or male branch
+#     (cluster_gametocyte_call) and to a state along it (gametocyte_state:
+#     developing gametocyte, early/late female, early/late male), by the rule
+#     documented in config/params.yaml (annotation). Module scores of the
+#     female and male sets (female_gam_score, male_gam_score) are kept per
+#     cell for display.
 #  4. Final stage, first available of: the stage given by the authors
 #     (author_stage), the cluster gametocyte call, the stage from the
 #     reference time course. stage_source says which one was used, and
@@ -28,6 +30,7 @@
 
 STAGE <- "40_annotate_stages"
 source("R/lib/setup.R")
+source("R/lib/gametocytes.R")
 suppressPackageStartupMessages({
   library(Seurat)
   library(ggplot2)
@@ -109,31 +112,18 @@ module_score <- function(set) {
 }
 meta$female_gam_score <- module_score("female")
 meta$male_gam_score <- module_score("male")
-male_mature_score <- module_score("panel_male")
 
-cluster_scores <- data.frame(blood_cluster = meta$blood_cluster, female = meta$female_gam_score, male = meta$male_gam_score,
-  male_mature = male_mature_score, umi = meta$nCount_RNA)[eligible, ] |>
-  group_by(blood_cluster) |>
-  summarise(cells = n(), mean_female_score = mean(female), mean_male_score = mean(male),
-    mean_male_mature_score = mean(male_mature), median_umi = median(umi), .groups = "drop") |>
-  mutate(
-    call = case_when(
-      mean_female_score >= p$gametocyte_female_min_score & mean_female_score - mean_male_score >= p$gametocyte_min_margin ~ "Female gametocyte",
-      mean_male_score >= p$gametocyte_male_min_score & mean_male_score - mean_female_score >= p$gametocyte_min_margin ~ "Male gametocyte",
-      TRUE ~ NA_character_),
-    state = case_when(
-      call == "Male gametocyte" & mean_male_mature_score >= p$late_male_min_score ~ "Late male",
-      call == "Male gametocyte" ~ "Early male",
-      call == "Female gametocyte" & median_umi < p$developing_max_umi ~ "Developing gametocyte",
-      call == "Female gametocyte" & mean_male_score >= p$undecided_min_male_score ~ "Developing gametocyte",
-      call == "Female gametocyte" & median_umi >= p$late_female_min_umi ~ "Late female",
-      call == "Female gametocyte" ~ "Early female",
-      TRUE ~ NA_character_)
-  ) |>
-  # developing gametocytes: on the female branch by the scores, but too
-  # early (few UMIs) for the sex to be called
-  mutate(call = ifelse(state %in% "Developing gametocyte", "Developing gametocyte", call)) |>
-  arrange(call, state, desc(mean_female_score))
+marker_sets <- list(female = markers$gene_id[markers$marker_set == "female"],
+  male = markers$gene_id[markers$marker_set == "male"],
+  male_mature = markers$gene_id[markers$marker_set == "panel_male"])
+enrichment <- marker_enrichment(GetAssayData(atlas, layer = "counts")[, eligible], GetAssayData(atlas, layer = "data")[, eligible],
+  meta$blood_cluster[eligible], marker_sets, p$marker_expression_bins, p$marker_control_genes, p$marker_control_seed)
+cluster_umi <- tapply(meta$nCount_RNA[eligible], meta$blood_cluster[eligible], median)
+cluster_scores <- data.frame(blood_cluster = rownames(enrichment), cells = as.integer(table(meta$blood_cluster[eligible])[rownames(enrichment)]),
+  enrichment, median_umi = as.numeric(cluster_umi[rownames(enrichment)])) |>
+  mutate(relative_umi = median_umi / median(median_umi)) |>
+  call_gametocyte_clusters(p) |>
+  arrange(call, state, desc(female))
 print(as.data.frame(cluster_scores), digits = 2)
 write_table(cluster_scores, file.path(res, "cluster_gametocyte_scores.tsv"))
 check(any(cluster_scores$call %in% "Female gametocyte") && any(cluster_scores$call %in% "Male gametocyte"),

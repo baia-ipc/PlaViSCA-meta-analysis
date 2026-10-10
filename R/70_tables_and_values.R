@@ -15,7 +15,7 @@
 #   columns.tsv                   description of the per-cell columns
 #   figure_integration.pdf        copy of results/integration/integration.pdf
 #   supplementary_qc.pdf          UMIs and genes per cell, per study
-#   supplementary_gametocyte_scores.pdf  module scores per cluster
+#   supplementary_gametocyte_scores.pdf  marker enrichment per blood-stage cluster
 #   supplementary_idc_delta.pdf   copy of the SingleR delta distribution
 
 STAGE <- "70_tables_and_values"
@@ -92,15 +92,13 @@ add("ReferenceGenesUnmapped", reference$without_ortholog, "reference genes witho
 markers <- read_meta("gametocyte_markers.tsv")
 add("MarkersFemale", sum(markers$marker_set == "female"), "female gametocyte marker genes", "metadata/gametocyte_markers.tsv")
 add("MarkersMale", sum(markers$marker_set == "male"), "male gametocyte marker genes", "metadata/gametocyte_markers.tsv")
-add("GametocyteMinScore", PARAMS$annotation$gametocyte_female_min_score, "minimum mean module score of a gametocyte cluster", "config/params.yaml", digits = 2)
-add("GametocyteMinMargin", PARAMS$annotation$gametocyte_min_margin, "minimum margin over the other sex", "config/params.yaml", digits = 2)
 add("ClusterResolution", PARAMS$blood_embedding$cluster_resolution, "resolution of the blood-stage clusters used for gametocytes", "config/params.yaml", digits = 2)
 add("AtlasClusterResolution", PARAMS$annotation$atlas_cluster_resolution, "resolution of the atlas clusters", "config/params.yaml", digits = 2)
-add("GametocyteMaleMinScore", PARAMS$annotation$gametocyte_male_min_score, "minimum mean male score of a male gametocyte cluster", "config/params.yaml", digits = 2)
-add("LateMaleMinScore", PARAMS$annotation$late_male_min_score, "minimum mean mature-male panel score of a late male cluster", "config/params.yaml", digits = 2)
-add("UndecidedMinMaleScore", PARAMS$annotation$undecided_min_male_score, "minimum mean male score for a female-branch cluster to be left without sex", "config/params.yaml", digits = 2)
-add("DevelopingMaxUmi", PARAMS$annotation$developing_max_umi, "median UMIs below which a female-branch cluster is developing gametocytes", "config/params.yaml")
-add("LateFemaleMinUmi", PARAMS$annotation$late_female_min_umi, "median UMIs from which a female-branch cluster is late female", "config/params.yaml")
+add("GametocyteMinEnrichment", PARAMS$annotation$gametocyte_min_enrichment, "minimum marker enrichment (percentage points) of a gametocyte cluster", "config/params.yaml")
+add("LateMaleMinEnrichment", PARAMS$annotation$late_male_min_enrichment, "minimum mature-male enrichment (percentage points) of a late male cluster", "config/params.yaml")
+add("MarkerControlGenes", PARAMS$annotation$marker_control_genes, "control genes per marker gene", "config/params.yaml")
+add("DevelopingMaxRelUmi", PARAMS$annotation$developing_max_rel_umi, "relative median UMIs below which a female-branch cluster is developing gametocytes", "config/params.yaml", digits = 1)
+add("LateFemaleMinRelUmi", PARAMS$annotation$late_female_min_rel_umi, "relative median UMIs from which a female-branch cluster is late female", "config/params.yaml", digits = 1)
 add("MarkersPanelMale", sum(markers$marker_set == "panel_male"), "genes of the mature-male panel", "metadata/gametocyte_markers.tsv")
 gstate <- table(mr_data$gametocyte_state)
 for (g in names(gstate)) add(paste0("CellsState", gsub("[^A-Za-z]", "", tools::toTitleCase(g))), as.integer(gstate[[g]]), paste("cells with gametocyte_state", g), "results/app_data")
@@ -124,9 +122,13 @@ asexual_groups <- setdiff(unique(calls$author_label[calls$study_label == "Hazzar
 asexual <- n_calls("Hazzard2024", asexual_groups)
 add("HazSexual", sexual, "Hazzard2024 cells in the authors' sexual group", "results/stage_annotation/author_labels_vs_cluster_call.tsv")
 add("HazSexualCalled", n_calls("Hazzard2024", "Sexual", c("Female gametocyte", "Male gametocyte")) / sexual,
-  "share of them in a gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv", percent = TRUE)
+  "share of them in a female or male gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv", percent = TRUE)
+add("HazSexualDeveloping", n_calls("Hazzard2024", "Sexual", "Developing gametocyte") / sexual,
+  "share of them in a developing gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv", percent = TRUE)
 add("HazAsexualCalled", n_calls("Hazzard2024", asexual_groups, c("Female gametocyte", "Male gametocyte")) / asexual,
-  "share of the authors' asexual groups in a gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv", percent = TRUE)
+  "share of the authors' asexual groups in a female or male gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv", percent = TRUE)
+add("HazAsexualDeveloping", n_calls("Hazzard2024", asexual_groups, "Developing gametocyte") / asexual,
+  "share of the authors' asexual groups in a developing gametocyte cluster", "results/stage_annotation/author_labels_vs_cluster_call.tsv", percent = TRUE)
 
 # integration assessment
 a <- PARAMS$assessment
@@ -269,13 +271,18 @@ ggsave(file.path(out, "supplementary_qc.pdf"), width = 7.5, height = 4,
     theme(axis.text.x = element_text(angle = 45, hjust = 1)))
 record_output(file.path(out, "supplementary_qc.pdf"))
 
-scores <- mr_data |>
-  filter(tissue == "Host blood", n_count_rna >= PARAMS$annotation$idc_min_umi) |>
-  select(cluster, Female = female_gam_score, Male = male_gam_score) |>
-  pivot_longer(c(Female, Male), names_to = "markers", values_to = "score")
+# marker enrichment per blood-stage cluster (stage 35), with the minimum
+# enrichment of the gametocyte rule (dashed)
+cluster_scores <- read_result(file.path(annotation_dir, "cluster_gametocyte_scores.tsv"))
+scores <- cluster_scores |>
+  mutate(blood_cluster = factor(blood_cluster, levels = sort(as.integer(blood_cluster)))) |>
+  select(blood_cluster, Female = female, Male = male, `Mature male panel` = male_mature) |>
+  pivot_longer(-blood_cluster, names_to = "markers", values_to = "enrichment")
+marker_colours <- c(Female = "#4E6E59", Male = "#42517C", `Mature male panel` = "#7F88B3")
 ggsave(file.path(out, "supplementary_gametocyte_scores.pdf"), width = 7.5, height = 3.5,
-  ggplot(scores, aes(cluster, score, fill = markers)) + geom_boxplot(outlier.size = 0.2) +
-    geom_hline(yintercept = PARAMS$annotation$gametocyte_min_score, linetype = "dashed") +
-    scale_fill_manual(values = c(Female = "#DAA520", Male = "#1F78B4")) +
-    labs(x = "Cluster", y = "Module score", fill = "Marker set") + theme_classic(base_size = 8))
+  ggplot(scores, aes(blood_cluster, enrichment, colour = markers)) + geom_point(size = 1.5) +
+    geom_hline(yintercept = PARAMS$annotation$gametocyte_min_enrichment, linetype = "dashed") +
+    scale_colour_manual(values = marker_colours) +
+    labs(x = "Blood-stage cluster", y = "Marker enrichment (percentage points)", colour = "Marker set") +
+    theme_classic(base_size = 8))
 record_output(file.path(out, "supplementary_gametocyte_scores.pdf"))

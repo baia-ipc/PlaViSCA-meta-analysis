@@ -85,24 +85,29 @@ annotation:
   sa2020_gametocytes: author_data/pbio.3000711.s034.xlsx
   # resolution of the atlas-wide clusters exported as `cluster` (stage 30)
   atlas_cluster_resolution: 0.05
-  # Gametocytes are called per cluster of stage 35 (blood_cluster), on the
-  # mean module scores of metadata/gametocyte_markers.tsv over the cluster:
-  #   female branch: female >= female_min_score and >= male + min_margin
-  #   male branch:   male >= male_min_score and >= female + min_margin
-  #   late male:     male branch and male_mature >= late_male_min_score
+  # Gametocytes are called per cluster of stage 35 (blood_cluster), from the
+  # marker sets of metadata/gametocyte_markers.tsv (female, male, and the
+  # mature-male panel). Enrichment of a set in a cluster: share of the
+  # cluster's cells detecting the set's genes minus the share detecting
+  # control genes of similar expression, in percentage points
+  # (marker_control_genes per marker gene, from marker_expression_bins bins
+  # of mean expression). Relative UMIs: the cluster's median UMIs divided by
+  # the median over the clusters. Neither depends on sequencing depth.
+  #   female branch: female >= gametocyte_min_enrichment and female > male
+  #   male branch:   male >= gametocyte_min_enrichment and male > female
+  #   late male:     male branch with mature-male >= late_male_min_enrichment
+  #   early male:    the other male-branch clusters
   #   developing gametocyte (sex not called; stage "Developing gametocyte"):
-  #                  female branch with median UMIs < developing_max_umi, or
-  #                  with mean male score >= undecided_min_male_score (cells
-  #                  where the branch splits towards the male arm)
-  #   late female:   female branch with median UMIs >= late_female_min_umi
+  #                  female branch with relative UMIs < developing_max_rel_umi
+  #   late female:   female branch with relative UMIs >= late_female_min_rel_umi
   #   early female:  the other female-branch clusters
-  gametocyte_female_min_score: 0.10
-  gametocyte_male_min_score: 0.30
-  gametocyte_min_margin: 0.05
-  late_male_min_score: 0.20
-  developing_max_umi: 500
-  undecided_min_male_score: 0.10
-  late_female_min_umi: 3000
+  marker_expression_bins: 25
+  marker_control_genes: 100
+  marker_control_seed: 1
+  gametocyte_min_enrichment: 10
+  late_male_min_enrichment: 20
+  developing_max_rel_umi: 0.4
+  late_female_min_rel_umi: 1.5
 
 # Stage 60: integration assessment.
 assessment:

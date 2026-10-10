@@ -136,21 +136,29 @@ branch shape their own embedding, without the liver and sporozoite cells:
    SingleR's `delta.next`. `metadata/idc_timepoints.tsv` turns time points
    into stages (`idc_stage`): 6–12 h ring, 24 h trophozoite, 32–42 h
    schizont, 48 h late schizont/merozoite.
-3. **Gametocytes.** Module scores (`AddModuleScore`) are computed for the
+3. **Gametocytes.** Gametocytes are called from the
    marker sets of `metadata/gametocyte_markers.tsv`: 19 female and 6 male
    genes from Sa et al. 2020, and a curated panel of mature-male genes.
-   They are averaged over each blood-stage cluster of stage 35, and each
-   cluster is assigned by this rule (thresholds in `config/params.yaml`):
+   For each blood-stage cluster of stage 35 and each marker set, the
+   enrichment is the share of the cluster's cells detecting the set's genes
+   minus the share detecting control genes of similar expression (100 per
+   marker gene), in percentage points. Each cluster's median UMIs are
+   divided by the median over the clusters (relative UMIs). Neither depends
+   on sequencing depth. Each cluster is assigned by this rule (thresholds in
+   `config/params.yaml`):
 
-   | Assignment | Condition (cluster means) |
+   | Assignment | Condition (per cluster) |
    |---|---|
-   | female branch | female score ≥ 0.10 and ≥ male score + 0.05 |
-   | male branch | male score ≥ 0.30 and ≥ female score + 0.05 |
-   | late male | male branch and mature-male panel score ≥ 0.20 |
+   | female branch | female enrichment ≥ 10 and > male enrichment |
+   | male branch | male enrichment ≥ 10 and > female enrichment |
+   | late male | male branch with mature-male panel enrichment ≥ 20 |
    | early male | other male-branch clusters |
-   | developing gametocyte | female branch with median UMIs < 500, or with male score ≥ 0.10 (where the branch splits; sex not called) |
-   | late female | female branch with median UMIs ≥ 3,000 |
+   | developing gametocyte | female branch with relative UMIs < 0.4 (sex not called) |
+   | late female | female branch with relative UMIs ≥ 1.5 |
    | early female | other female-branch clusters |
+
+   Module scores of the female and male sets (`AddModuleScore`) are kept per
+   cell for display (`female_gam_score`, `male_gam_score`).
 
    The UMI cut-offs use the growth of gametocytes as they mature (more RNA
    per cell). Developing gametocytes get the stage "Developing gametocyte",

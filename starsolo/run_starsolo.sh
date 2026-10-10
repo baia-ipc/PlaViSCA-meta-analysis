@@ -10,10 +10,13 @@
 # see starsolo/README.md) are taken from <workspace>/inputs/reference/.
 #
 # Settings by 10x chemistry (Sa2020, PMID 32365102, is 10x v2; the others v3):
-#   v2: whitelist 737K-august-2016, UMI 10 nt, clip 26 nt of R1, reads
-#       trimmed to 75 nt (seqtk trimfq), index with sjdbOverhang 74
-#   v3: whitelist 3M-february-2018, UMI 12 nt, clip 28 nt of R1, index with
-#       sjdbOverhang 90
+#   v2: whitelist 737K-august-2016, UMI 10 nt, reads trimmed to 75 nt
+#       (seqtk trimfq), index with sjdbOverhang 74
+#   v3: whitelist 3M-february-2018, UMI 12 nt, index with sjdbOverhang 90
+#
+# Only R2 (cDNA) is aligned. R1 gives the barcode (first 16 nt) and the UMI
+# (next 10 or 12 nt); the rest of R1, when present (Sa2020 and the
+# Hazzard2022 blood runs have 75-nt R1), is poly-T and adapter and is ignored.
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -23,9 +26,9 @@ pmid=$1; run=$2; fastq_dir=$3; out_dir=$4; threads=${5:-15}
 ref="${STARSOLO_REFERENCE:-$PLAVISCA_WORKSPACE/inputs/reference}"
 
 if [ "$pmid" = 32365102 ]; then
-  whitelist=737K-august-2016.txt; umi=10; clip="26 0"; index=star_index_overhang74; keep=75
+  whitelist=737K-august-2016.txt; umi=10; index=star_index_overhang74; keep=75
 else
-  whitelist=3M-february-2018.txt; umi=12; clip="28 0"; index=star_index_overhang90; keep=
+  whitelist=3M-february-2018.txt; umi=12; index=star_index_overhang90; keep=
 fi
 
 mkdir -p "$out_dir/$pmid"
@@ -55,13 +58,12 @@ zcat -f "$ref/$whitelist.gz" > "$work/$whitelist"
 pixi run STAR \
   --runThreadN "$threads" \
   --genomeDir "$ref/$index" \
-  --readFilesIn "$r1" "$r2" \
-  --soloBarcodeMate 1 \
+  --readFilesIn "$r2" "$r1" \
+  --soloBarcodeReadLength 0 \
   --sjdbGTFfile "$ref/PlasmoDB-68_PvivaxP01_utr2exon.gtf" \
   --readFilesCommand zcat \
   --soloCBwhitelist "$work/$whitelist" \
   --soloType CB_UMI_Simple \
-  --clip5pNbases $clip \
   --soloCBlen 16 \
   --soloUMIlen $umi \
   --soloUMIfiltering MultiGeneUMI \

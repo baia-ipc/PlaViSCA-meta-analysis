@@ -154,11 +154,14 @@ packages <- c("Seurat", "SeuratObject", "harmony", "SingleR", "DropletUtils", "u
 software <- data.frame(software = c("R", packages),
   version = c(paste(R.version$major, R.version$minor, sep = "."), vapply(packages, function(x) as.character(packageVersion(x)), "")))
 
-star_options <- c("soloType", "soloCBwhitelist", "soloCBlen", "soloUMIlen", "clip5pNbases", "soloBarcodeMate",
-  "soloUMIfiltering", "soloFeatures", "alignIntronMin", "alignIntronMax", "sjdbGTFfile", "sjdbOverhang")
-starsolo <- do.call(rbind, lapply(studies$study_label[studies$study_label %in% runs$study_label], function(study) {
+star_options <- c("readFilesIn", "soloType", "soloCBwhitelist", "soloCBlen", "soloUMIlen", "soloBarcodeReadLength",
+  "soloStrand", "soloUMIfiltering", "soloFeatures", "alignIntronMin", "alignIntronMax", "sjdbGTFfile")
+starsolo_studies <- studies$study_label[vapply(studies$study_label, function(s) identical(PARAMS$import[[s]]$source, "starsolo"), TRUE)]
+starsolo <- do.call(rbind, lapply(starsolo_studies, function(study) {
   pmid <- studies$study_pmid[studies$study_label == study]
-  logs <- Sys.glob(file.path(INPUTS, PARAMS$import$starsolo_counts, pmid, "*_solo_out", "Log.out"))
+  logs <- file.path(INPUTS, PARAMS$import$starsolo_counts, pmid,
+    paste0(runs$run_id[runs$study_label == study], "_solo_out"), "Log.out")
+  logs <- logs[file.exists(logs)]
   if (length(logs) == 0) return(NULL)
   per_run <- lapply(logs, function(f) {
     lines <- readLines(f, n = 200)
@@ -170,6 +173,8 @@ starsolo <- do.call(rbind, lapply(studies$study_label[studies$study_label %in% r
       j <- i + 1
       v <- character()
       while (j <= length(tokens) && !startsWith(tokens[j], "--")) { v <- c(v, basename(tokens[j])); j <- j + 1 }
+      # read files: keep only the read number (R1, R2), not the run name
+      if (o == "readFilesIn") v <- paste0("R", sub("^.*_([12])\\.fastq(\\.gz)?$", "\\1", v))
       paste(v, collapse = " ")
     }, "")
     c(star_version = sub("^STAR version=", "", grep("^STAR version=", lines, value = TRUE)[1]), option_values)

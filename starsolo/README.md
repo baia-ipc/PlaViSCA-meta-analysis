@@ -51,17 +51,30 @@ starsolo/run_starsolo.sh <study_pmid> <run_id> <fastq_dir> <out_dir> [threads]
 
 This counts one run (`<fastq_dir>/<pmid>/<run>_1.fastq.gz` and `_2.fastq.gz`)
 into `<out_dir>/<pmid>/<run>_solo_out/`. The STAR options are in the script.
+Only read 2 (cDNA) is aligned; read 1 gives the cell barcode and the UMI.
 Sa2020 reads are first trimmed to 75 bases (seqtk). The runs to count are
 those of `metadata/runs.tsv`.
 
-## How this reproduces the counts used
+## Why only read 2 is aligned
 
-The STARsolo outputs in `inputs/starsolo_counts/` were made with the same
-STAR version and options. A first recomputation, with the same-length
-contigs paired in numeric order, differed from them mainly in the genes of
-the wrongly paired contigs (and in a few other genes by 1 to 7 UMIs); one
-run (SRR20710501) was identical. This led to `contig_pairs.tsv`. The
-comparison with the corrected reference is in progress.
+In 10x 3' libraries, read 2 is the cDNA, on the same strand as the RNA;
+read 1 holds the barcode and the UMI, and in some runs (Sa2020, the
+Hazzard2022 blood runs: 75 bases) also poly-T and adapter. STARsolo is
+therefore given read 2 as the read to align and read 1 only as the barcode
+read (`--readFilesIn R2 R1 --soloBarcodeReadLength 0`), and counts reads on
+the gene strand (STARsolo default).
+
+Aligning read 1 as a mate of read 2 instead (`--soloBarcodeMate 1` with
+`--clip5pNbases`) gives wrong counts: the pair takes the strand of read 1, so
+reads are counted on the opposite strand of the genes, and where read 1 is
+longer than barcode + UMI most pairs are discarded as too short.
+
+Check: in run ERR5087440 (Ruberto2022_2), for the 2,570 cells of the
+authors' analysis, the gene counts correlate with the authors' counts with
+a median per-cell Spearman correlation of 0.88.
+
+The reads used are in `/pool/baia/refdata/PlaViSca/fq_data/<PMID>/` (with
+`md5sum.txt`).
 
 The barcode whitelists `3M-february-2018.txt.gz` and
 `737K-august-2016.txt.gz` come from

@@ -180,15 +180,15 @@ blood_meta$umap_b_2 <- blood_cells$umap_b_2[match(rownames(blood_meta), blood_ce
 state_levels <- c("Developing gametocyte", "Early female", "Late female", "Early male", "Late male")
 blood_levels <- c("Ring", "Trophozoite", "Schizont (Blood stage)", "Merozoite", state_levels)
 blood_colours <- c("Ring" = "#A9D18E", "Trophozoite" = "#F4D35E", "Schizont (Blood stage)" = "#8EC5E8",
-  "Merozoite" = "#2E75B6", "Developing gametocyte" = "#66454C", "Early female" = "#759F8B",
+  "Merozoite" = "#2E75B6", "Developing gametocyte" = "#C0504D", "Early female" = "#759F8B",
   "Late female" = "#4E6E59", "Early male" = "#7F88B3", "Late male" = "#42517C")
 blood_labels <- c("Ring" = "Ring", "Trophozoite" = "Trophozoite", "Schizont (Blood stage)" = "Schizont",
   "Merozoite" = "Late schizont / merozoite", setNames(state_levels, state_levels))
 set.seed(1)
 blood_meta <- blood_meta[sample(nrow(blood_meta)), ]
-umap_panel <- function(colour, title, continuous = TRUE) {
+umap_panel <- function(colour, title, continuous = TRUE, point_size = 0.2) {
   g <- ggplot(blood_meta, aes(umap_b_1, umap_b_2, colour = .data[[colour]])) +
-    ggrastr::rasterise(geom_point(size = 0.2, stroke = 0, shape = 16), dpi = 300, dev = "ragg") +
+    ggrastr::rasterise(geom_point(size = point_size, stroke = 0, shape = 16), dpi = 300, dev = "ragg") +
     coord_equal() + labs(title = title, x = "UMAP 1", y = "UMAP 2", colour = NULL) +
     theme_classic(base_size = 8, base_family = "Helvetica") +
     theme(axis.text = element_blank(), axis.ticks = element_blank(), plot.title = element_text(size = 9, face = "bold"))
@@ -218,8 +218,8 @@ label_layer <- geom_label(data = cluster_labels, aes(umap_b_1, umap_b_2, label =
   size = 2.2, label.padding = unit(0.08, "lines"), alpha = 0.8)
 blood_meta$blood_cluster <- factor(blood_meta$blood_cluster, levels = sort(as.integer(unique(blood_meta$blood_cluster))))
 cluster_figure <- (umap_panel("blood_cluster", sprintf("Blood-stage clusters (resolution %s)", PARAMS$blood_embedding$cluster_resolution),
-    continuous = FALSE) + guides(colour = "none") + label_layer) |
-  (umap_panel("blood_stage", "Blood stage", continuous = FALSE) + label_layer +
+    continuous = FALSE, point_size = 0.5) + guides(colour = "none") + label_layer) |
+  (umap_panel("blood_stage", "Blood stage", continuous = FALSE, point_size = 0.5) + label_layer +
     scale_colour_manual(values = blood_colours, labels = blood_labels, na.value = "#D9D9D9", na.translate = FALSE, drop = FALSE) +
     guides(colour = guide_legend(override.aes = list(size = 2.5)))) +
   plot_annotation(tag_levels = "A")

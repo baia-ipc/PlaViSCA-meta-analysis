@@ -150,7 +150,7 @@ branch shape their own embedding, without the liver and sporozoite cells:
    | Assignment | Condition (per cluster) |
    |---|---|
    | female branch | female enrichment ≥ 10 and > male enrichment |
-   | male branch | male enrichment ≥ 10 and > female enrichment |
+   | male branch | male enrichment ≥ 10 and > female enrichment, and mature-male panel enrichment ≥ 5 |
    | late male | male branch with mature-male panel enrichment ≥ 20 |
    | early male | other male-branch clusters |
    | developing gametocyte | female branch with relative UMIs < 0.4 (sex not called) |

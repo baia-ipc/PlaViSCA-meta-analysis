@@ -34,8 +34,7 @@ before it.
 | `60_assess_integration` | integration metrics and figure | `results/integration/` |
 | `70_tables_and_values` | tables, cited values, parameters, software versions, figures | `results/tables_and_values/` |
 
-[docs/pipeline.md](docs/pipeline.md) describes each stage in detail. What has
-been verified about the input data is in [docs/validation.md](docs/validation.md).
+[docs/pipeline.md](docs/pipeline.md) describes each stage in detail.
 
 ## Layout
 
@@ -46,7 +45,7 @@ config/            params.yaml (analysis parameters), local.env.example
 metadata/          curated tables: studies, runs, stages, markers, columns,
                    expected cell counts, input files and checksums
 tests/             tests of the metadata and of the shared code
-docs/              pipeline description, validation summary
+docs/              pipeline description
 run.sh             runs the stages
 pixi.toml/.lock    software environment
 ```

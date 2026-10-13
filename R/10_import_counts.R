@@ -10,7 +10,7 @@
 #   - read the GeneFull matrix of each run ("filtered" = STARsolo cell calls,
 #     "raw" = all barcodes) and remove the rRNA genes
 #   - plot the barcode rank (knee) curve of each run
-#   - runs are read and made into objects in parallel (import: threads)
+#   - runs are read and made into objects in parallel (PLAVISCA_THREADS)
 #   - Hazzard2022: keep the barcodes with at least a number of unique reads
 #     over the whole genome, by tissue (the authors' rule; the reads per
 #     barcode come from starsolo/run_starsolo.sh --genome-reads)
@@ -41,10 +41,9 @@ studies <- commandArgs(TRUE)
 if (length(studies) == 0) studies <- STUDIES
 check(all(studies %in% STUDIES), "unknown study: ", paste(setdiff(studies, STUDIES), collapse = ", "))
 
-# Apply f to each element of x, on PARAMS$import$threads cores; stop if any
-# element fails.
+# Apply f to each element of x, on THREADS cores; stop if any element fails.
 parallel_map <- function(x, f) {
-  result <- parallel::mclapply(x, f, mc.cores = PARAMS$import$threads, mc.preschedule = FALSE)
+  result <- parallel::mclapply(x, f, mc.cores = THREADS, mc.preschedule = FALSE)
   failed <- vapply(result, function(r) is.null(r) || inherits(r, "try-error"), TRUE)
   check(!any(failed), "failed for ", paste(names(x)[failed], collapse = ", "), ": ",
     paste(unique(unlist(lapply(result[failed], as.character))), collapse = "; "))

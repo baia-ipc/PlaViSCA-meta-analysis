@@ -3,6 +3,7 @@
 # Provides:
 #   CODE_DIR, PARAMS                 repository root and config/params.yaml
 #   INPUTS, RUN_DIR, RESULTS         workspace locations (see config/local.env.example)
+#   THREADS                          cores to use (PLAVISCA_THREADS, default 1)
 #   stage_dir(name)                  output directory of a stage (created if needed)
 #   read_meta(name)                  read a table from metadata/
 #   write_table(df, path)            write a TSV and record it in the run's output log
@@ -22,8 +23,8 @@ if (!file.exists(file.path(CODE_DIR, "config", "params.yaml"))) {
   stop("run the stages from the repository root (see run.sh)", call. = FALSE)
 }
 
-# config/local.env (KEY=VALUE lines) sets the workspace; environment
-# variables of the same name take precedence.
+# config/local.env (KEY=VALUE lines) sets the workspace and the cores;
+# environment variables of the same name take precedence.
 local({
   env_file <- file.path(CODE_DIR, "config", "local.env")
   if (!file.exists(env_file)) return()
@@ -45,6 +46,11 @@ INPUTS <- file.path(WORKSPACE, "inputs")
 RUN_DIR <- file.path(WORKSPACE, "runs", RUN_ID)
 RESULTS <- file.path(RUN_DIR, "results")
 dir.create(RESULTS, recursive = TRUE, showWarnings = FALSE)
+
+# Cores depend on the machine, not on the analysis: they are set in
+# config/local.env and do not change the results.
+THREADS <- suppressWarnings(as.integer(Sys.getenv("PLAVISCA_THREADS", "1")))
+if (is.na(THREADS) || THREADS < 1) stop("PLAVISCA_THREADS must be a positive integer", call. = FALSE)
 
 # PLAVISCA_PARAMS can name another parameter file (e.g. for a test run)
 PARAMS_FILE <- Sys.getenv("PLAVISCA_PARAMS", file.path(CODE_DIR, "config", "params.yaml"))
@@ -144,4 +150,4 @@ save_session_info <- function(dir) {
 
 STUDIES <- read_meta("studies.tsv")$study_label
 
-message(sprintf("[%s] workspace %s, run '%s'", if (exists("STAGE")) STAGE else "?", WORKSPACE, RUN_ID))
+message(sprintf("[%s] workspace %s, run '%s', %d cores", if (exists("STAGE")) STAGE else "?", WORKSPACE, RUN_ID, THREADS))

@@ -76,7 +76,7 @@ Requirements: [pixi](https://pixi.sh) on Linux. The environment
 (R 4.3, Seurat 5, Harmony, SingleR) is created from `pixi.lock` on first use.
 
 ```bash
-cp config/local.env.example config/local.env   # then set PLAVISCA_WORKSPACE
+cp config/local.env.example config/local.env   # then set PLAVISCA_WORKSPACE (and PLAVISCA_THREADS)
 ./run.sh check-inputs                          # verify the input checksums
 ./run.sh all                                   # run every stage
 ./run.sh 40 50                                 # or run single stages

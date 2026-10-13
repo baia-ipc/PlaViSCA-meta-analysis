@@ -119,7 +119,7 @@ VariableFeatures(atlas) <- variable_genes
 atlas <- ScaleData(atlas, features = variable_genes)
 atlas <- RunPCA(atlas, features = variable_genes, seed.use = p$pca_seed)
 atlas <- RunUMAP(atlas, reduction = "pca", dims = dims, n.components = p$umap_components,
-  n.threads = p$threads, seed.use = p$umap_seed)
+  seed.use = p$umap_seed)
 # copied as they are (keeping their keys PC_ and umap_)
 atlas@reductions$pca_unintegrated <- atlas@reductions$pca
 atlas@reductions$umap_unintegrated <- atlas@reductions$umap
@@ -131,7 +131,7 @@ atlas <- IntegrateLayers(atlas, method = HarmonyIntegration, orig.reduction = "p
 atlas <- JoinLayers(atlas)
 
 atlas <- RunUMAP(atlas, reduction = "pca_integrated", dims = dims, n.components = p$umap_components,
-  n.threads = p$threads, seed.use = p$umap_seed)
+  seed.use = p$umap_seed)
 atlas@reductions$umap_integrated <- atlas@reductions$umap
 
 atlas <- FindNeighbors(atlas, reduction = "pca_integrated", dims = dims)

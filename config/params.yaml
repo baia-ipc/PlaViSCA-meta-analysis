@@ -14,8 +14,6 @@ reference:
 import:
   # folder of the STARsolo outputs, under <workspace>/inputs/
   starsolo_counts: starsolo_counts
-  # cores used to read the runs of a study in parallel
-  threads: 8
   Sa2020:
     source: starsolo
     matrix: raw
@@ -66,7 +64,6 @@ integration:
   cluster_resolutions: {from: 0.01, to: 0.10, by: 0.01}
   umap_seed: 42        # Seurat default
   pca_seed: 42         # Seurat default
-  threads: 10
 
 # Stage 35: embedding and clusters of the blood-stage cells.
 blood_embedding:

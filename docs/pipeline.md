@@ -38,7 +38,8 @@ For these studies:
 - Each run is made into an object with `min.cells`/`min.features` as in
   params, and the runs are merged.
 - A barcode-rank (knee) plot is drawn for each run.
-- The runs of a study are read in parallel (`import.threads`).
+- The runs of a study are read in parallel, on `PLAVISCA_THREADS` cores
+  (set in `config/local.env`).
 - Hazzard2022: the authors define a cell by its unique reads over the whole
   genome (reads with the same barcode, UMI, strand and position counted
   once), not only on genes. `starsolo/run_starsolo.sh --genome-reads` writes

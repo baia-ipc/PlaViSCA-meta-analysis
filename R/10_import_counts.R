@@ -14,8 +14,8 @@
 #   - Hazzard2022: keep the barcodes with at least a number of unique reads
 #     over the whole genome, by tissue (the authors' rule; the reads per
 #     barcode come from starsolo/run_starsolo.sh --genome-reads)
-#   - Hazzard2024, Ruberto2022_2: keep the cells retained by the authors
-#   - Sa2020: keep all cells of the STARsolo filtered matrix
+#   - Hazzard2024, Ruberto2022_2, Sa2020: keep the cells retained by the
+#     authors (Sa2020: the cells of their main analysis, a table in metadata/)
 # Studies whose counts come from the authors' matrix:
 #   - Ruberto2022_1: raw UMI counts of the authors' object (kallisto|bustools,
 #     PlasmoDB-51), on our gene list: genes the authors did not count are
@@ -52,6 +52,18 @@ parallel_map <- function(x, f) {
 }
 
 # --- studies counted with STARsolo ------------------------------------------
+
+# The cells the authors retained (cell_id, author_cell_id), or NULL when the
+# study's cells are not taken from the authors: a file under inputs/
+# (import: author_cells) or, for Sa2020, the main analysis table in metadata/
+# (import: main_analysis_cells).
+author_cells <- function(study, cfg, study_runs) {
+  if (isTRUE(cfg$main_analysis_cells)) return(sa2020_main_analysis_cells(study_runs))
+  if (is.null(cfg$author_cells)) return(NULL)
+  switch(study,
+    Hazzard2024 = hazzard2024_author_cells(input_path(cfg$author_cells), study_runs),
+    Ruberto2022_2 = ruberto2022_2_author_cells(input_path(cfg$author_cells), study_runs))
+}
 
 import_starsolo <- function(study, cfg) {
   suppressPackageStartupMessages(library(DropletUtils))
@@ -102,11 +114,8 @@ import_starsolo <- function(study, cfg) {
   rm(matrices)
   cells_called <- vapply(objects, function(o) as.integer(ncol(o)), 1L)
 
-  if (!is.null(cfg$author_cells)) {
-    author <- switch(study,
-      Hazzard2024 = hazzard2024_author_cells(input_path(cfg$author_cells), study_runs),
-      Ruberto2022_2 = ruberto2022_2_author_cells(input_path(cfg$author_cells), study_runs)
-    )
+  author <- author_cells(study, cfg, study_runs)
+  if (!is.null(author)) {
     check_unique(author$cell_id, paste(study, "author cells"))
     missing <- setdiff(author$cell_id, unlist(lapply(objects, colnames), use.names = FALSE))
     check(length(missing) == 0, sprintf("%d %s author cells are not in the STARsolo matrices", length(missing), study))
@@ -121,7 +130,7 @@ import_starsolo <- function(study, cfg) {
 
   object <- JoinLayers(Reduce(function(x, y) merge(x, y), unname(objects)))
   object$author_cell_id <- NA_character_
-  if (!is.null(cfg$author_cells)) {
+  if (!is.null(author)) {
     object <- subset(object, cells = author$cell_id)
     object$author_cell_id <- author$author_cell_id[match(colnames(object), author$cell_id)]
   }

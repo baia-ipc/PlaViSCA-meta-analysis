@@ -18,9 +18,12 @@ import:
   threads: 8
   Sa2020:
     source: starsolo
-    matrix: filtered
+    matrix: raw
     min_cells: 1
     min_features: 1
+    # the cells of the authors' main analysis
+    # (metadata/sa2020_main_analysis_cells.tsv)
+    main_analysis_cells: true
   Hazzard2022:
     source: starsolo
     matrix: raw

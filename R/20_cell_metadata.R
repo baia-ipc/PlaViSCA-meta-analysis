@@ -11,8 +11,7 @@
 #       author_sex          Sa2020 gametocyte sex (S5 Data)
 #       author_state, author_sex_state, author_ap2g   Mancio-Silva2022 Table S2
 #       author_pseudogroup  Hazzard2024 sexual/asexual groups
-#       author_cell_id      Sa2020: the cell's name in the authors' main analysis,
-#                           for the cells in it (other studies: set in stage 10)
+# (author_cell_id, the cell's name in the authors' data, is set in stage 10.)
 
 STAGE <- "20_cell_metadata"
 source("R/lib/setup.R")
@@ -35,15 +34,6 @@ RUN_COLUMNS <- c("host_species", "tissue", "strain", "parasite_origin_location",
 # --- author annotations, one function per study -----------------------------
 
 annotate_sa2020 <- function(meta, study_runs) {
-  # author cell names: the cells of the authors' main analysis, which include
-  # all cells of the S5 Data
-  main <- sa2020_main_analysis_cells(study_runs)
-  check_unique(main$cell_id, "Sa2020 main analysis cells")
-  found <- main$cell_id %in% rownames(meta)
-  message(sprintf("Sa2020: %d of %d cells of the authors' main analysis are among our cells (%d missing)",
-    sum(found), length(found), sum(!found)))
-  meta$author_cell_id <- main$author_cell_id[match(rownames(meta), main$cell_id)]
-
   # gametocyte sex from the authors' S5 Data (Sample = "<author sample>_<barcode>")
   s5 <- read_excel(input_path(PARAMS$annotation$sa2020_gametocytes))
   s5 <- s5[s5$Type %in% c("Female", "Male"), ]

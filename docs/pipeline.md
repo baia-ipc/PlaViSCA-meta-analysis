@@ -130,7 +130,7 @@ Outputs: `atlas_integrated.rds`, `rrna_genes_removed.tsv`,
 
 ## 35 Blood embedding
 
-The cells eligible for blood-stage inference (host blood, at least 300
+The cells eligible for blood-stage inference (host blood, at least 20
 UMIs) are analysed on their own, so that the asexual cycle and the sexual
 branch shape their own embedding, without the liver and sporozoite cells:
 - 2,000 variable genes, PCA, and Harmony with one batch per study;
@@ -141,7 +141,7 @@ branch shape their own embedding, without the liver and sporozoite cells:
 
 ## 40 Annotate stages
 
-1. **Eligible cells.** Cells of host blood samples with at least 300 UMIs
+1. **Eligible cells.** Cells of host blood samples with at least 20 UMIs
    are eligible for blood-stage inference.
 2. **Asexual stage.** SingleR (default settings) compares each eligible
    cell with the SMRU1 time course of Zhu et al. 2016:

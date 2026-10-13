@@ -82,7 +82,7 @@ annotation:
   idc_reference: reference/Zhu_SciReps_2016.xls
   idc_reference_sheet: SMRU1
   idc_orthologs: reference/GenesByOrthologs_Summary.xlsx
-  idc_min_umi: 300
+  idc_min_umi: 20
   # The stage assigned to each reference time point: metadata/idc_timepoints.tsv
   sa2020_gametocytes: author_data/pbio.3000711.s034.xlsx
   # resolution of the atlas-wide clusters exported as `cluster` (stage 30)

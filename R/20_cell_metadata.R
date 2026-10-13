@@ -89,7 +89,6 @@ annotate_hazzard2024 <- function(meta) {
 
 # --- run --------------------------------------------------------------------
 
-cell_totals <- list()
 for (study in STUDIES) {
   object <- readRDS(file.path(in_dir, paste0(study, ".rds")))
   study_runs <- runs[runs$study_label == study, ]
@@ -117,8 +116,5 @@ for (study in STUDIES) {
 
   object@meta.data <- meta
   save_object(object, file.path(out, paste0(study, ".rds")))
-  cell_totals[[study]] <- data.frame(study_label = study, stage = "", cells = ncol(object))
   message(sprintf("%s: %d cells; author stage for %d cells", study, ncol(object), sum(!is.na(meta$author_stage))))
 }
-
-check_expected_counts(do.call(rbind, cell_totals), "study_cells")

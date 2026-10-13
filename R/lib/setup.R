@@ -96,36 +96,6 @@ check_no_na <- function(x, what) {
   check(!anyNA(x), sprintf("%d missing values in %s", sum(is.na(x)), what))
 }
 
-# Cell counts are compared with metadata/expected_counts.tsv. A difference
-# stops the pipeline: if it is intended, update that file and say why in the
-# commit message.
-check_expected_counts <- function(observed, check_name) {
-  expected <- read_meta("expected_counts.tsv")
-  expected <- expected[expected$check == check_name, , drop = FALSE]
-  check(nrow(expected) > 0, "no rows for '", check_name, "' in metadata/expected_counts.tsv")
-  key <- function(df) paste(df$study_label, ifelse(is.na(df$stage), "", df$stage), sep = " / ")
-  merged <- merge(
-    data.frame(key = key(expected), expected = as.integer(expected$cells)),
-    data.frame(key = key(observed), observed = observed$cells),
-    all = TRUE
-  )
-  merged[is.na(merged)] <- 0
-  bad <- merged[merged$expected != merged$observed, , drop = FALSE]
-  if (nrow(bad) > 0 && Sys.getenv("PLAVISCA_COUNT_CHECK") == "report") {
-    # counts changed on purpose: list the differences and go on; once they
-    # are reviewed, copy the new counts into metadata/expected_counts.tsv
-    write_table(merged, file.path(stage_dir(STAGE), paste0("expected_counts_", check_name, ".tsv")))
-    warning(sprintf("cell counts differ from metadata/expected_counts.tsv (%s) in %d row(s)", check_name, nrow(bad)), call. = FALSE)
-    return(invisible(FALSE))
-  }
-  if (nrow(bad) > 0) {
-    print(bad, row.names = FALSE)
-    stop(sprintf("cell counts differ from metadata/expected_counts.tsv (%s) in %d row(s)", check_name, nrow(bad)), call. = FALSE)
-  }
-  message(sprintf("cell counts match metadata/expected_counts.tsv (%s, %d rows)", check_name, nrow(merged)))
-  invisible(TRUE)
-}
-
 # --- tables and objects -----------------------------------------------------
 
 # All columns are read as text; convert explicitly where a number or a

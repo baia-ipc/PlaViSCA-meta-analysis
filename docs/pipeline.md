@@ -177,8 +177,7 @@ branch shape their own embedding, without the liver and sporozoite cells:
 Checks:
 - only eligible cells have blood-stage labels;
 - gametocytes occur only in host blood;
-- liver cells have liver stages;
-- cell numbers per study and stage equal `metadata/expected_counts.tsv`.
+- liver cells have liver stages.
 
 Results (`results/stage_annotation/`):
 - `eligible_cells.tsv`;

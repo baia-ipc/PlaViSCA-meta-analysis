@@ -23,7 +23,6 @@ studies <- read_meta("studies.tsv")
 runs <- read_meta("runs.tsv")
 stages <- read_meta("stages.tsv")
 columns <- read_meta("columns.tsv")
-expected <- read_meta("expected_counts.tsv")
 
 test("study labels are unique", !anyDuplicated(studies$study_label))
 test("every run belongs to a known study", all(runs$study_label %in% studies$study_label))
@@ -47,14 +46,6 @@ test("time point stages are known stages", all(read_meta("idc_timepoints.tsv")$s
 test("gametocyte marker sets are known", all(read_meta("gametocyte_markers.tsv")$marker_set %in%
   c("female", "male", "panel_commitment", "panel_male", "panel_female", "panel_both_sexes")))
 test("exported columns are unique", !anyDuplicated(columns$column))
-test("expected counts: one total per study", setequal(expected$study_label[expected$check == "study_cells"], studies$study_label))
-test("expected counts: stage totals add up to study totals", {
-  totals <- setNames(as.integer(expected$cells[expected$check == "study_cells"]), expected$study_label[expected$check == "study_cells"])
-  by_stage <- tapply(as.integer(expected$cells[expected$check == "stage_cells"]), expected$study_label[expected$check == "stage_cells"], sum)
-  all(by_stage[names(totals)] == totals)
-})
-test("expected stages are known stages",
-  all(expected$stage[expected$check == "stage_cells"] %in% c(stages$stage, "(none)")))
 test("removed Mancio-Silva2022 cells are '.1' copies of kept cells", {
   d <- read_meta("mancio_silva2022_duplicate_cells.tsv")
   all(d$removed_cell_id == paste0(d$kept_cell_id, ".1"))

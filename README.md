@@ -104,14 +104,17 @@ The stages stop with an explanation when something is not as expected. For
 example:
 - an input file is missing;
 - a cell cannot be matched to its run or to the authors' data;
-- a cell gets a stage that is not possible for its tissue;
-- cell numbers differ from `metadata/expected_counts.tsv`.
+- a cell gets a stage that is not possible for its tissue.
 
-To accept new cell numbers on purpose, run with
-`PLAVISCA_COUNT_CHECK=report ./run.sh ...`: the stages then go on and write
-the expected and observed numbers to `expected_counts_<check>.tsv` in their
-output folder. Review them, then update `metadata/expected_counts.tsv` in the
-same commit as the change that causes them.
+To see what a change does to the results, compare two runs:
+
+```bash
+pixi run Rscript --vanilla R/tools/compare_runs.R main test
+```
+
+This prints the cells per study in each run, the cells whose stage or
+gametocyte state changed, and the reported values that differ
+(`results/tables_and_values/values.tsv`).
 
 ## Contact
 

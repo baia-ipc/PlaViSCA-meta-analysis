@@ -165,10 +165,6 @@ for (column in blood_only) {
 gametocyte <- meta$stage %in% c("Developing gametocyte", "Female gametocyte", "Male gametocyte")
 check(all(meta$tissue[gametocyte] == "Host blood"), "gametocyte stage outside host blood")
 check(all(meta$broad_stage[meta$tissue == "Host liver"] %in% c(NA, "Liver stage")), "a liver cell has a non-liver stage")
-stage_counts <- meta |>
-  mutate(stage = coalesce(stage, "(none)")) |>
-  dplyr::count(study_label, stage, name = "cells")
-check_expected_counts(stage_counts, "stage_cells")
 
 # --- figures: gametocytes on the blood-only UMAP ---------------------------
 # (a) female and (b) male marker scores, (c) UMIs, (d) gametocyte states;

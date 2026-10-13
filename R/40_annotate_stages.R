@@ -6,7 +6,8 @@
 #     the reference is the SMRU1 time course of Zhu et al. 2016 (RNA-seq,
 #     7 time points), with genes mapped to PvP01 by the PlasmoDB one-to-one
 #     orthologs. Each eligible cell gets the time point it most resembles
-#     (idc_timepoint, pruned SingleR label; idc_delta, SingleR delta.next),
+#     (idc_timepoint, SingleR label; idc_delta, SingleR delta.next;
+#     idc_pruned, TRUE where SingleR's pruning would discard the label),
 #     which is converted to a stage with metadata/idc_timepoints.tsv
 #     (idc_stage).
 #  3. Gametocytes, per cluster of the blood-only clustering of stage 35
@@ -83,8 +84,13 @@ rm(test)
 
 meta$idc_timepoint <- NA_character_
 meta$idc_delta <- NA_real_
-meta[eligible, "idc_timepoint"] <- prediction$pruned.labels
+meta$idc_pruned <- NA
+# every eligible cell keeps its best time point; the cells whose label
+# SingleR's pruning would discard are flagged
+meta[eligible, "idc_timepoint"] <- prediction$labels
 meta[eligible, "idc_delta"] <- prediction$delta.next
+meta[eligible, "idc_pruned"] <- is.na(prediction$pruned.labels)
+message(sprintf("%d of %d eligible cells have a label that SingleR's pruning would discard", sum(is.na(prediction$pruned.labels)), sum(eligible)))
 timepoint_stage <- read_meta("idc_timepoints.tsv")
 check_same_set(timepoint_stage$timepoint_h, timepoints, "time points of metadata/idc_timepoints.tsv and of the reference")
 meta$idc_stage <- timepoint_stage$stage[match(meta$idc_timepoint, timepoint_stage$timepoint_h)]

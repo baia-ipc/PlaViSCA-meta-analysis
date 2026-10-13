@@ -150,9 +150,11 @@ branch shape their own embedding, without the liver and sporozoite cells:
    - its genes are mapped to PvP01 by PlasmoDB's one-to-one orthologs, and
      genes without an ortholog are dropped.
 
-   `idc_timepoint` is the pruned label: the time point the cell most
-   resembles. It is a similarity, not a measured age. `idc_delta` is
-   SingleR's `delta.next`. `metadata/idc_timepoints.tsv` turns time points
+   `idc_timepoint` is SingleR's label: the time point the cell most
+   resembles. It is a similarity, not a measured age. Every eligible cell
+   keeps its label; `idc_pruned` is TRUE where SingleR's pruning (default
+   settings) would discard it as unreliable. `idc_delta` is SingleR's
+   `delta.next`. `metadata/idc_timepoints.tsv` turns time points
    into stages (`idc_stage`): 6–12 h ring, 24 h trophozoite, 32–42 h
    schizont, 48 h late schizont/merozoite.
 3. **Gametocytes.** Gametocytes are called from the

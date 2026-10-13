@@ -53,18 +53,6 @@ parallel_map <- function(x, f) {
 
 # --- studies counted with STARsolo ------------------------------------------
 
-# The cells the authors retained (cell_id, author_cell_id), or NULL when the
-# study's cells are not taken from the authors: a file under inputs/
-# (import: author_cells) or, for Sa2020, the main analysis table in metadata/
-# (import: main_analysis_cells).
-author_cells <- function(study, cfg, study_runs) {
-  if (isTRUE(cfg$main_analysis_cells)) return(sa2020_main_analysis_cells(study_runs))
-  if (is.null(cfg$author_cells)) return(NULL)
-  switch(study,
-    Hazzard2024 = hazzard2024_author_cells(input_path(cfg$author_cells), study_runs),
-    Ruberto2022_2 = ruberto2022_2_author_cells(input_path(cfg$author_cells), study_runs))
-}
-
 import_starsolo <- function(study, cfg) {
   suppressPackageStartupMessages(library(DropletUtils))
   study_runs <- runs[runs$study_label == study, ]

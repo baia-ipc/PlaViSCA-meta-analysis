@@ -72,6 +72,11 @@ test("author cell names with '_' in the sample name are parsed", {
 test("author cell names of an unknown sample fail", fails(sample_barcode_cells("AMRU_Sa_AAAC", toy_runs, "toy")))
 test("the Sa2020 main analysis cells map to unique Sa2020 cells",
   !anyDuplicated(sa2020_main_analysis_cells(runs[runs$study_label == "Sa2020", ])$cell_id))
+test("author_cells gives the Sa2020 main analysis cells, and none without settings", {
+  sa2020 <- runs[runs$study_label == "Sa2020", ]
+  nrow(author_cells("Sa2020", list(main_analysis_cells = TRUE), sa2020)) == 9215 &&
+    is.null(author_cells("Hazzard2022", list(), runs[runs$study_label == "Hazzard2022", ]))
+})
 test("check fails when the condition is false", fails(check(FALSE, "x")))
 test("check_unique fails on duplicates", fails(check_unique(c("a", "a"), "x")))
 test("check_same_order fails on a different order", fails(check_same_order(c("a", "b"), c("b", "a"), "x")))

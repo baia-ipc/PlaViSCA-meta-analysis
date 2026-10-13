@@ -64,3 +64,15 @@ ruberto2022_2_author_cells <- function(path, runs) {
   check_no_na(run, "run of each Ruberto2022_2 author cell")
   data.frame(cell_id = cell_id(run, barcode), author_cell_id = author_ids, stringsAsFactors = FALSE)
 }
+
+# The cells the authors retained (cell_id, author_cell_id), or NULL when the
+# study's cells are not taken from the authors: a file under inputs/
+# (import: author_cells) or, for Sa2020, the main analysis table in metadata/
+# (import: main_analysis_cells). cfg: the study's import settings in params.
+author_cells <- function(study, cfg, runs) {
+  if (isTRUE(cfg$main_analysis_cells)) return(sa2020_main_analysis_cells(runs))
+  if (is.null(cfg$author_cells)) return(NULL)
+  switch(study,
+    Hazzard2024 = hazzard2024_author_cells(input_path(cfg$author_cells), runs),
+    Ruberto2022_2 = ruberto2022_2_author_cells(input_path(cfg$author_cells), runs))
+}

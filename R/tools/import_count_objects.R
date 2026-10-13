@@ -11,7 +11,8 @@
 #
 # Writes the same <study>.rds files as stage 10 (counts, run_id,
 # author_cell_id). Where the authors define the cells of a study
-# (Hazzard2024, Ruberto2022_2), the cells must be exactly the authors' cells.
+# (Hazzard2024, Ruberto2022_2, Sa2020), the cells must be exactly the authors'
+# cells.
 
 STAGE <- "10_import_counts"
 source("R/lib/setup.R")
@@ -38,11 +39,8 @@ for (study in studies) {
 
   cfg <- PARAMS$import[[study]]
   object$author_cell_id <- NA_character_
-  if (!is.null(cfg$author_cells)) {
-    author <- switch(study,
-      Hazzard2024 = hazzard2024_author_cells(input_path(cfg$author_cells), study_runs),
-      Ruberto2022_2 = ruberto2022_2_author_cells(input_path(cfg$author_cells), study_runs)
-    )
+  author <- author_cells(study, cfg, study_runs)
+  if (!is.null(author)) {
     check_same_set(colnames(object), author$cell_id, paste(study, "cells and author cells"))
     object$author_cell_id <- author$author_cell_id[match(colnames(object), author$cell_id)]
   }

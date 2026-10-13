@@ -9,10 +9,13 @@ reference:
 # Stage 10: how the cells of each study are obtained.
 #   matrix:      STARsolo GeneFull matrix to read ("filtered" or "raw")
 #   min_cells / min_features: CreateSeuratObject() filters
-#   emptydrops:  droplet calling on the raw matrix (only Hazzard2022)
+#   min_genome_reads: cells are the barcodes with at least this many unique
+#                reads over the whole genome, by tissue (only Hazzard2022)
 import:
   # folder of the STARsolo outputs, under <workspace>/inputs/
   starsolo_counts: starsolo_counts
+  # cores used to read the runs of a study in parallel
+  threads: 8
   Sa2020:
     source: starsolo
     matrix: filtered
@@ -23,10 +26,9 @@ import:
     matrix: raw
     min_cells: 1
     min_features: 1
-    emptydrops:
-      lower: 1
-      fdr: 0.001
-      seed: 123456
+    min_genome_reads:
+      Host blood: 5000
+      Vector salivary gland: 250
   Hazzard2024:
     source: starsolo
     matrix: raw

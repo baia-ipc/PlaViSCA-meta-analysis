@@ -1,6 +1,7 @@
 path	bytes	sha256	description	source_url
 author_data/6_PvSPZ.BS.combined.rds	205753524	6ed948ccab4d57649e8e37b5148e5fdd219c9e02e0c7dead1c3009a2436893ba	Ruberto et al. 2022 (sporozoites), authors' Seurat object of sporozoites and blood stages	to be confirmed
 author_data/Hep59.1.2.seu_20aug2025.rds	13771658	87a64c47530ff5b1b140cc064269fbd8bf1160903efe7fb0b14a1bed5a998bce	Ruberto et al. 2022 (liver), authors' Seurat object Hep59.1.2.seu	to be confirmed
+author_data/pbio.3000711.s030.xlsx	1852702	00a5277e70e114facb8a034d7d83c4596ead7aff68d9ee001fb6f1ba6a482d2b	Sa et al. 2020, PLoS Biol, S1 Data (source data of Fig 1; sheet "data 1B" names the cells of the main analysis)	https://journals.plos.org/plosbiology/article/file?type=supplementary&id=10.1371/journal.pbio.3000711.s030
 author_data/pbio.3000711.s034.xlsx	1142411	391e2c8b1a825a170f9fbcbb4464614a0b0f2540c795847c63d7d0172472f90e	Sa et al. 2020, PLoS Biol, S5 Data (gametocyte cells)	https://journals.plos.org/plosbiology/article/file?type=supplementary&id=10.1371/journal.pbio.3000711.s034
 author_data/Proccessed_Data.txt	9792598	fb22feceedfca890e93ca7dfd7573ff6ef0ab2b8b3f8b0d617d5fc51b97be26a	Hazzard et al. 2024, Zenodo record 12775216 (retained cells, PseudoGroup)	https://zenodo.org/records/12775216/files/Proccessed_Data.txt
 author_data/PvData_CHM_Final.RDS	73729652	c80e25bd8046b784cad92c98b73d73fb504889a1a4017c41e574e57054f89659	Mancio-Silva et al. 2022, Zenodo record 6280956 (Seurat object)	https://zenodo.org/records/6280956

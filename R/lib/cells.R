@@ -29,15 +29,26 @@ author_sample_runs <- function(runs) {
   setNames(runs$run_id, runs$author_sample)
 }
 
+# Our names of author cells named "<author sample>_<barcode>"; the sample
+# name may itself contain "_" (e.g. "NIH_Sa_AAAC...", "5309_2_AAAC...").
+# what: the source of the names, for error messages
+sample_barcode_cells <- function(author_ids, runs, what) {
+  run <- author_sample_runs(runs)[sub("_[^_]+$", "", author_ids)]
+  check_no_na(run, paste("run of each", what, "cell"))
+  data.frame(cell_id = cell_id(run, sub("^.*_", "", author_ids)), author_cell_id = author_ids,
+    stringsAsFactors = FALSE)
+}
+
 # Hazzard2024: the authors' processed table (Proccessed_Data.txt) has one row
 # per retained cell, named "<author sample>_<barcode>", e.g. "5309_2_AAAC...".
 hazzard2024_author_cells <- function(path, runs) {
-  author_ids <- rownames(utils::read.delim(path))
-  sample <- sub("_[^_]+$", "", author_ids)
-  barcode <- sub("^.*_", "", author_ids)
-  run <- author_sample_runs(runs)[sample]
-  check_no_na(run, "run of each Hazzard2024 author cell")
-  data.frame(cell_id = cell_id(run, barcode), author_cell_id = author_ids, stringsAsFactors = FALSE)
+  sample_barcode_cells(rownames(utils::read.delim(path)), runs, "Hazzard2024 author")
+}
+
+# Sa2020: metadata/sa2020_main_analysis_cells.tsv lists the cells of the
+# authors' main analysis, e.g. "NIH_Sa_AAAC...".
+sa2020_main_analysis_cells <- function(runs) {
+  sample_barcode_cells(read_meta("sa2020_main_analysis_cells.tsv")$author_cell_id, runs, "Sa2020 main analysis")
 }
 
 # Ruberto2022_2: the authors' object combines sporozoites with blood stages;

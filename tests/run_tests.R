@@ -65,6 +65,13 @@ test("Hazzard2024 author cell names are parsed", {
   x <- hazzard2024_author_cells(f, r)
   identical(x$cell_id, c("955_AAAC", "956_GGGT")) && identical(x$author_cell_id, c("5309_2_AAAC", "5309_1_GGGT"))
 })
+test("author cell names with '_' in the sample name are parsed", {
+  x <- sample_barcode_cells(c("NIH_CQ_AAAC", "NIH_Sa_GGGT"), toy_runs, "toy")
+  identical(x$cell_id, c("270_AAAC", "269_GGGT")) && identical(x$author_cell_id, c("NIH_CQ_AAAC", "NIH_Sa_GGGT"))
+})
+test("author cell names of an unknown sample fail", fails(sample_barcode_cells("AMRU_Sa_AAAC", toy_runs, "toy")))
+test("the Sa2020 main analysis cells map to unique Sa2020 cells",
+  !anyDuplicated(sa2020_main_analysis_cells(runs[runs$study_label == "Sa2020", ])$cell_id))
 test("check fails when the condition is false", fails(check(FALSE, "x")))
 test("check_unique fails on duplicates", fails(check_unique(c("a", "a"), "x")))
 test("check_same_order fails on a different order", fails(check_same_order(c("a", "b"), c("b", "a"), "x")))

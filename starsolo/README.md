@@ -55,6 +55,25 @@ Only read 2 (cDNA) is aligned; read 1 gives the cell barcode and the UMI.
 Sa2020 reads are first trimmed to 75 bases (seqtk). The runs to count are
 those of `metadata/runs.tsv`.
 
+## Unique reads per barcode over the genome
+
+```bash
+starsolo/run_starsolo.sh --genome-reads 36525464 SRR20710500 <fastq_dir> <out_dir>
+```
+
+With `--genome-reads`, the run's folder also gets
+`genome_reads_per_barcode.tsv` (barcode, unique reads). Stage 10 uses it
+for Hazzard2022, whose authors define a cell as a barcode with at least
+5,000 (blood) or 250 (sporozoites) unique reads over the whole genome (the
+paper says "more than"; their counting script uses `>= 5000`).
+
+`count_genome_reads.py` counts, from a temporary coordinate-sorted BAM, the
+reads that are primary alignments, map to one place only and have a
+corrected barcode and UMI; reads with the same barcode, UMI, strand and
+position are counted once, wherever they map. The count matrices are the
+same with or without the option. The four Hazzard2022 runs of
+`inputs/starsolo_counts/` were made with it.
+
 ## Why only read 2 is aligned
 
 In 10x 3' libraries, read 2 is the cDNA, on the same strand as the RNA;
@@ -81,6 +100,5 @@ The barcode whitelists `3M-february-2018.txt.gz` and
 <https://teichlab.github.io/scg_lib_structs/data/10X-Genomics/>. Each is
 identical to the barcode list of the raw matrices of its chemistry.
 
-The order of the genes in the GTF (and therefore the order of the rows of
-the matrices) follows the GFF. It differs from the order in
-`inputs/starsolo_counts/`; the counts do not.
+The order of the genes in the GTF, and therefore of the rows of the
+matrices, follows the GFF.

@@ -11,8 +11,8 @@
 #       author_sex          Sa2020 gametocyte sex (S5 Data)
 #       author_state, author_sex_state, author_ap2g   Mancio-Silva2022 Table S2
 #       author_pseudogroup  Hazzard2024 sexual/asexual groups
-#       sa2020_main_analysis  the cell is in the main analysis of Sa2020
-#       author_cell_id      the cell's name in the authors' data
+#       author_cell_id      Sa2020: the cell's name in the authors' main analysis,
+#                           for the cells in it (other studies: set in stage 10)
 
 STAGE <- "20_cell_metadata"
 source("R/lib/setup.R")
@@ -35,27 +35,24 @@ RUN_COLUMNS <- c("host_species", "tissue", "strain", "parasite_origin_location",
 # --- author annotations, one function per study -----------------------------
 
 annotate_sa2020 <- function(meta, study_runs) {
-  # cells of the authors' main analysis
-  main <- read_meta("sa2020_main_analysis_cells.tsv")
-  main <- main[main$in_atlas == "TRUE", ]
-  meta$sa2020_main_analysis <- rownames(meta) %in% main$cell_id
+  # author cell names: the cells of the authors' main analysis, which include
+  # all cells of the S5 Data
+  main <- sa2020_main_analysis_cells(study_runs)
+  check_unique(main$cell_id, "Sa2020 main analysis cells")
+  found <- main$cell_id %in% rownames(meta)
+  message(sprintf("Sa2020: %d of %d cells of the authors' main analysis are among our cells (%d missing)",
+    sum(found), length(found), sum(!found)))
+  meta$author_cell_id <- main$author_cell_id[match(rownames(meta), main$cell_id)]
 
   # gametocyte sex from the authors' S5 Data (Sample = "<author sample>_<barcode>")
   s5 <- read_excel(input_path(PARAMS$annotation$sa2020_gametocytes))
   s5 <- s5[s5$Type %in% c("Female", "Male"), ]
-  run <- author_sample_runs(study_runs)[sub("_[^_]+$", "", s5$Sample)]
-  check_no_na(run, "run of each Sa2020 S5 Data cell")
-  s5_cell <- cell_id(run, sub("^.*_", "", s5$Sample))
+  s5_cell <- sample_barcode_cells(s5$Sample, study_runs, "Sa2020 S5 Data")$cell_id
   check_unique(s5_cell, "Sa2020 S5 Data cells")
   found <- s5_cell %in% rownames(meta)
   message(sprintf("Sa2020: %d of %d gametocytes of the S5 Data are among our cells", sum(found), length(found)))
   meta$author_stage <- paste(s5$Type, "gametocyte")[match(rownames(meta), s5_cell)]
   meta$author_sex <- meta$author_stage
-
-  # author cell names, for the cells in the authors' tables
-  meta$author_cell_id <- main$author_cell_id[match(rownames(meta), main$cell_id)]
-  from_s5 <- is.na(meta$author_cell_id) & rownames(meta) %in% s5_cell
-  meta$author_cell_id[from_s5] <- s5$Sample[match(rownames(meta)[from_s5], s5_cell)]
   meta
 }
 

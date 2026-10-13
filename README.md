@@ -84,13 +84,15 @@ pixi run test                                  # tests (no data needed)
 
 **Starting from the reads.** `starsolo/` makes the STARsolo count
 matrices, the input of stage 10, from the reads of the runs in
-`metadata/runs.tsv`. It reproduces the counts exactly; see
+`metadata/runs.tsv`; `inputs/starsolo_counts/` was made with it. See
 [starsolo/README.md](starsolo/README.md).
 
-**Starting from count objects.** Importing the STARsolo matrices (stage 10)
-is the slowest step. `R/tools/import_count_objects.R` can be used instead. It
-starts from per-study count objects (`inputs/study_count_objects/`, checksums
-in `metadata/study_count_objects.sha256`) and writes the same stage 10 outputs.
+**Starting from count objects.** `R/tools/import_count_objects.R` can be
+used instead of importing the STARsolo matrices. It starts from per-study
+count objects (`inputs/study_count_objects/`, checksums in
+`metadata/study_count_objects.sha256`) and writes the same stage 10 outputs.
+The count objects are the stage 10 outputs (`<study>.rds`) of the four
+STARsolo studies, from a run with the default settings.
 
 ```bash
 pixi run Rscript --vanilla R/tools/import_count_objects.R

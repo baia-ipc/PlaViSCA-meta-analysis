@@ -29,7 +29,7 @@ STARsolo studies (GeneFull counts; settings under `import` in params):
 | Study | Matrix | Cells |
 |---|---|---|
 | Sa2020 | filtered | all cells called by STARsolo |
-| Hazzard2022 | raw | `emptyDrops` (lower = 1, FDR ≤ 0.001, seed 123456) |
+| Hazzard2022 | raw | the authors' rule: at least 5,000 (blood) or 250 (salivary gland) unique reads over the whole genome |
 | Hazzard2024 | raw | the cells in the authors' processed table (Zenodo 12775216) |
 | Ruberto2022_2 | raw | the cells with Stage = Sporozoite in the authors' object |
 
@@ -38,6 +38,14 @@ For these studies:
 - Each run is made into an object with `min.cells`/`min.features` as in
   params, and the runs are merged.
 - A barcode-rank (knee) plot is drawn for each run.
+- The runs of a study are read in parallel (`import.threads`).
+- Hazzard2022: the authors define a cell by its unique reads over the whole
+  genome (reads with the same barcode, UMI, strand and position counted
+  once), not only on genes. `starsolo/run_starsolo.sh --genome-reads` writes
+  these counts per barcode (`genome_reads_per_barcode.tsv` in each run's
+  folder); the thresholds are `import.Hazzard2022.min_genome_reads`. The
+  deposited blood runs give fewer cells than the publication reports (879
+  against 2,756), also when processed with the authors' published method.
 - To match a cell with the authors' data, the authors' sample names are
   translated to runs using `metadata/runs.tsv` (`author_sample`).
 
@@ -71,11 +79,17 @@ Every cell gets:
 | Study | Annotation | Source |
 |---|---|---|
 | Sa2020 | female/male gametocytes → `author_stage` | S5 Data |
-| Sa2020 | member of the authors' main analysis → `sa2020_main_analysis` | `metadata/sa2020_main_analysis_cells.tsv` |
+| Sa2020 | the cell's name in the authors' main analysis → `author_cell_id` | `metadata/sa2020_main_analysis_cells.tsv` |
 | Ruberto2022_1 | Hypnozoites / Schizonts → `author_stage` | authors' object |
 | Mancio-Silva2022 | State, sex.state, AP2G; State gives `author_stage` (Replicative = liver schizont) | Table S2 |
 | Hazzard2024 | sexual/asexual group → `author_pseudogroup` | processed table |
 | Ruberto2022_2, Hazzard2022 (runs SRR20710498/9) | the whole sample is sporozoites → `author_stage` | `metadata/runs.tsv`, `sample_stage` |
+
+`metadata/sa2020_main_analysis_cells.tsv` lists the authors' names of the
+9,215 cells of their main analysis. Stage 20 matches them to our cells, so
+a Sa2020 cell has an `author_cell_id` exactly when it is in the authors'
+main analysis, whatever cells the counts give; it reports how many of the
+authors' cells are among ours and how many are missing.
 
 ## 30 Integrate
 

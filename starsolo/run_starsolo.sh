@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 # Count the reads of one run with STARsolo (the input of stage 10).
 #
-# Usage: starsolo/run_starsolo.sh <study_pmid> <run_id> <fastq_dir> <out_dir> [threads]
+# Usage: starsolo/run_starsolo.sh [--genome-reads] <study_pmid> <run_id> <fastq_dir> <out_dir> [threads]
 #
 #   <fastq_dir>/<study_pmid>/<run_id>_1.fastq.gz, _2.fastq.gz   reads (R1: barcode+UMI, R2: cDNA)
 #   <out_dir>/<study_pmid>/<run_id>_solo_out/                   STARsolo output
+#
+# --genome-reads: also write <run_id>_solo_out/genome_reads_per_barcode.tsv,
+#   the unique reads of each barcode over the whole genome (count_genome_reads.py),
+#   from a temporary coordinate-sorted BAM. Stage 10 uses it for Hazzard2022.
+#   The count matrices are the same with or without it.
 #
 # Reference files (made by starsolo/make_reference.py and STAR genomeGenerate,
 # see starsolo/README.md) are taken from <workspace>/inputs/reference/.
@@ -20,6 +25,8 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
+genome_reads=
+if [ "${1:-}" = "--genome-reads" ]; then genome_reads=1; shift; fi
 pmid=$1; run=$2; fastq_dir=$3; out_dir=$4; threads=${5:-15}
 [ -f ../config/local.env ] && . ../config/local.env
 # STARSOLO_REFERENCE: another reference folder (default: the workspace one)
@@ -55,6 +62,9 @@ if [ -n "$keep" ]; then
 fi
 
 zcat -f "$ref/$whitelist.gz" > "$work/$whitelist"
+alignments=(--outSAMtype None)
+[ -n "$genome_reads" ] && alignments=(--outSAMtype BAM SortedByCoordinate --outSAMattributes NH HI AS nM CB UB \
+  --limitBAMsortRAM 20000000000 --outBAMsortingThreadN "$threads")
 pixi run STAR \
   --runThreadN "$threads" \
   --genomeDir "$ref/$index" \
@@ -69,11 +79,17 @@ pixi run STAR \
   --soloUMIfiltering MultiGeneUMI \
   --alignIntronMin 1 \
   --alignIntronMax 2756 \
-  --outSAMtype None \
+  "${alignments[@]}" \
   --soloFeatures Gene GeneFull \
   --outStd Log \
   --outTmpDir "$work/star_tmp" \
   --outFileNamePrefix "$work/${run}_solo_out/"
+
+if [ -n "$genome_reads" ]; then
+  bam="$work/${run}_solo_out/Aligned.sortedByCoord.out.bam"
+  pixi run samtools view "$bam" | pixi run python count_genome_reads.py "$work/${run}_solo_out/genome_reads_per_barcode.tsv"
+  rm "$bam"
+fi
 
 rm -rf "$out_dir/$pmid/${run}_solo_out"
 mv "$work/${run}_solo_out" "$out_dir/$pmid/${run}_solo_out"

@@ -10,7 +10,10 @@
 #   - read the GeneFull matrix of each run ("filtered" = STARsolo cell calls,
 #     "raw" = all barcodes) and remove the rRNA genes
 #   - plot the barcode rank (knee) curve of each run
-#   - Hazzard2022: call cells with emptyDrops on the raw matrix
+#   - runs are read and made into objects in parallel (import: threads)
+#   - Hazzard2022: keep the barcodes with at least a number of unique reads
+#     over the whole genome, by tissue (the authors' rule; the reads per
+#     barcode come from starsolo/run_starsolo.sh --genome-reads)
 #   - Hazzard2024, Ruberto2022_2: keep the cells retained by the authors
 #   - Sa2020: keep all cells of the STARsolo filtered matrix
 # Studies whose counts come from the authors' matrix:
@@ -38,6 +41,16 @@ studies <- commandArgs(TRUE)
 if (length(studies) == 0) studies <- STUDIES
 check(all(studies %in% STUDIES), "unknown study: ", paste(setdiff(studies, STUDIES), collapse = ", "))
 
+# Apply f to each element of x, on PARAMS$import$threads cores; stop if any
+# element fails.
+parallel_map <- function(x, f) {
+  result <- parallel::mclapply(x, f, mc.cores = PARAMS$import$threads, mc.preschedule = FALSE)
+  failed <- vapply(result, function(r) is.null(r) || inherits(r, "try-error"), TRUE)
+  check(!any(failed), "failed for ", paste(names(x)[failed], collapse = ", "), ": ",
+    paste(unique(unlist(lapply(result[failed], as.character))), collapse = "; "))
+  result
+}
+
 # --- studies counted with STARsolo ------------------------------------------
 
 import_starsolo <- function(study, cfg) {
@@ -45,7 +58,7 @@ import_starsolo <- function(study, cfg) {
   study_runs <- runs[runs$study_label == study, ]
   pmid <- study_table$study_pmid[study_table$study_label == study]
   # the import keeps every run of the study listed in metadata/runs.tsv
-  matrices <- lapply(setNames(study_runs$run_id, study_runs$run_id), function(run) {
+  matrices <- parallel_map(setNames(study_runs$run_id, study_runs$run_id), function(run) {
     path <- input_path(PARAMS$import$starsolo_counts, pmid, paste0(run, "_solo_out"), "Solo.out", "GeneFull", cfg$matrix)
     sce <- read10xCounts(path, col.names = TRUE)
     sce[!rownames(sce) %in% rrna_genes, ]
@@ -65,24 +78,29 @@ import_starsolo <- function(study, cfg) {
   record_output(file.path(out, paste0(study, "_knee_plots.pdf")))
 
   barcodes_read <- vapply(matrices, ncol, 1L)
-  if (!is.null(cfg$emptydrops)) {
-    set.seed(cfg$emptydrops$seed)
-    matrices <- lapply(matrices, function(sce) {
-      result <- emptyDrops(sce, lower = cfg$emptydrops$lower)
-      sce[, which(result$FDR <= cfg$emptydrops$fdr)]
-    })
+  if (!is.null(cfg$min_genome_reads)) {
+    matrices <- setNames(lapply(names(matrices), function(run) {
+      tissue <- study_runs$tissue[study_runs$run_id == run]
+      threshold <- cfg$min_genome_reads[[tissue]]
+      check(!is.null(threshold), study, ": no min_genome_reads for tissue ", tissue)
+      reads <- utils::read.delim(input_path(PARAMS$import$starsolo_counts, pmid, paste0(run, "_solo_out"),
+        "genome_reads_per_barcode.tsv"), stringsAsFactors = FALSE)
+      cells <- reads$barcode[reads$unique_reads >= threshold]
+      check(all(cells %in% colnames(matrices[[run]])), run, ": barcodes of genome_reads_per_barcode.tsv not in the matrix")
+      matrices[[run]][, colnames(matrices[[run]]) %in% cells]
+    }), names(matrices))
   }
 
-  objects <- lapply(names(matrices), function(run) {
+  objects <- parallel_map(setNames(names(matrices), names(matrices)), function(run) {
     counts <- SingleCellExperiment::counts(matrices[[run]])
     colnames(counts) <- cell_id(run, colnames(counts))
     object <- CreateSeuratObject(counts, min.cells = cfg$min_cells, min.features = cfg$min_features)
     object$run_id <- run
     object
   })
-  object <- JoinLayers(Reduce(function(x, y) merge(x, y), objects))
-  cells_called <- table(factor(object$run_id, levels = names(matrices)))
-  object$author_cell_id <- NA_character_
+  run_names <- names(matrices)
+  rm(matrices)
+  cells_called <- vapply(objects, function(o) as.integer(ncol(o)), 1L)
 
   if (!is.null(cfg$author_cells)) {
     author <- switch(study,
@@ -90,17 +108,29 @@ import_starsolo <- function(study, cfg) {
       Ruberto2022_2 = ruberto2022_2_author_cells(input_path(cfg$author_cells), study_runs)
     )
     check_unique(author$cell_id, paste(study, "author cells"))
-    missing <- setdiff(author$cell_id, colnames(object))
+    missing <- setdiff(author$cell_id, unlist(lapply(objects, colnames), use.names = FALSE))
     check(length(missing) == 0, sprintf("%d %s author cells are not in the STARsolo matrices", length(missing), study))
+    # keep only the author cells of each run before merging: merging every
+    # barcode of the raw matrices is slow. The genes of each run object stay.
+    objects <- lapply(names(objects), function(run) {
+      keep <- colnames(objects[[run]])[colnames(objects[[run]]) %in% author$cell_id]
+      check(length(keep) > 0, run, " has no ", study, " author cells")
+      subset(objects[[run]], cells = keep)
+    })
+  }
+
+  object <- JoinLayers(Reduce(function(x, y) merge(x, y), unname(objects)))
+  object$author_cell_id <- NA_character_
+  if (!is.null(cfg$author_cells)) {
     object <- subset(object, cells = author$cell_id)
     object$author_cell_id <- author$author_cell_id[match(colnames(object), author$cell_id)]
   }
 
   list(object = object, summary = data.frame(
-    study_label = study, run_id = names(matrices), matrix = cfg$matrix,
+    study_label = study, run_id = run_names, matrix = cfg$matrix,
     barcodes_read = as.integer(barcodes_read),
     cells_called = as.integer(cells_called),
-    cells_kept = as.integer(table(factor(object$run_id, levels = names(matrices))))
+    cells_kept = as.integer(table(factor(object$run_id, levels = run_names)))
   ))
 }
 

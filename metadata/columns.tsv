@@ -3,7 +3,7 @@ barcode	identity	Cell name: <last 3 digits of the run accession>_<cell barcode>;
 study_label	identity	Study (see the data sources table)
 study_pmid	identity	PubMed ID of the study
 run_id	identity	Sequencing run accession (Mancio-Silva2022: the runs of the author sample, separated by ";")
-author_cell_id	identity	Name of the cell in the authors' data, where the authors provide cell names
+author_cell_id	identity	Name of the cell in the authors' data, where the authors provide cell names (Sa2020: set exactly for the cells of the authors' main analysis)
 n_count_rna	counts	Number of UMIs of the cell (rRNA genes excluded)
 n_feature_rna	counts	Number of genes detected in the cell
 count_source	counts	How the counts were obtained
@@ -24,7 +24,6 @@ author_state	author	Mancio-Silva2022, Table S2: State
 author_sex_state	author	Mancio-Silva2022, Table S2: sex.state
 author_ap2g	author	Mancio-Silva2022, Table S2: AP2G
 author_pseudogroup	author	Hazzard2024: the authors' sexual/asexual group (PseudoGroup)
-sa2020_main_analysis	author	Sa2020: the cell is in the authors' main analysis
 stage	stage	Life-cycle stage: the authors' stage if given, else the cluster gametocyte call, else idc_stage
 broad_stage	stage	Blood, liver or sporozoite stage
 stage_source	stage	Where stage comes from: author, gametocyte_markers or idc_reference

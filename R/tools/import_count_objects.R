@@ -7,7 +7,7 @@
 # Input: <workspace>/inputs/study_count_objects/<study>.rds, a Seurat object
 #        per study whose RNA "counts" layer holds the raw UMI counts of the
 #        study's cells, named "<last 3 digits of run>_<barcode>", with rRNA
-#        genes already removed. Checksums: metadata/study_count_objects.sha256.
+#        genes already removed. Checksums: SHA256SUMS in the same folder.
 #
 # Writes the same <study>.rds files as stage 10 (counts, run_id,
 # author_cell_id). Where the authors define the cells of a study

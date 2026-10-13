@@ -43,7 +43,7 @@ R/                 stage scripts (NN_name.R), lib/ (shared code), tools/
 starsolo/          from reads to STARsolo count matrices (own environment)
 config/            params.yaml (analysis parameters), local.env.example
 metadata/          curated tables: studies, runs, stages, markers, columns,
-                   expected cell counts, input files and checksums
+                   input files and their checksums
 tests/             tests of the metadata and of the shared code
 docs/              pipeline description
 run.sh             runs the stages
@@ -55,10 +55,10 @@ location is set in `config/local.env`:
 
 ```
 <workspace>/inputs/          input data (read only)
-  starsolo_counts/<PMID>/<run>_solo_out/   STARsolo output per run
+  starsolo_counts/<PMID>/<run>_solo_out/   STARsolo output per run, with SHA256SUMS
   author_data/               authors' objects and tables
   reference/                 GFF, reference time course, orthologs
-  study_count_objects/       per-study count objects (optional entry point)
+  study_count_objects/       per-study count objects (optional entry point), with SHA256SUMS
 <workspace>/runs/<run>/      one directory per run (PLAVISCA_RUN, default "main")
   outs/NN_stage/             outputs of each stage
   results/                   app data, tables, figures
@@ -67,7 +67,8 @@ location is set in `config/local.env`:
 ```
 
 `metadata/input_files.tsv` lists the input files: where each comes from, its
-size and its checksum.
+size and its checksum. The count folders carry their own checksums, written
+when the files were made (`SHA256SUMS`); `./run.sh check-inputs` checks both.
 
 ## Running
 
@@ -89,10 +90,11 @@ matrices, the input of stage 10, from the reads of the runs in
 
 **Starting from count objects.** `R/tools/import_count_objects.R` can be
 used instead of importing the STARsolo matrices. It starts from per-study
-count objects (`inputs/study_count_objects/`, checksums in
-`metadata/study_count_objects.sha256`) and writes the same stage 10 outputs.
-The count objects are the stage 10 outputs (`<study>.rds`) of the four
-STARsolo studies, from a run with the default settings.
+count objects (`inputs/study_count_objects/`) and writes the same stage 10
+outputs. The count objects are the stage 10 outputs (`<study>.rds`) of the
+four STARsolo studies, from a run with the default settings; when copying
+them, record their checksums with `sha256sum *.rds > SHA256SUMS` in that
+folder.
 
 ```bash
 pixi run Rscript --vanilla R/tools/import_count_objects.R

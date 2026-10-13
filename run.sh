@@ -25,8 +25,11 @@ stages=$(ls R/[0-9][0-9]_*.R | xargs -n1 basename | sed 's/\.R$//')
 if [ "${1:-}" = "check-inputs" ]; then
   inputs="$PLAVISCA_WORKSPACE/inputs"
   (cd "$inputs" && tail -n +2 "$OLDPWD/metadata/input_files.tsv" | awk -F'\t' '$3 ~ /^[0-9a-f]{64}$/ {print $3 "  " $1}' | sha256sum -c --quiet) &&
-  (cd "$inputs/starsolo_counts" && sha256sum -c --quiet "$OLDPWD/metadata/starsolo_counts.sha256") &&
-  (cd "$inputs/study_count_objects" && sha256sum -c --quiet "$OLDPWD/metadata/study_count_objects.sha256") &&
+  # count folders: the SHA256SUMS written next to the files when they were made
+  for sums in "$inputs"/starsolo_counts/*/*_solo_out/SHA256SUMS "$inputs"/study_count_objects/SHA256SUMS; do
+    [ -f "$sums" ] || continue
+    (cd "$(dirname "$sums")" && sha256sum -c --quiet SHA256SUMS) || { echo "checksum mismatch in $sums" >&2; exit 1; }
+  done &&
   echo "all input files match their checksums"
   exit
 fi

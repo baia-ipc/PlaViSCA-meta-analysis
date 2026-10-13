@@ -5,6 +5,7 @@
 #
 #   <fastq_dir>/<study_pmid>/<run_id>_1.fastq.gz, _2.fastq.gz   reads (R1: barcode+UMI, R2: cDNA)
 #   <out_dir>/<study_pmid>/<run_id>_solo_out/                   STARsolo output
+#   <out_dir>/<study_pmid>/<run_id>_solo_out/SHA256SUMS         checksums of the files stage 10 reads
 #
 # --genome-reads: also write <run_id>_solo_out/genome_reads_per_barcode.tsv,
 #   the unique reads of each barcode over the whole genome (count_genome_reads.py),
@@ -90,6 +91,12 @@ if [ -n "$genome_reads" ]; then
   pixi run samtools view "$bam" | pixi run python count_genome_reads.py "$work/${run}_solo_out/genome_reads_per_barcode.tsv"
   rm "$bam"
 fi
+
+# checksums of the files stage 10 reads, checked by ./run.sh check-inputs
+(cd "$work/${run}_solo_out" &&
+  checked=(Log.out Log.final.out Solo.out/GeneFull) &&
+  { [ -z "$genome_reads" ] || checked+=(genome_reads_per_barcode.tsv); } &&
+  find "${checked[@]}" -type f | LC_ALL=C sort | xargs sha256sum > SHA256SUMS)
 
 rm -rf "$out_dir/$pmid/${run}_solo_out"
 mv "$work/${run}_solo_out" "$out_dir/$pmid/${run}_solo_out"

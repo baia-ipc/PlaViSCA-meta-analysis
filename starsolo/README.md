@@ -51,6 +51,9 @@ starsolo/run_starsolo.sh <study_pmid> <run_id> <fastq_dir> <out_dir> [threads]
 
 This counts one run (`<fastq_dir>/<pmid>/<run>_1.fastq.gz` and `_2.fastq.gz`)
 into `<out_dir>/<pmid>/<run>_solo_out/`. The STAR options are in the script.
+The folder gets a `SHA256SUMS` with the checksums of the files stage 10
+reads (logs, `Solo.out/GeneFull/`, `genome_reads_per_barcode.tsv`), which
+`./run.sh check-inputs` verifies.
 Only read 2 (cDNA) is aligned; read 1 gives the cell barcode and the UMI.
 Sa2020 reads are first trimmed to 75 bases (seqtk). The runs to count are
 those of `metadata/runs.tsv`.

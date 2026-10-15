@@ -247,7 +247,7 @@ dotplot <- ggplot(dots, aes(state, label, size = detected, colour = mean)) + geo
   labs(x = NULL, y = NULL, size = "Fraction detected", colour = "Mean expression") +
   theme_bw(base_size = 7) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 for (ext in c("pdf", "png")) {
-  ggsave(file.path(res, paste0("gametocyte_marker_panel.", ext)), dotplot, width = 5.5, height = 7.5, dpi = 300)
+  ggsave(file.path(res, paste0("gametocyte_marker_panel.", ext)), dotplot, width = 5.5, height = 1.5 + 0.2 * nrow(panel), dpi = 300)
   record_output(file.path(res, paste0("gametocyte_marker_panel.", ext)))
 }
 

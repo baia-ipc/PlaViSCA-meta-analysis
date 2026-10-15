@@ -44,7 +44,7 @@ test("broad stages are blood, liver or sporozoite",
   all(stages$broad_stage %in% c("Blood stage", "Liver stage", "Sporozoite stage")))
 test("time point stages are known stages", all(read_meta("idc_timepoints.tsv")$stage %in% stages$stage))
 test("gametocyte marker sets are known", all(read_meta("gametocyte_markers.tsv")$marker_set %in%
-  c("female", "male", "panel_commitment", "panel_male", "panel_female", "panel_both_sexes")))
+  c("female", "male", "panel_male", "panel_female")))
 test("exported columns are unique", !anyDuplicated(columns$column))
 test("removed Mancio-Silva2022 cells are '.1' copies of kept cells", {
   d <- read_meta("mancio_silva2022_duplicate_cells.tsv")

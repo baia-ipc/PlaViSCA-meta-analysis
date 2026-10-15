@@ -24,41 +24,16 @@ PVP01-1412100	male	meiosis-specific nuclear structural protein 1	Sa et al. 2020 
 PVP01-1025600	male	CFA20 domain-containing protein	Sa et al. 2020 (sex calls)
 PVP01-1266500	male	allantoicase	Sa et al. 2020 (sex calls)
 PVP01-1229400	male	lactate dehydrogenase	Sa et al. 2020 (sex calls)
-PVP01-1440800	panel_commitment	AP2-G	sexual commitment / early gametocyte genes
-PVP01-0734100	panel_commitment	GDV1	sexual commitment / early gametocyte genes
-PVP01-0725700	panel_commitment	gametocyte development protein GD1	sexual commitment / early gametocyte genes
-PVP01-0422700	panel_commitment	gamete antigen 27/25	sexual commitment / early gametocyte genes
-PVP01-0422600	panel_commitment	ETRAMP11.2	sexual commitment / early gametocyte genes
-PVP01-0204100	panel_male	kinesin-8B	male gamete and male development genes
-PVP01-0820800	panel_male	kinesin-8X	male gamete and male development genes
-PVP01-0215600	panel_male	dynein heavy chain	male gamete and male development genes
-PVP01-0313800	panel_male	dynein heavy chain	male gamete and male development genes
-PVP01-0608300	panel_male	dynein heavy chain	male gamete and male development genes
-PVP01-0703700	panel_male	dynein heavy chain	male gamete and male development genes
-PVP01-0923500	panel_male	dynein heavy chain	male gamete and male development genes
-PVP01-0313300	panel_male	CDPK4	male gamete and male development genes
-PVP01-0914700	panel_male	MAPK2	male gamete and male development genes
-PVP01-0530800	panel_male	alpha tubulin 2	male gamete and male development genes
-PVP01-0814300	panel_male	HAP2	male gamete and male development genes
-PVP01-1108200	panel_male	GEX1	male gamete and male development genes
-PVP01-0824500	panel_male	male development protein MD3	male gamete and male development genes
-PVP01-1145300	panel_male	male development protein MD4	male gamete and male development genes
-PVP01-0521000	panel_male	male development protein MD5	male gamete and male development genes
-PVP01-0616100	panel_female	P25	female gametocyte / ookinete genes
-PVP01-0616000	panel_female	P28	female gametocyte / ookinete genes
-PVP01-1208000	panel_female	P47	female gametocyte / ookinete genes
-PVP01-1251100	panel_female	CCp2	female gametocyte / ookinete genes
-PVP01-0702200	panel_female	CCp4	female gametocyte / ookinete genes
-PVP01-0206000	panel_female	CCp5	female gametocyte / ookinete genes
-PVP01-1255400	panel_female	LAP5	female gametocyte / ookinete genes
-PVP01-1007900	panel_female	NEK2	female gametocyte / ookinete genes
-PVP01-0314900	panel_female	serine/threonine-protein kinase NEK4	female gametocyte / ookinete genes
-PVP01-0947400	panel_female	female development protein FD2	female gametocyte / ookinete genes
-PVP01-0819400	panel_female	DOZI	female gametocyte / ookinete genes
-PVP01-0317400	panel_female	PSOP1	female gametocyte / ookinete genes
-PVP01-0206300	panel_female	PSOP24	female gametocyte / ookinete genes
-PVP01-1258000	panel_female	GEST	female gametocyte / ookinete genes
-PVP01-1119300	panel_female	PSOP6	female gametocyte / ookinete genes
-PVP01-0415800	panel_both_sexes	P230	gamete surface and egress genes of both sexes
-PVP01-1208100	panel_both_sexes	P48/45	gamete surface and egress genes of both sexes
-PVP01-1018300	panel_both_sexes	GEP	gamete surface and egress genes of both sexes
+PVP01-0204100	panel_male	kinesin-8B	known male gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_0111000)
+PVP01-0608300	panel_male	dynein heavy chain	known male gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_1023100)
+PVP01-0703700	panel_male	dynein heavy chain	known male gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_0905300)
+PVP01-0923500	panel_male	dynein heavy chain	known male gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_1122900)
+PVP01-0313300	panel_male	CDPK4	known male gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_0717500)
+PVP01-0914700	panel_male	MAPK2	known male gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_1113900)
+PVP01-0530800	panel_male	alpha tubulin 2	known male gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_0422300)
+PVP01-0814300	panel_male	HAP2	known male gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_1014200)
+PVP01-0616100	panel_female	P25	known female gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_1031000)
+PVP01-1208000	panel_female	P47	known female gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_1346800)
+PVP01-1007900	panel_female	NEK2	known female gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_0525900)
+PVP01-0314900	panel_female	NEK4	known female gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_0719200)
+PVP01-0819400	panel_female	DOZI	known female gametocyte marker, Lasonder et al. 2016 Table 1 (P. falciparum PF3D7_0320800)

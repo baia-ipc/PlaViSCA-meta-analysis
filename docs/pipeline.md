@@ -159,7 +159,11 @@ branch shape their own embedding, without the liver and sporozoite cells:
    schizont, 48 h late schizont/merozoite.
 3. **Gametocytes.** Gametocytes are called from the
    marker sets of `metadata/gametocyte_markers.tsv`: 19 female and 6 male
-   genes from Sa et al. 2020, and a curated panel of mature-male genes.
+   genes from Sa et al. 2020, and a panel of 8 known male gametocyte
+   markers (Lasonder et al. 2016, Table 1: kinesin-8B, three dynein heavy
+   chains, CDPK4, MAPK2, alpha-tubulin 2, HAP2). The S4 dot plot also shows
+   5 known female markers from the same table (P25, P47, NEK2, NEK4, DOZI).
+   The P. falciparum ortholog of each panel gene is given in the table.
    For each blood-stage cluster of stage 35 and each marker set, the
    enrichment is the share of the cluster's cells detecting the set's genes
    minus the share detecting control genes of similar expression (100 per

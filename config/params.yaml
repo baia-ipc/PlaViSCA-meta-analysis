@@ -96,9 +96,7 @@ annotation:
   # of mean expression). Relative UMIs: the cluster's median UMIs divided by
   # the median over the clusters. Neither depends on sequencing depth.
   #   female branch: female >= gametocyte_min_enrichment and female > male
-  #   male branch:   male >= gametocyte_min_enrichment, male > female and
-  #                  mature-male >= male_min_mature_enrichment (some schizont
-  #                  clusters detect part of the male set)
+  #   male branch:   male >= gametocyte_min_enrichment and male > female
   #   late male:     male branch with mature-male >= late_male_min_enrichment
   #   early male:    the other male-branch clusters
   #   developing gametocyte (sex not called; stage "Developing gametocyte"):
@@ -109,7 +107,6 @@ annotation:
   marker_control_genes: 100
   marker_control_seed: 1
   gametocyte_min_enrichment: 10
-  male_min_mature_enrichment: 5
   late_male_min_enrichment: 20
   developing_max_rel_umi: 0.4
   late_female_min_rel_umi: 1.5

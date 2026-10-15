@@ -27,9 +27,6 @@ marker_enrichment <- function(counts, data, cluster, marker_sets, n_bins, n_cont
   })
 }
 
-# Some schizont clusters detect part of the male set; the male branch
-# therefore also needs some mature-male signal.
-#
 # enrichment: data frame with blood_cluster, female, male, male_mature
 # (percentage points) and relative_umi (cluster median UMIs / median over the
 # clusters). p: the annotation parameters. Adds call and state.
@@ -38,7 +35,7 @@ call_gametocyte_clusters <- function(enrichment, p) {
     dplyr::mutate(
       call = dplyr::case_when(
         female >= p$gametocyte_min_enrichment & female > male ~ "Female gametocyte",
-        male >= p$gametocyte_min_enrichment & male > female & male_mature >= p$male_min_mature_enrichment ~ "Male gametocyte",
+        male >= p$gametocyte_min_enrichment & male > female ~ "Male gametocyte",
         TRUE ~ NA_character_),
       state = dplyr::case_when(
         call == "Male gametocyte" & male_mature >= p$late_male_min_enrichment ~ "Late male",

@@ -96,7 +96,6 @@ add("MarkersMale", sum(markers$marker_set == "male"), "male gametocyte marker ge
 add("ClusterResolution", PARAMS$blood_embedding$cluster_resolution, "resolution of the blood-stage clusters used for gametocytes", "config/params.yaml", digits = 2)
 add("AtlasClusterResolution", PARAMS$annotation$atlas_cluster_resolution, "resolution of the atlas clusters", "config/params.yaml", digits = 2)
 add("GametocyteMinEnrichment", PARAMS$annotation$gametocyte_min_enrichment, "minimum marker enrichment (percentage points) of a gametocyte cluster", "config/params.yaml")
-add("MaleMinMatureEnrichment", PARAMS$annotation$male_min_mature_enrichment, "minimum mature-male enrichment (percentage points) of a male gametocyte cluster", "config/params.yaml")
 add("LateMaleMinEnrichment", PARAMS$annotation$late_male_min_enrichment, "minimum mature-male enrichment (percentage points) of a late male cluster", "config/params.yaml")
 add("MarkerControlGenes", PARAMS$annotation$marker_control_genes, "control genes per marker gene", "config/params.yaml")
 add("DevelopingMaxRelUmi", PARAMS$annotation$developing_max_rel_umi, "relative median UMIs below which a female-branch cluster is developing gametocytes", "config/params.yaml", digits = 1)

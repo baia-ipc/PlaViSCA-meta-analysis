@@ -158,12 +158,16 @@ branch shape their own embedding, without the liver and sporozoite cells:
    into stages (`idc_stage`): 6–12 h ring, 24 h trophozoite, 32–42 h
    schizont, 48 h late schizont/merozoite.
 3. **Gametocytes.** Gametocytes are called from the
-   marker sets of `metadata/gametocyte_markers.tsv`: 19 female and 6 male
+   marker sets of `metadata/gametocyte_markers.tsv`: 19 female and 3 male
    genes from Sa et al. 2020, and a panel of 8 known male gametocyte
    markers (Lasonder et al. 2016, Table 1: kinesin-8B, three dynein heavy
    chains, CDPK4, MAPK2, alpha-tubulin 2, HAP2). The S4 dot plot also shows
    5 known female markers from the same table (P25, P47, NEK2, NEK4, DOZI).
    The P. falciparum ortholog of each panel gene is given in the table.
+   Three genes of the Sa et al. 2020 male set are left out because they are
+   also detected in many asexual and female cells: fructose-bisphosphate
+   aldolase (PVP01_1262200), allantoicase (PVP01_1266500) and lactate
+   dehydrogenase (PVP01_1229400).
    For each blood-stage cluster of stage 35 and each marker set, the
    enrichment is the share of the cluster's cells detecting the set's genes
    minus the share detecting control genes of similar expression (100 per
@@ -175,7 +179,7 @@ branch shape their own embedding, without the liver and sporozoite cells:
    | Assignment | Condition (per cluster) |
    |---|---|
    | female branch | female enrichment ≥ 10 and > male enrichment |
-   | male branch | male enrichment ≥ 10 and > female enrichment, and mature-male panel enrichment ≥ 5 |
+   | male branch | male enrichment ≥ 10 and > female enrichment |
    | late male | male branch with mature-male panel enrichment ≥ 20 |
    | early male | other male-branch clusters |
    | developing gametocyte | female branch with relative UMIs < 0.4 (sex not called) |

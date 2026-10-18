@@ -1,4 +1,4 @@
-# Stage 70: tables, values and figures for reporting the results.
+# Stage 70: tables and values for reporting the results.
 #
 # Collects the numbers produced by the earlier stages in a form ready to be
 # cited (e.g. in the manuscript, which is edited separately using these
@@ -13,18 +13,9 @@
 #   parameters.tsv                config/params.yaml as a table
 #   software_versions.tsv         versions of R and of the R packages used
 #   columns.tsv                   description of the per-cell columns
-#   figure_integration.pdf        copy of results/integration/integration.pdf
-#   supplementary_qc.pdf          UMIs and genes per cell, per study
-#   supplementary_gametocyte_scores.pdf  marker enrichment per blood-stage cluster
-#   supplementary_blood_clusters.pdf  copy of the blood-stage clusters and their stage
-#   supplementary_idc_delta.pdf   copy of the SingleR delta distribution
 
 STAGE <- "70_tables_and_values"
 source("R/lib/setup.R")
-suppressPackageStartupMessages({
-  library(ggplot2)
-  library(tidyr)
-})
 
 out <- results_dir("tables_and_values")
 annotation_dir <- file.path(RESULTS, "stage_annotation")
@@ -254,38 +245,3 @@ tex_rows(rbind(
 
 columns <- read_meta("columns.tsv")
 write_table(columns, file.path(out, "columns.tsv"))
-
-# --- figures ----------------------------------------------------------------
-
-invisible(file.copy(file.path(integration_dir, "integration.pdf"), file.path(out, "figure_integration.pdf"), overwrite = TRUE))
-record_output(file.path(out, "figure_integration.pdf"))
-invisible(file.copy(file.path(annotation_dir, "idc_delta_distribution.pdf"), file.path(out, "supplementary_idc_delta.pdf"), overwrite = TRUE))
-record_output(file.path(out, "supplementary_idc_delta.pdf"))
-invisible(file.copy(file.path(annotation_dir, "blood_clusters_umap.pdf"), file.path(out, "supplementary_blood_clusters.pdf"), overwrite = TRUE))
-record_output(file.path(out, "supplementary_blood_clusters.pdf"))
-
-qc <- mr_data |>
-  select(study_label, UMIs = n_count_rna, Genes = n_feature_rna) |>
-  pivot_longer(c(UMIs, Genes), names_to = "measure")
-ggsave(file.path(out, "supplementary_qc.pdf"), width = 7.5, height = 4,
-  ggplot(qc, aes(study_label, value)) + geom_violin(scale = "width", fill = "grey85") +
-    geom_boxplot(width = 0.15, outlier.shape = NA) + scale_y_log10() + facet_wrap(~measure, scales = "free_y") +
-    labs(x = NULL, y = "per cell (log scale)") + theme_classic(base_size = 8) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)))
-record_output(file.path(out, "supplementary_qc.pdf"))
-
-# marker enrichment per blood-stage cluster (stage 35), with the minimum
-# enrichment of the gametocyte rule (dashed)
-cluster_scores <- read_result(file.path(annotation_dir, "cluster_gametocyte_scores.tsv"))
-scores <- cluster_scores |>
-  mutate(blood_cluster = factor(blood_cluster, levels = sort(as.integer(blood_cluster)))) |>
-  select(blood_cluster, Female = female, Male = male, `Mature male panel` = male_mature) |>
-  pivot_longer(-blood_cluster, names_to = "markers", values_to = "enrichment")
-marker_colours <- c(Female = "#4E6E59", Male = "#42517C", `Mature male panel` = "#7F88B3")
-ggsave(file.path(out, "supplementary_gametocyte_scores.pdf"), width = 7.5, height = 3.5,
-  ggplot(scores, aes(blood_cluster, enrichment, colour = markers)) + geom_point(size = 1.5) +
-    geom_hline(yintercept = PARAMS$annotation$gametocyte_min_enrichment, linetype = "dashed") +
-    scale_colour_manual(values = marker_colours) +
-    labs(x = "Blood-stage cluster", y = "Marker enrichment (percentage points)", colour = "Marker set") +
-    theme_classic(base_size = 8))
-record_output(file.path(out, "supplementary_gametocyte_scores.pdf"))

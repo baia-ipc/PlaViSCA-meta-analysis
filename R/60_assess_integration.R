@@ -27,15 +27,11 @@
 #
 # Writes to results/integration/: count tables (study x stage, study x broad
 # stage, cluster x study, cluster x stage), integration_metrics.tsv,
-# per_stage_sharing.tsv, per_stage_pairwise_sharing.tsv and the figure
-# integration.pdf/.png (UMAPs before/after integration, per-stage sharing).
+# per_stage_sharing.tsv and per_stage_pairwise_sharing.tsv. The figure is
+# made by stage 80.
 
 STAGE <- "60_assess_integration"
 source("R/lib/setup.R")
-suppressPackageStartupMessages({
-  library(ggplot2)
-  library(patchwork)
-})
 
 out <- results_dir("integration")
 p <- PARAMS$assessment
@@ -49,7 +45,6 @@ embedding <- function(name, dims) {
   x[, dims, drop = FALSE]
 }
 pcs <- list(unintegrated = embedding("pca_unintegrated", dims), integrated = embedding("pca_integrated", dims))
-umaps <- list(unintegrated = embedding("umap_unintegrated", 1:2), integrated = embedding("umap_integrated", 1:2))
 rm(atlas)
 
 study <- meta$study_label
@@ -155,84 +150,3 @@ pairwise <- do.call(rbind, pairwise)
 pairwise$ratio_unintegrated <- pairwise$observed_unintegrated / pairwise$expected_complete_mixing
 pairwise$ratio_integrated <- pairwise$observed_integrated / pairwise$expected_complete_mixing
 write_table(pairwise, file.path(out, "per_stage_pairwise_sharing.tsv"))
-
-# --- figure -----------------------------------------------------------------
-# PLOS figure format: one image, at most 7.5 in wide, Helvetica, >= 8 pt.
-# Colours: Okabe-Ito for studies, Paul Tol "muted" for stages (both
-# colour-blind safe, no shared hues).
-
-study_colours <- c("Hazzard2022" = "#E69F00", "Hazzard2024" = "#56B4E9", "Mancio-Silva2022" = "#009E73",
-  "Ruberto2022_1" = "#CC79A7", "Ruberto2022_2" = "#D55E00", "Sa2020" = "#0072B2")
-stage_order <- c("Sporozoite", "Hypnozoite", "Schizont (Liver stage)", "Ring/Early trophozoite", "Trophozoite",
-  "Schizont (Blood stage)", "Merozoite", "Developing gametocyte", "Female gametocyte", "Male gametocyte")
-tol_muted <- c("#332288", "#88CCEE", "#44AA99", "#117733", "#999933", "#DDCC77", "#CC6677", "#882255", "#AA4499", "#6699CC")
-no_stage <- "Unassigned (NA)"
-embedding_colours <- c("Unintegrated" = "#BBBBBB", "Integrated (Harmony)" = "#004488")
-
-check(all(study %in% names(study_colours)), "no figure colour for a study")
-check(all(stage %in% c(NA, stage_order)), "no figure colour for a stage")
-present_stages <- intersect(stage_order, unique(stage))
-check(length(present_stages) <= length(tol_muted), "more stages than stage colours")
-stage_colours <- c(setNames(tol_muted[seq_along(present_stages)], present_stages), setNames("#DDDDDD", no_stage))
-stage_shown <- ifelse(is.na(stage), no_stage, stage)
-
-# draw the studies interleaved in proportion to their size, so that no study
-# is painted over another
-rank_in_study <- ave(seq_len(n_cells), study, FUN = seq_along)
-draw_order <- order(rank_in_study / as.numeric(table(study)[study]))
-
-text_theme <- theme(
-  text = element_text(family = "Helvetica", size = 8), axis.text = element_text(size = 8),
-  axis.title = element_text(size = 8), plot.title = element_text(size = 9, face = "bold", hjust = 0),
-  legend.text = element_text(size = 8), legend.title = element_text(size = 8, face = "bold"),
-  legend.key.size = unit(10, "pt"), plot.tag = element_text(size = 11, face = "bold"))
-
-umap_panel <- function(which, colour_by, title) {
-  df <- data.frame(x = umaps[[which]][draw_order, 1], y = umaps[[which]][draw_order, 2],
-    study = factor(study[draw_order], levels = names(study_colours)),
-    stage = factor(stage_shown[draw_order], levels = names(stage_colours)))
-  colours <- if (colour_by == "study") scale_colour_manual(name = "Study", values = study_colours, drop = TRUE)
-    else scale_colour_manual(name = "Stage", values = stage_colours, drop = TRUE)
-  ggplot(df, aes(x = x, y = y, colour = .data[[colour_by]])) +
-    ggrastr::rasterise(geom_point(size = 0.05, stroke = 0, shape = 16), dpi = 300, dev = "ragg") +
-    colours + guides(colour = guide_legend(override.aes = list(size = 2.5))) + coord_equal() +
-    labs(title = title, x = "UMAP 1", y = "UMAP 2") +
-    theme_classic(base_size = 8, base_family = "Helvetica") + text_theme +
-    theme(axis.text = element_blank(), axis.ticks = element_blank())
-}
-
-sharing <- rbind(
-  data.frame(stage = per_stage$stage, embedding = "Unintegrated", ratio = per_stage$ratio_unintegrated),
-  data.frame(stage = per_stage$stage, embedding = "Integrated (Harmony)", ratio = per_stage$ratio_integrated))
-sharing$stage <- factor(sharing$stage, levels = rev(intersect(stage_order, per_stage$stage)))
-sharing$embedding <- factor(sharing$embedding, levels = names(embedding_colours))
-arrows <- data.frame(stage = factor(per_stage$stage, levels = levels(sharing$stage)),
-  from = per_stage$ratio_unintegrated, to = per_stage$ratio_integrated)
-
-sharing_panel <- ggplot(sharing, aes(x = ratio, y = stage)) +
-  geom_vline(xintercept = 1, linetype = "dashed", colour = "grey40", linewidth = 0.3) +
-  geom_segment(data = arrows, aes(x = from, xend = to, y = stage, yend = stage), colour = "grey70", linewidth = 0.6) +
-  geom_point(aes(colour = embedding), size = 2.2) +
-  scale_colour_manual(name = "Embedding", values = embedding_colours) +
-  scale_x_continuous(limits = c(0, max(1.05, ceiling(max(sharing$ratio) * 20) / 20)), breaks = seq(0, 1.5, 0.25),
-    expand = expansion(mult = c(0, 0.01))) +
-  labs(title = "Cross-study neighbour sharing within stage",
-    x = sprintf("Observed / expected fraction of %d nearest neighbours from another study\n(1 = complete mixing)", p$k_neighbours),
-    y = NULL) +
-  theme_classic(base_size = 8, base_family = "Helvetica") + text_theme +
-  theme(panel.grid.major.x = element_line(colour = "grey92", linewidth = 0.3))
-
-figure <- (umap_panel("unintegrated", "study", "Unintegrated: study") | umap_panel("unintegrated", "stage", "Unintegrated: stage")) /
-  (umap_panel("integrated", "study", "Integrated: study") | umap_panel("integrated", "stage", "Integrated: stage")) /
-  free(sharing_panel) +
-  plot_layout(heights = c(1, 1, 0.75), guides = "collect") +
-  plot_annotation(tag_levels = "A") & theme(legend.position = "right")
-
-pdf(file.path(out, "integration.pdf"), width = 7.5, height = 8, family = "Helvetica", useDingbats = FALSE)
-print(figure)
-invisible(dev.off())
-record_output(file.path(out, "integration.pdf"))
-ragg::agg_png(file.path(out, "integration.png"), width = 7.5, height = 8, units = "in", res = 300)
-print(figure)
-invisible(dev.off())
-record_output(file.path(out, "integration.png"))

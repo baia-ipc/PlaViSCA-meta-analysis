@@ -214,12 +214,10 @@ Checks:
 Results (`results/stage_annotation/`):
 - `eligible_cells.tsv`;
 - `idc_reference.tsv` (genes of the reference and how many were mapped);
-- `idc_delta_distribution.pdf`;
 - `cluster_gametocyte_scores.tsv` (mean scores, median UMIs, call and
   state per blood-stage cluster);
-- `gametocytes_umap.pdf` (blood-stage UMAP: female and male scores, UMIs,
-  gametocyte states) and `gametocyte_marker_panel.pdf` (curated sexual-stage
-  genes per state);
+- `gametocyte_marker_panel.tsv` (fraction of cells detecting each curated
+  sexual-stage gene, and its mean expression, per gametocyte state);
 - `author_labels_vs_cluster_call.tsv`.
 
 ## 50 Export of the app data
@@ -250,8 +248,7 @@ nearest neighbours):
   random draw of the other n − 1 cells.
 
 Results in `results/integration/`: count tables, `integration_metrics.tsv`,
-`per_stage_sharing.tsv`, `per_stage_pairwise_sharing.tsv` and the figure
-`integration.pdf`.
+`per_stage_sharing.tsv` and `per_stage_pairwise_sharing.tsv`.
 
 ## 70 Tables and values
 
@@ -262,8 +259,40 @@ ready to be cited:
 - the dataset and stage-count tables (`.tsv`, and the table rows as `.tex`);
 - the STARsolo options read from the run logs;
 - the parameters and the software versions;
-- the column dictionary;
-- copies of the figures.
+- the column dictionary.
 
 The manuscript is not changed by the pipeline: it is edited separately,
 using these files.
+
+## 80 Figures
+
+Draws the figures of the manuscript into `results/figures/`, one PDF (for
+the manuscript) and one PNG (for a quick look) each, named by their number
+in the manuscript:
+
+| File | Content |
+|---|---|
+| `fig1_overview` | workflow; cells per study; stage composition of each study |
+| `fig2_blood_stages` | blood-stage UMAP: stage and gametocyte state, UMIs, female and male marker scores; curated marker panel; our calls in the cells labelled by the source studies |
+| `fig3_integration` | UMAP before and after Harmony, by study and stage; mixing metrics; cross-study sharing within stage |
+| `fig4_invasion_genes` | DBP, CSP and AMA1 on the integrated UMAP, and the fraction of cells detecting them per stage and study |
+| `s1_fig_qc` | genes and UMIs per cell, per study |
+| `s2_fig_stage_call` | SingleR delta per reference time point; share of labels flagged by pruning |
+| `s3_fig_blood_clusters` | blood-stage clusters and their stage |
+| `s4_fig_gametocyte_calls` | how clusters are called: marker enrichment, relative UMIs, thresholds |
+| `s5_fig_technical` | platform and UMIs on the embeddings |
+
+The numbers printed in the figures (cells, genes) come from
+`results/tables_and_values/values.tsv`, so stage 70 runs first.
+
+The style is shared (`R/lib/plots.R`): one colour and one display name per
+study and per stage, Helvetica, at most 7.5 x 8.75 in (PLOS). The stage
+colours are chosen so that every pair stays distinguishable with
+protanopia and deuteranopia. Each figure subject has its own module in
+`R/figures/`; to add a figure, write a function there that returns a
+ggplot/patchwork object and save it with `save_figure()` in
+`R/80_figures.R`.
+
+Fig 5 (the app, side-by-side coloring) is a screenshot, taken with the
+screenshot tool of the app repository (`tools/screenshots/manuscript.yml`).
+

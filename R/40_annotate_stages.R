@@ -30,15 +30,14 @@
 #     metadata/stages.tsv.
 #
 # Writes atlas.rds and, in results/stage_annotation/, the tables behind the
-# numbers reported for the annotation.
+# numbers and figures reported for the annotation (the figures themselves are
+# made by stage 80).
 
 STAGE <- "40_annotate_stages"
 source("R/lib/setup.R")
 source("R/lib/gametocytes.R")
 suppressPackageStartupMessages({
   library(Seurat)
-  library(ggplot2)
-  library(patchwork)
   library(SingleR)
   library(SummarizedExperiment)
   library(readxl)
@@ -97,11 +96,6 @@ message(sprintf("%d of %d eligible cells have a label that SingleR's pruning wou
 timepoint_stage <- read_meta("idc_timepoints.tsv")
 check_same_set(timepoint_stage$timepoint_h, timepoints, "time points of metadata/idc_timepoints.tsv and of the reference")
 meta$idc_stage <- timepoint_stage$stage[match(meta$idc_timepoint, timepoint_stage$timepoint_h)]
-
-pdf(file.path(res, "idc_delta_distribution.pdf"), width = 10, height = 6)
-print(plotDeltaDistribution(prediction, ncol = 4))
-dev.off()
-record_output(file.path(res, "idc_delta_distribution.pdf"))
 
 # --- 3. gametocytes ---------------------------------------------------------
 
@@ -177,84 +171,22 @@ gametocyte <- meta$stage %in% c("Developing gametocyte", "Female gametocyte", "M
 check(all(meta$tissue[gametocyte] == "Host blood"), "gametocyte stage outside host blood")
 check(all(meta$broad_stage[meta$tissue == "Host liver"] %in% c(NA, "Liver stage")), "a liver cell has a non-liver stage")
 
-# --- figures: gametocytes on the blood-only UMAP ---------------------------
-# (a) female and (b) male marker scores, (c) UMIs, (d) gametocyte states;
-# and the curated marker panel per state.
+# --- curated marker panel per gametocyte state -----------------------------
+# fraction of cells detecting each gene of the curated sexual-stage panel and
+# its mean normalised expression, in the asexual cells and in each
+# gametocyte state (eligible cells only)
 
-blood_meta <- meta[eligible, ]
-blood_meta$umap_b_1 <- blood_cells$umap_b_1[match(rownames(blood_meta), blood_cells$cell)]
-blood_meta$umap_b_2 <- blood_cells$umap_b_2[match(rownames(blood_meta), blood_cells$cell)]
 state_levels <- c("Developing gametocyte", "Early female", "Late female", "Early male", "Late male")
-blood_levels <- c("Ring/Early trophozoite", "Trophozoite", "Schizont (Blood stage)", "Merozoite", state_levels)
-blood_colours <- c("Ring/Early trophozoite" = "#A9D18E", "Trophozoite" = "#F4D35E", "Schizont (Blood stage)" = "#8EC5E8",
-  "Merozoite" = "#2E75B6", "Developing gametocyte" = "#C0504D", "Early female" = "#759F8B",
-  "Late female" = "#4E6E59", "Early male" = "#7F88B3", "Late male" = "#42517C")
-blood_labels <- c("Ring/Early trophozoite" = "Ring/early trophozoite", "Trophozoite" = "Trophozoite", "Schizont (Blood stage)" = "Schizont",
-  "Merozoite" = "Late schizont / merozoite", setNames(state_levels, state_levels))
-set.seed(1)
-blood_meta <- blood_meta[sample(nrow(blood_meta)), ]
-umap_panel <- function(colour, title, continuous = TRUE, point_size = 0.2) {
-  g <- ggplot(blood_meta, aes(umap_b_1, umap_b_2, colour = .data[[colour]])) +
-    ggrastr::rasterise(geom_point(size = point_size, stroke = 0, shape = 16), dpi = 300, dev = "ragg") +
-    coord_equal() + labs(title = title, x = "UMAP 1", y = "UMAP 2", colour = NULL) +
-    theme_classic(base_size = 8, base_family = "Helvetica") +
-    theme(axis.text = element_blank(), axis.ticks = element_blank(), plot.title = element_text(size = 9, face = "bold"))
-  if (continuous) g + scale_colour_viridis_c(limits = quantile(blood_meta[[colour]], c(0.01, 0.99)), oob = scales::squish)
-  else g
-}
-# blood stage: the gametocyte state where there is one, else the stage
-blood_meta$blood_stage <- factor(coalesce(blood_meta$gametocyte_state, blood_meta$stage), levels = blood_levels)
-blood_meta$log10_umi <- log10(blood_meta$nCount_RNA)
-figure <- (umap_panel("female_gam_score", "Female marker score") | umap_panel("male_gam_score", "Male marker score")) /
-  (umap_panel("log10_umi", "UMIs (log10)") |
-    (umap_panel("blood_stage", "Blood stage", continuous = FALSE) +
-      scale_colour_manual(values = blood_colours, labels = blood_labels, na.value = "#D9D9D9", na.translate = FALSE, drop = FALSE) +
-      guides(colour = guide_legend(override.aes = list(size = 2.5))))) +
-  plot_annotation(tag_levels = "A")
-ggsave(file.path(res, "gametocytes_umap.pdf"), figure, width = 7.5, height = 7, device = cairo_pdf)
-record_output(file.path(res, "gametocytes_umap.pdf"))
-ggsave(file.path(res, "gametocytes_umap.png"), figure, width = 7.5, height = 7, dpi = 300)
-record_output(file.path(res, "gametocytes_umap.png"))
-
-# supplementary: (a) the blood-stage clusters of stage 35, labelled at their
-# median position, and (b) the blood stage
-cluster_labels <- blood_meta |>
-  group_by(blood_cluster) |>
-  summarise(umap_b_1 = median(umap_b_1), umap_b_2 = median(umap_b_2), .groups = "drop")
-label_layer <- geom_label(data = cluster_labels, aes(umap_b_1, umap_b_2, label = blood_cluster), inherit.aes = FALSE,
-  size = 2.2, label.padding = unit(0.08, "lines"), alpha = 0.8)
-blood_meta$blood_cluster <- factor(blood_meta$blood_cluster, levels = sort(as.integer(unique(blood_meta$blood_cluster))))
-cluster_figure <- (umap_panel("blood_cluster", sprintf("Blood-stage clusters (resolution %s)", PARAMS$blood_embedding$cluster_resolution),
-    continuous = FALSE, point_size = 0.5) + guides(colour = "none") + label_layer) |
-  (umap_panel("blood_stage", "Blood stage", continuous = FALSE, point_size = 0.5) + label_layer +
-    scale_colour_manual(values = blood_colours, labels = blood_labels, na.value = "#D9D9D9", na.translate = FALSE, drop = FALSE) +
-    guides(colour = guide_legend(override.aes = list(size = 2.5)))) +
-  plot_annotation(tag_levels = "A")
-ggsave(file.path(res, "blood_clusters_umap.pdf"), cluster_figure, width = 7.5, height = 4, device = cairo_pdf)
-record_output(file.path(res, "blood_clusters_umap.pdf"))
-ggsave(file.path(res, "blood_clusters_umap.png"), cluster_figure, width = 7.5, height = 4, dpi = 300)
-record_output(file.path(res, "blood_clusters_umap.png"))
-
 panel <- markers[startsWith(markers$marker_set, "panel_"), ]
-panel_data <- GetAssayData(atlas, layer = "data")[panel$gene_id, rownames(blood_meta)]
-group <- factor(ifelse(is.na(blood_meta$gametocyte_state), "Asexual", blood_meta$gametocyte_state), levels = c("Asexual", state_levels))
+panel_data <- GetAssayData(atlas, layer = "data")[panel$gene_id, eligible]
+group <- factor(ifelse(is.na(meta$gametocyte_state[eligible]), "Asexual", meta$gametocyte_state[eligible]),
+  levels = c("Asexual", state_levels))
 dots <- do.call(rbind, lapply(levels(group), function(g) {
   x <- panel_data[, group == g, drop = FALSE]
   data.frame(state = g, gene_id = panel$gene_id, gene = panel$gene, marker_set = sub("^panel_", "", panel$marker_set),
     detected = Matrix::rowMeans(x > 0), mean = Matrix::rowMeans(x))
 }))
 write_table(dots, file.path(res, "gametocyte_marker_panel.tsv"))
-dots$label <- factor(paste0(dots$gene, " (", sub("PVP01-", "", dots$gene_id), ")"), levels = rev(unique(paste0(panel$gene, " (", sub("PVP01-", "", panel$gene_id), ")"))))
-dots$state <- factor(dots$state, levels = levels(group))
-dotplot <- ggplot(dots, aes(state, label, size = detected, colour = mean)) + geom_point() +
-  scale_colour_viridis_c() + scale_size_area(max_size = 4) +
-  facet_grid(marker_set ~ ., scales = "free_y", space = "free_y") +
-  labs(x = NULL, y = NULL, size = "Fraction detected", colour = "Mean expression") +
-  theme_bw(base_size = 7) + theme(axis.text.x = element_text(angle = 45, hjust = 1))
-for (ext in c("pdf", "png")) {
-  ggsave(file.path(res, paste0("gametocyte_marker_panel.", ext)), dotplot, width = 5.5, height = 1.5 + 0.2 * nrow(panel), dpi = 300)
-  record_output(file.path(res, paste0("gametocyte_marker_panel.", ext)))
-}
 
 atlas@meta.data <- meta
 save_object(atlas, file.path(out, "atlas.rds"))

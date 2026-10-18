@@ -31,15 +31,17 @@ before it.
 | `35_blood_embedding` | embedding and clusters of the blood-stage cells alone | `blood.rds` |
 | `40_annotate_stages` | life-cycle stage of each cell | `atlas.rds` |
 | `50_export_app_data` | data files of the app | `results/app_data/` |
-| `60_assess_integration` | integration metrics and figure | `results/integration/` |
-| `70_tables_and_values` | tables, cited values, parameters, software versions, figures | `results/tables_and_values/` |
+| `60_assess_integration` | integration metrics | `results/integration/` |
+| `70_tables_and_values` | tables, cited values, parameters, software versions | `results/tables_and_values/` |
+| `80_figures` | figures of the manuscript | `results/figures/` |
 
 [docs/pipeline.md](docs/pipeline.md) describes each stage in detail.
 
 ## Layout
 
 ```
-R/                 stage scripts (NN_name.R), lib/ (shared code), tools/
+R/                 stage scripts (NN_name.R), lib/ (shared code),
+                   figures/ (one module per figure subject), tools/
 starsolo/          from reads to STARsolo count matrices (own environment)
 config/            params.yaml (analysis parameters), local.env.example
 metadata/          curated tables: studies, runs, stages, markers, columns,
@@ -99,7 +101,7 @@ folder.
 ```bash
 pixi run Rscript --vanilla R/tools/import_count_objects.R
 pixi run Rscript --vanilla R/10_import_counts.R Ruberto2022_1 Mancio-Silva2022
-./run.sh 20 30 40 50 60 70
+./run.sh 20 30 40 50 60 70 80
 ```
 
 ## Checks

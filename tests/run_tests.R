@@ -81,5 +81,14 @@ test("check fails when the condition is false", fails(check(FALSE, "x")))
 test("check_unique fails on duplicates", fails(check_unique(c("a", "a"), "x")))
 test("check_same_order fails on a different order", fails(check_same_order(c("a", "b"), c("b", "a"), "x")))
 
+# --- figure style -----------------------------------------------------------
+
+source("R/lib/plots.R")
+test("every study has a figure colour and name",
+  setequal(names(STUDY_COLOURS), studies$study_label) && setequal(names(STUDY_NAMES), studies$study_label))
+test("every stage has a figure colour and name",
+  setequal(names(STAGE_COLOURS), stages$stage) && setequal(names(STAGE_NAMES), stages$stage))
+test("every broad stage has a figure colour", setequal(names(BROAD_STAGE_COLOURS), stages$broad_stage))
+
 cat(sprintf("\n%d failure(s)\n", failures))
 quit(status = if (failures > 0) 1 else 0)

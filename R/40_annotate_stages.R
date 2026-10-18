@@ -180,11 +180,11 @@ blood_meta <- meta[eligible, ]
 blood_meta$umap_b_1 <- blood_cells$umap_b_1[match(rownames(blood_meta), blood_cells$cell)]
 blood_meta$umap_b_2 <- blood_cells$umap_b_2[match(rownames(blood_meta), blood_cells$cell)]
 state_levels <- c("Developing gametocyte", "Early female", "Late female", "Early male", "Late male")
-blood_levels <- c("Ring", "Trophozoite", "Schizont (Blood stage)", "Merozoite", state_levels)
-blood_colours <- c("Ring" = "#A9D18E", "Trophozoite" = "#F4D35E", "Schizont (Blood stage)" = "#8EC5E8",
+blood_levels <- c("Ring/Early trophozoite", "Trophozoite", "Schizont (Blood stage)", "Merozoite", state_levels)
+blood_colours <- c("Ring/Early trophozoite" = "#A9D18E", "Trophozoite" = "#F4D35E", "Schizont (Blood stage)" = "#8EC5E8",
   "Merozoite" = "#2E75B6", "Developing gametocyte" = "#C0504D", "Early female" = "#759F8B",
   "Late female" = "#4E6E59", "Early male" = "#7F88B3", "Late male" = "#42517C")
-blood_labels <- c("Ring" = "Ring", "Trophozoite" = "Trophozoite", "Schizont (Blood stage)" = "Schizont",
+blood_labels <- c("Ring/Early trophozoite" = "Ring/early trophozoite", "Trophozoite" = "Trophozoite", "Schizont (Blood stage)" = "Schizont",
   "Merozoite" = "Late schizont / merozoite", setNames(state_levels, state_levels))
 set.seed(1)
 blood_meta <- blood_meta[sample(nrow(blood_meta)), ]

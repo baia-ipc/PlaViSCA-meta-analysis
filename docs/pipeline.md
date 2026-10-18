@@ -155,7 +155,7 @@ branch shape their own embedding, without the liver and sporozoite cells:
    keeps its label; `idc_pruned` is TRUE where SingleR's pruning (default
    settings) would discard it as unreliable. `idc_delta` is SingleR's
    `delta.next`. `metadata/idc_timepoints.tsv` turns time points
-   into stages (`idc_stage`): 6–12 h ring, 24 h trophozoite, 32–42 h
+   into stages (`idc_stage`): 6–12 h ring/early trophozoite, 24 h trophozoite, 32–42 h
    schizont, 48 h late schizont/merozoite.
 3. **Gametocytes.** Gametocytes are called from the
    marker sets of `metadata/gametocyte_markers.tsv`: 19 female and 4 male

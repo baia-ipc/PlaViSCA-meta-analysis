@@ -158,16 +158,17 @@ branch shape their own embedding, without the liver and sporozoite cells:
    into stages (`idc_stage`): 6–12 h ring, 24 h trophozoite, 32–42 h
    schizont, 48 h late schizont/merozoite.
 3. **Gametocytes.** Gametocytes are called from the
-   marker sets of `metadata/gametocyte_markers.tsv`: 19 female and 3 male
+   marker sets of `metadata/gametocyte_markers.tsv`: 19 female and 4 male
    genes from Sa et al. 2020, and a panel of 8 known male gametocyte
    markers (Lasonder et al. 2016, Table 1: kinesin-8B, three dynein heavy
    chains, CDPK4, MAPK2, alpha-tubulin 2, HAP2). The S4 dot plot also shows
    5 known female markers from the same table (P25, P47, NEK2, NEK4, DOZI).
    The P. falciparum ortholog of each panel gene is given in the table.
-   Three genes of the Sa et al. 2020 male set are left out because they are
-   also detected in many asexual and female cells: fructose-bisphosphate
-   aldolase (PVP01_1262200), allantoicase (PVP01_1266500) and lactate
-   dehydrogenase (PVP01_1229400).
+   The Sa et al. 2020 sets are the genes highlighted as specifically
+   expressed in gametocytes in their S3 Table. Two of its six male genes are
+   left out: fructose-bisphosphate aldolase (PVP01_1262200), also detected
+   in most asexual parasites, and allantoicase (PVP01_1266500), also detected
+   in most late female gametocytes.
    For each blood-stage cluster of stage 35 and each marker set, the
    enrichment is the share of the cluster's cells detecting the set's genes
    minus the share detecting control genes of similar expression (100 per

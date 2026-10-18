@@ -21,10 +21,13 @@
 #     documented in config/params.yaml (annotation). Module scores of the
 #     female and male sets (female_gam_score, male_gam_score) are kept per
 #     cell for display.
-#  4. Final stage, first available of: the stage given by the authors
-#     (author_stage), the cluster gametocyte call, the stage from the
-#     reference time course. stage_source says which one was used, and
-#     broad_stage is the broad stage of metadata/stages.tsv.
+#  4. Final stage. Eligible cells take the cluster gametocyte call, else
+#     the stage from the reference time course; all other cells take the
+#     stage given by the authors (author_stage). The authors' gametocyte
+#     labels of Sa2020 (author_sex) and Hazzard2024's sexual/asexual groups
+#     (author_pseudogroup) stay as fields for comparison. stage_source says
+#     which source was used, and broad_stage is the broad stage of
+#     metadata/stages.tsv.
 #
 # Writes atlas.rds and, in results/stage_annotation/, the tables behind the
 # numbers reported for the annotation.
@@ -142,11 +145,13 @@ meta$gametocyte_state[eligible] <- cluster_scores$state[match(meta$blood_cluster
 
 # --- 4. final stage ---------------------------------------------------------
 
-meta$stage <- coalesce(meta$author_stage, meta$cluster_gametocyte_call, meta$idc_stage)
+# our own call for the host-blood cells we can classify, the authors'
+# stage for the others
+meta$stage <- ifelse(eligible, coalesce(meta$cluster_gametocyte_call, meta$idc_stage), meta$author_stage)
 meta$stage_source <- case_when(
-  !is.na(meta$author_stage) ~ "author",
-  !is.na(meta$cluster_gametocyte_call) ~ "gametocyte_markers",
-  !is.na(meta$idc_stage) ~ "idc_reference",
+  eligible & !is.na(meta$cluster_gametocyte_call) ~ "gametocyte_markers",
+  eligible & !is.na(meta$idc_stage) ~ "idc_reference",
+  !eligible & !is.na(meta$author_stage) ~ "author",
   TRUE ~ NA_character_
 )
 check(all(meta$stage %in% c(NA, stages$stage)), "stages not in metadata/stages.tsv")

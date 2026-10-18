@@ -90,7 +90,7 @@ Every cell gets:
 
 | Study | Annotation | Source |
 |---|---|---|
-| Sa2020 | female/male gametocytes → `author_stage` | S5 Data |
+| Sa2020 | female/male gametocytes → `author_stage`, `author_sex` | S5 Data |
 | Ruberto2022_1 | Hypnozoites / Schizonts → `author_stage` | authors' object |
 | Mancio-Silva2022 | State, sex.state, AP2G; State gives `author_stage` (Replicative = liver schizont) | Table S2 |
 | Hazzard2024 | sexual/asexual group → `author_pseudogroup` | processed table |
@@ -195,14 +195,16 @@ branch shape their own embedding, without the liver and sporozoite cells:
    not a sex. Eligible cells take the call (`cluster_gametocyte_call`) and
    the state (`gametocyte_state`) of their cluster.
 4. **Final stage.**
-   - `stage` takes the first available of: the authors' stage, the cluster
-     gametocyte call, `idc_stage`. `stage_source` records which one was
-     used.
+   - `stage` of eligible (host-blood) cells: the cluster gametocyte call,
+     else `idc_stage`. All other cells (sporozoites, liver stages) take the
+     authors' stage, as these are cells we do not classify ourselves.
+     `stage_source` records which one was used.
    - `broad_stage` (blood, liver or sporozoite) comes from
      `metadata/stages.tsv`.
-   - The authors' sexual/asexual groups of Hazzard2024 do not enter `stage`;
-     they are compared with the cluster call in
-     `author_labels_vs_cluster_call.tsv`.
+   - The authors' gametocyte labels of Sa2020 (`author_sex`) and the
+     sexual/asexual groups of Hazzard2024 (`author_pseudogroup`) do not
+     enter `stage` of host-blood cells; they are compared with the cluster
+     call in `author_labels_vs_cluster_call.tsv`.
 
 Checks:
 - only eligible cells have blood-stage labels;

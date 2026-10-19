@@ -1,4 +1,4 @@
-# Stage 50: data files for the PlaViSca app.
+# Stage 50: data files for the PlaViSCA app.
 #
 # Writes to results/app_data/:
 #   cleaned_dataset.rds   list of

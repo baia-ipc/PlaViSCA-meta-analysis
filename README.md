@@ -1,10 +1,10 @@
-# PlaViSca preprocessing pipeline
+# PlaViSCA preprocessing pipeline
 
-Builds the data of [PlaViSca](https://github.com/baia-ipc/PlaViSca), an atlas of
+Builds the data of [PlaViSCA](https://github.com/baia-ipc/PlaViSCA-app), an atlas of
 six public *Plasmodium vivax* single-cell RNA-seq studies, from the count
 matrices of each study. It produces:
 
-- the data files of the PlaViSca app;
+- the data files of the PlaViSCA app;
 - the integrated atlas (Seurat object);
 - the tables, values and figures of the manuscript.
 

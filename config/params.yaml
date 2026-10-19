@@ -1,4 +1,4 @@
-# Analysis parameters of the PlaViSca preprocessing pipeline.
+# Analysis parameters of the PlaViSCA preprocessing pipeline.
 # Every stage reads its parameters from here; stage 70 copies them into
 # results/tables_and_values/parameters.tsv.
 

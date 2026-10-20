@@ -113,13 +113,20 @@ tag_panels <- function() {
 
 FIGURES_DIR <- NULL
 
-save_figure <- function(plot, name, width, height) {
+# PDF and PNG named `name` in FIGURES_DIR; the TIFF for the PLOS submission
+# (RGB, LZW, 600 dpi) named by its label in the manuscript (`label`, e.g.
+# "Fig1", "S1_Fig") in FIGURES_DIR/plos/
+save_figure <- function(plot, name, label, width, height) {
   check(width <= 7.5 && height <= 8.75, "figure ", name, " larger than the PLOS maximum of 7.5 x 8.75 in")
   pdf_path <- file.path(FIGURES_DIR, paste0(name, ".pdf"))
   png_path <- file.path(FIGURES_DIR, paste0(name, ".png"))
+  tiff_path <- file.path(FIGURES_DIR, "plos", paste0(label, ".tif"))
+  dir.create(dirname(tiff_path), showWarnings = FALSE)
   ggsave(pdf_path, plot, width = width, height = height, device = cairo_pdf)
   ggsave(png_path, plot, width = width, height = height, dpi = 300, device = ragg::agg_png, bg = "white")
-  record_output(pdf_path)
-  record_output(png_path)
+  ggsave(tiff_path, plot, width = width, height = height, dpi = 600, device = ragg::agg_tiff,
+         bg = "white", compression = "lzw")
+  check(file.size(tiff_path) <= 10e6, "figure ", label, " larger than the PLOS maximum of 10 MB")
+  for (path in c(pdf_path, png_path, tiff_path)) record_output(path)
   invisible(pdf_path)
 }

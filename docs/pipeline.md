@@ -268,7 +268,9 @@ using these files.
 
 Draws the figures of the manuscript into `results/figures/`, one PDF (for
 the manuscript) and one PNG (for a quick look) each, named by their number
-in the manuscript:
+in the manuscript, and into `results/figures/plos/` the TIFF files for the
+PLOS submission (RGB, LZW, 600 dpi), named by their label (`Fig1.tif`,
+`S1_Fig.tif`, ...):
 
 | File | Content |
 |---|---|
@@ -294,5 +296,6 @@ ggplot/patchwork object and save it with `save_figure()` in
 `R/80_figures.R`.
 
 Fig 5 (the app, side-by-side coloring) is a screenshot, taken with the
-screenshot tool of the app repository (`tools/screenshots/manuscript.yml`).
+screenshot tool of the app repository (`tools/screenshots/manuscript.yml`),
+which also writes its TIFF (`plos/Fig5.tif` under the output directory).
 

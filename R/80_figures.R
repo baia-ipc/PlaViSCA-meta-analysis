@@ -14,6 +14,8 @@
 #   fig1_overview          fig2_blood_stages      fig3_integration
 #   fig4_invasion_genes    s1_fig_qc              s2_fig_stage_call
 #   s3_fig_blood_clusters  s4_fig_gametocyte_calls  s5_fig_technical
+# and to results/figures/plos/ the TIFF files for the PLOS submission, named
+# by their label (Fig1.tif ... Fig4.tif, S1_Fig.tif ... S5_Fig.tif).
 # Fig 5 (screenshots of the app) is made in the app repository
 # (tools/screenshots/).
 
@@ -73,15 +75,15 @@ value <- function(key) {
 
 # --- figures ----------------------------------------------------------------
 
-save_figure(figure_overview(meta, studies, value), "fig1_overview", 7.5, 4.8)
-save_figure(figure_blood_stages(blood, marker_panel, author_calls), "fig2_blood_stages", 7.5, 8.6)
-save_figure(figure_integration(meta, umap, metrics, sharing), "fig3_integration", 7.5, 8.4)
-save_figure(figure_invasion_genes(meta, umap$integrated, expression), "fig4_invasion_genes", 7.5, 7.4)
+save_figure(figure_overview(meta, studies, value), "fig1_overview", "Fig1", 7.5, 4.8)
+save_figure(figure_blood_stages(blood, marker_panel, author_calls), "fig2_blood_stages", "Fig2", 7.5, 8.6)
+save_figure(figure_integration(meta, umap, metrics, sharing), "fig3_integration", "Fig3", 7.5, 8.4)
+save_figure(figure_invasion_genes(meta, umap$integrated, expression), "fig4_invasion_genes", "Fig4", 7.5, 7.4)
 
-save_figure(figure_qc(meta), "s1_fig_qc", 7.5, 3.2)
-save_figure(figure_stage_call(meta), "s2_fig_stage_call", 7.5, 3.4)
-save_figure(figure_blood_clusters(blood), "s3_fig_blood_clusters", 7.5, 4)
-save_figure(figure_gametocyte_calls(cluster_scores, PARAMS$annotation), "s4_fig_gametocyte_calls", 7.5, 3.4)
-save_figure(figure_technical(meta, umap, studies), "s5_fig_technical", 7.5, 3)
+save_figure(figure_qc(meta), "s1_fig_qc", "S1_Fig", 7.5, 3.2)
+save_figure(figure_stage_call(meta), "s2_fig_stage_call", "S2_Fig", 7.5, 3.4)
+save_figure(figure_blood_clusters(blood), "s3_fig_blood_clusters", "S3_Fig", 7.5, 4)
+save_figure(figure_gametocyte_calls(cluster_scores, PARAMS$annotation), "s4_fig_gametocyte_calls", "S4_Fig", 7.5, 3.4)
+save_figure(figure_technical(meta, umap, studies), "s5_fig_technical", "S5_Fig", 7.5, 3)
 
 save_session_info(FIGURES_DIR)

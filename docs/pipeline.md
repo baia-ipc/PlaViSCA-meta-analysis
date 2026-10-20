@@ -299,3 +299,8 @@ Fig 5 (the app, side-by-side coloring) is a screenshot, taken with the
 screenshot tool of the app repository (`tools/screenshots/manuscript.yml`),
 which also writes its TIFF (`plos/Fig5.tif` under the output directory).
 
+`R/tools/check_plos_figures.R` checks the TIFF files against the PLOS
+requirements (one image per file, LZW, RGB or greyscale without alpha,
+300–600 dpi, at most 7.5 x 8.75 in, at most 10 MB), for example all of them
+once Fig 5 is next to the others.
+

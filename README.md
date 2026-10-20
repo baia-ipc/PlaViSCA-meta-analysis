@@ -122,6 +122,14 @@ This prints the cells per study in each run, the cells whose stage or
 gametocyte state changed, and the reported values that differ
 (`results/tables_and_values/values.tsv`).
 
+To check the TIFF figures against the PLOS requirements before uploading
+them (the checks of PLOS's PACE tool: LZW, RGB without alpha, 300–600 dpi,
+size and file size), give the folder or the files:
+
+```bash
+pixi run Rscript --vanilla R/tools/check_plos_figures.R /path/to/figures/plos
+```
+
 ## Contact
 
 Sopheap Oeng (osopheap@pasteur-kh.org), Giorgio Gonnella

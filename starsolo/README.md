@@ -95,8 +95,9 @@ Check: in run ERR5087440 (Ruberto2022_2), for the 2,570 cells of the
 authors' analysis, the gene counts correlate with the authors' counts with
 a median per-cell Spearman correlation of 0.88.
 
-The reads used are in `/pool/baia/refdata/PlaViSca/fq_data/<PMID>/` (with
-`md5sum.txt`).
+The reads are the FASTQ files of the runs in `metadata/runs.tsv`, downloaded
+from the SRA/ENA into `<fastq_dir>/<PMID>/`, with an `md5sum.txt` of the
+files.
 
 The barcode whitelists `3M-february-2018.txt.gz` and
 `737K-august-2016.txt.gz` come from

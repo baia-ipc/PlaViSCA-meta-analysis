@@ -18,10 +18,10 @@ blood_state_panel <- function(blood, title = "Blood stage", point_size = 0.15) {
   embedding_plot(blood_points(blood), "state", title, point_size) + discrete_scale(STATE_COLOURS, STATE_NAMES)
 }
 
+# the colour bar sits right of the plot, clear of the cells
 blood_value_panel <- function(blood, column, title, legend) {
   embedding_plot(blood_points(blood), column, title, point_size = 0.15) + continuous_scale(blood[[column]], legend) +
-    theme(legend.position = "inside", legend.position.inside = c(1, 0), legend.justification = c(1, 0),
-      legend.background = element_blank())
+    theme(legend.position = "right")
 }
 
 marker_panel_plot <- function(marker_panel) {

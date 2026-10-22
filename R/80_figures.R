@@ -76,7 +76,7 @@ value <- function(key) {
 # --- figures ----------------------------------------------------------------
 
 save_figure(figure_overview(meta, studies, value), "fig1_overview", "Fig1", 7.5, 4.8)
-save_figure(figure_blood_stages(blood, marker_panel, author_calls), "fig2_blood_stages", "Fig2", 7.5, 8.6)
+save_figure(figure_blood_stages(blood, marker_panel, author_calls), "fig2_blood_stages", "Fig2", 7.5, 8.75)
 save_figure(figure_integration(meta, umap, metrics, sharing), "fig3_integration", "Fig3", 7.5, 8.4)
 save_figure(figure_invasion_genes(meta, umap$integrated, expression), "fig4_invasion_genes", "Fig4", 7.5, 7.4)
 

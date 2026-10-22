@@ -40,7 +40,10 @@ marker_panel_plot <- function(marker_panel) {
     labs(title = "Curated sexual-stage genes", x = NULL, y = NULL) +
     theme_figure(7) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), strip.text.y = element_text(angle = -90),
-      panel.grid.major = element_line(colour = "grey93", linewidth = 0.25), legend.box = "vertical")
+      panel.grid.major = element_line(colour = "grey93", linewidth = 0.25), legend.box = "vertical",
+      # the title starts at the gene labels, a little right of the panel tag:
+      # from the narrow panel it would run into the next panel
+      plot.title.position = "plot", plot.title = element_text(margin = margin(l = 14, b = 5.5)))
 }
 
 # author_calls: study_label, author_label, cluster_gametocyte_call, cells
@@ -77,12 +80,12 @@ author_concordance_plot <- function(author_calls) {
 
 figure_blood_stages <- function(blood, marker_panel, author_calls) {
   blood$log10_umi <- log10(blood$nCount_RNA)
-  ((blood_state_panel(blood) + theme(legend.position = "bottom") + guides(colour = guide_legend(ncol = 2,
-    override.aes = list(size = 2.2)))) | blood_value_panel(blood, "log10_umi", "UMIs per cell", "log10")) /
+  ((blood_state_panel(blood) + guides(colour = guide_legend(ncol = 1, override.aes = list(size = 2.2)))) |
+    blood_value_panel(blood, "log10_umi", "UMIs per cell", "log10")) /
     (blood_value_panel(blood, "female_gam_score", "Female marker score", "Score") |
       blood_value_panel(blood, "male_gam_score", "Male marker score", "Score")) /
     (free(marker_panel_plot(marker_panel)) + author_concordance_plot(author_calls) + plot_layout(widths = c(1.4, 1))) +
-    plot_layout(heights = c(1, 1, 1.15)) + tag_panels()
+    plot_layout(heights = c(1.2, 1.2, 1.1)) + tag_panels()
 }
 
 # --- S3 Fig -----------------------------------------------------------------

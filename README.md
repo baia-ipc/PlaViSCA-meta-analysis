@@ -130,6 +130,11 @@ size and file size), give the folder or the files:
 pixi run Rscript --vanilla R/tools/check_plos_figures.R /path/to/figures/plos
 ```
 
+## License
+
+The PlaViSCA preprocessing pipeline is released under the Creative Commons
+Attribution 4.0 International license (CC BY 4.0); see [LICENSE](LICENSE).
+
 ## Contact
 
 Sopheap Oeng (osopheap@pasteur-kh.org), Giorgio Gonnella

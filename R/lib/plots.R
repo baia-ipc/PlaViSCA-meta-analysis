@@ -28,7 +28,7 @@ STUDY_COLOURS <- c(
   "Sa2020" = "#0072B2", "Hazzard2022" = "#E69F00", "Hazzard2024" = "#56B4E9",
   "Ruberto2022_1" = "#CC79A7", "Mancio-Silva2022" = "#009E73", "Ruberto2022_2" = "#D55E00")
 STUDY_NAMES <- c(
-  "Sa2020" = "Sa 2020", "Hazzard2022" = "Hazzard 2022", "Hazzard2024" = "Hazzard 2024",
+  "Sa2020" = "Sá 2020", "Hazzard2022" = "Hazzard 2022", "Hazzard2024" = "Hazzard 2024",
   "Ruberto2022_1" = "Ruberto 2022 (1)", "Mancio-Silva2022" = "Mancio-Silva 2022", "Ruberto2022_2" = "Ruberto 2022 (2)")
 
 # in the order of metadata/stages.tsv

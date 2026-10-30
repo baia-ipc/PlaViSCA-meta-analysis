@@ -49,9 +49,9 @@ marker_panel_plot <- function(marker_panel) {
 # author_calls: study_label, author_label, cluster_gametocyte_call, cells
 author_concordance_plot <- function(author_calls) {
   group <- with(author_calls, dplyr::case_when(
-    study_label == "Sa2020" & author_label %in% "Female gametocyte" ~ "Sa 2020: female",
-    study_label == "Sa2020" & author_label %in% "Male gametocyte" ~ "Sa 2020: male",
-    study_label == "Sa2020" ~ "Sa 2020: other",
+    study_label == "Sa2020" & author_label %in% "Female gametocyte" ~ "Sá 2020: female",
+    study_label == "Sa2020" & author_label %in% "Male gametocyte" ~ "Sá 2020: male",
+    study_label == "Sa2020" ~ "Sá 2020: other",
     study_label == "Hazzard2024" & author_label == "Sexual" ~ "Hazzard 2024: sexual",
     study_label == "Hazzard2024" ~ "Hazzard 2024: asexual"))
   check(!anyNA(group), "author label without a group in the concordance figure")
@@ -62,7 +62,7 @@ author_concordance_plot <- function(author_calls) {
     cells = author_calls$cells) |>
     dplyr::group_by(group, call) |> dplyr::summarise(cells = sum(cells), .groups = "drop")
   totals <- df |> dplyr::group_by(group) |> dplyr::summarise(cells = sum(cells))
-  order <- c("Sa 2020: female", "Sa 2020: male", "Sa 2020: other", "Hazzard 2024: sexual", "Hazzard 2024: asexual")
+  order <- c("Sá 2020: female", "Sá 2020: male", "Sá 2020: other", "Hazzard 2024: sexual", "Hazzard 2024: asexual")
   df$group <- factor(df$group, levels = rev(order))
   df$call <- factor(df$call, levels = names(call_colours))
   totals$group <- factor(totals$group, levels = rev(order))

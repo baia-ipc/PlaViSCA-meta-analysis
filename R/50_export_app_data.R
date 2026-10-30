@@ -6,12 +6,16 @@
 #                                    columns of metadata/columns.tsv)
 #                           pca_df   per study: standard deviation of each PC
 #                           hiv_data per study: variable genes (vst)
-#   normalize_df.rds      mr_data + log-normalised expression (cells x genes)
-#   raw_df.rds            mr_data + raw UMI counts (cells x genes)
+#   normalized_expression.rds  sparse matrix (Matrix::dgCMatrix), cells x genes,
+#                              log-normalised expression (Seurat layer "data")
+#   raw_expression.rds         sparse matrix, cells x genes, raw UMI counts
+#                              (Seurat layer "counts")
 #   data_source.csv       one row per study (metadata/studies.tsv + cell numbers)
 #   gene_annotation.rds   gene ID, name and description (stage 00)
 #
-# Cells are sorted by name. Gene IDs are written as in PlasmoDB ("PVP01_...").
+# Cells are sorted by name; the rows of the expression matrices are the cells
+# of mr_data, in the same order (rownames = mr_data$barcode). Gene IDs are
+# written as in PlasmoDB ("PVP01_...").
 
 STAGE <- "50_export_app_data"
 source("R/lib/setup.R")
@@ -47,16 +51,17 @@ check(length(missing) == 0, "columns of metadata/columns.tsv missing from the at
 mr_data <- mr_data[sort(colnames(atlas)), columns$column]
 check_unique(mr_data$barcode, "cell names")
 
-# --- expression tables ------------------------------------------------------
+# --- expression matrices ----------------------------------------------------
 
-expression_table <- function(layer) {
-  expression <- Matrix::t(GetAssayData(atlas, assay = "RNA", layer = layer))[rownames(mr_data), ]
+expression_matrix <- function(layer) {
+  expression <- Matrix::t(GetAssayData(atlas, assay = "RNA", layer = layer))[mr_data$barcode, ]
+  expression <- methods::as(expression, "CsparseMatrix")
   colnames(expression) <- plasmodb_id(colnames(expression))
-  check_same_order(rownames(expression), rownames(mr_data), "cells of the expression table and of mr_data")
-  cbind(mr_data, as.matrix(expression))
+  check_same_order(rownames(expression), mr_data$barcode, "cells of the expression matrix and of mr_data")
+  expression
 }
-save_object(expression_table("data"), file.path(out, "normalize_df.rds"))
-save_object(expression_table("counts"), file.path(out, "raw_df.rds"))
+save_object(expression_matrix("data"), file.path(out, "normalized_expression.rds"))
+save_object(expression_matrix("counts"), file.path(out, "raw_expression.rds"))
 
 # --- per-study PCA and variable genes (QC panels of the app) ----------------
 

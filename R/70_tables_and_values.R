@@ -42,8 +42,9 @@ add <- function(key, value, description, source, digits = NA, percent = FALSE) {
 # cells and genes
 add("Studies", length(unique(mr_data$study_label)), "studies", "results/app_data")
 add("CellsTotal", nrow(mr_data), "cells in the atlas", "results/app_data")
-atlas_genes <- ncol(readRDS(file.path(RESULTS, "app_data", "raw_df.rds"))) - nrow(read_meta("columns.tsv"))
-add("GenesTotal", atlas_genes, "genes in the atlas", "results/app_data/raw_df.rds")
+invisible(loadNamespace("Matrix"))  # the expression matrices are sparse (dgCMatrix)
+atlas_genes <- ncol(readRDS(file.path(RESULTS, "app_data", "raw_expression.rds")))
+add("GenesTotal", atlas_genes, "genes in the atlas", "results/app_data/raw_expression.rds")
 
 measured <- read_result(file.path(stage_dir("30_integrate"), "measured_genes.tsv"))
 add("GenesShared", sum(measured$in_all_studies), "genes measured in all studies (variable genes chosen among these)", "outs/30_integrate/measured_genes.tsv")

@@ -228,12 +228,15 @@ Results (`results/stage_annotation/`):
     cells sorted by name;
   - `pca_df`: per-study PCA standard deviations;
   - `hiv_data`: per-study variable genes, recomputed on each study alone;
-- `normalize_df.rds`: `mr_data` plus log-normalised expression;
-- `raw_df.rds`: `mr_data` plus counts;
+- `normalized_expression.rds`: sparse matrix (`Matrix::dgCMatrix`), cells x
+  genes, log-normalised expression;
+- `raw_expression.rds`: sparse matrix of the same shape, raw UMI counts;
 - `data_source.csv`;
 - `gene_annotation.rds`.
 
-Gene columns use PlasmoDB IDs (`PVP01_...`).
+The rows of the expression matrices are the cells of `mr_data`, in the same
+order (row names = `mr_data$barcode`); the columns are PlasmoDB gene IDs
+(`PVP01_...`).
 
 ## 60 Assess integration
 

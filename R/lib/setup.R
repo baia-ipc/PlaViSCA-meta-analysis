@@ -105,10 +105,11 @@ check_no_na <- function(x, what) {
 # --- tables and objects -----------------------------------------------------
 
 # All columns are read as text; convert explicitly where a number or a
-# TRUE/FALSE flag is needed.
+# TRUE/FALSE flag is needed. The files are UTF-8 (accented author names), and
+# the strings are marked as such so that they render whatever the locale.
 read_meta <- function(name) {
   utils::read.delim(file.path(CODE_DIR, "metadata", name), stringsAsFactors = FALSE,
-    check.names = FALSE, na.strings = "", colClasses = "character")
+    check.names = FALSE, na.strings = "", colClasses = "character", encoding = "UTF-8")
 }
 
 # Every file written by a stage is recorded in <run>/outputs.tsv with its
@@ -133,8 +134,9 @@ record_output <- function(path) {
   invisible(path)
 }
 
+# Written as UTF-8 whatever the locale (accented author names).
 write_table <- function(df, path) {
-  utils::write.table(df, path, sep = "\t", quote = FALSE, row.names = FALSE, na = "")
+  utils::write.table(df, path, sep = "\t", quote = FALSE, row.names = FALSE, na = "", fileEncoding = "UTF-8")
   record_output(path)
 }
 
